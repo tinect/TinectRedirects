@@ -8,8 +8,8 @@ use Shopware\Core\Framework\Api\Context\SystemSource;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
+use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\MultiFilter;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
 use Shopware\Core\Framework\Uuid\Uuid;
 use Shopware\Core\SalesChannelRequest;
@@ -71,7 +71,10 @@ class ExceptionSubscriber implements EventSubscriberInterface
 
         $criteria = (new Criteria())
             ->addFilter(new EqualsFilter('source', $path))
-            ->addFilter(new EqualsAnyFilter('salesChannelDomainId', [$salesChannelDomainId, null]))
+            ->addFilter(new MultiFilter(MultiFilter::CONNECTION_OR, [
+                new EqualsFilter('salesChannelDomainId', $salesChannelDomainId),
+                new EqualsFilter('salesChannelDomainId', null),
+            ]))
             ->addSorting(new FieldSorting('salesChannelDomainId', FieldSorting::DESCENDING))
             ->setLimit(1);
 
