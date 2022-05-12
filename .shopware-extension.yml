@@ -1,0 +1,12 @@
+build:
+    zip:
+        composer:
+            enabled: false
+        assets:
+            enabled: true
+        pack:
+            excludes:
+                paths:
+                    - var
+                    - .gitignore
+                    - src/Resources/app/administration/src
