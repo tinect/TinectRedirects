@@ -12,9 +12,15 @@ use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\MultiFilter;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
 use Shopware\Core\Framework\Uuid\Uuid;
+use Shopware\Core\PlatformRequest;
 use Shopware\Core\SalesChannelRequest;
+use Shopware\Core\System\SalesChannel\Context\AbstractSalesChannelContextFactory;
+use Shopware\Core\System\SalesChannel\Context\SalesChannelContextService;
+use Shopware\Core\System\SalesChannel\SalesChannelContext;
+use Shopware\Storefront\Framework\Routing\RequestTransformer;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -27,12 +33,16 @@ class ExceptionSubscriber implements EventSubscriberInterface
 
     private SeoUrlPlaceholderHandlerInterface $seoUrlPlaceholderHandler;
 
+    private AbstractSalesChannelContextFactory $salesChannelContextFactory;
+
     public function __construct(
         EntityRepositoryInterface $redirectRepository,
-        SeoUrlPlaceholderHandlerInterface $seoUrlPlaceholderHandler
+        SeoUrlPlaceholderHandlerInterface $seoUrlPlaceholderHandler,
+        AbstractSalesChannelContextFactory $salesChannelContextFactory
     ) {
         $this->redirectRepository = $redirectRepository;
         $this->seoUrlPlaceholderHandler = $seoUrlPlaceholderHandler;
+        $this->salesChannelContextFactory = $salesChannelContextFactory;
     }
 
     public static function getSubscribedEvents(): array
@@ -58,15 +68,17 @@ class ExceptionSubscriber implements EventSubscriberInterface
 
         $salesChannelDomainId = $request->attributes->get(SalesChannelRequest::ATTRIBUTE_DOMAIN_ID);
 
-        $response = $this->handleRequest($request->getPathInfo(), $salesChannelDomainId);
+        $response = $this->handleRequest($request, $salesChannelDomainId);
 
         if ($response instanceof Response) {
             $event->setResponse($response);
         }
     }
 
-    private function handleRequest(string $path, ?string $salesChannelDomainId): ?Response
+    private function handleRequest(Request $request, ?string $salesChannelDomainId): ?Response
     {
+        $path = $request->getPathInfo();
+
         $context = new Context(new SystemSource());
 
         $criteria = (new Criteria())
@@ -97,8 +109,32 @@ class ExceptionSubscriber implements EventSubscriberInterface
 
         $targetURL = $redirect->target;
 
-        //TODO $this->seoUrlPlaceholderHandler->replace over $targetURL
+        $host = $request->attributes->get(RequestTransformer::SALES_CHANNEL_ABSOLUTE_BASE_URL)
+            . $request->attributes->get(RequestTransformer::SALES_CHANNEL_BASE_URL);
+
+        $salesChannelContext = $this->getSalesChannelContext($request);
+
+        $targetURL = $this->seoUrlPlaceholderHandler->replace($targetURL, $host, $salesChannelContext);
 
         return new RedirectResponse($targetURL, $redirect->httpCode);
+    }
+
+    private function getSalesChannelContext(Request $request): SalesChannelContext
+    {
+        $salesChannelContext = $request->attributes->get(PlatformRequest::ATTRIBUTE_SALES_CHANNEL_CONTEXT_OBJECT);
+
+        if ($salesChannelContext) {
+            return $salesChannelContext;
+        }
+
+        return $this->createSalesChannelContext(
+            $request->attributes->get(PlatformRequest::ATTRIBUTE_SALES_CHANNEL_ID),
+            $request->headers->get(PlatformRequest::HEADER_LANGUAGE_ID)
+        );
+    }
+
+    private function createSalesChannelContext(string $salesChannelId, string $languageId): SalesChannelContext
+    {
+        return $this->salesChannelContextFactory->create('', $salesChannelId, [SalesChannelContextService::LANGUAGE_ID => $languageId]);
     }
 }

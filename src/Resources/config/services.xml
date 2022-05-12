@@ -12,6 +12,7 @@
             <tag name="kernel.event_subscriber"/>
             <argument type="service" id="tinect_redirects_redirect.repository"/>
             <argument type="service" id="Shopware\Core\Content\Seo\SeoUrlPlaceholderHandlerInterface"/>
+            <argument type="service" id="Shopware\Core\System\SalesChannel\Context\SalesChannelContextFactory" />
         </service>
     </services>
 </container>
