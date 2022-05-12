@@ -3,10 +3,10 @@
 namespace Tinect\Redirects\Migration;
 
 use Doctrine\DBAL\Connection;
-use Tinect\Redirects\Content\Redirect\RedirectDefinition;
 use Shopware\Core\Defaults;
 use Shopware\Core\Framework\Migration\MigrationStep;
 use Shopware\Core\Framework\Uuid\Uuid;
+use Tinect\Redirects\Content\Redirect\RedirectDefinition;
 
 class Migration1615031757ImportExportProfile extends MigrationStep
 {

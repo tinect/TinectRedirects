@@ -4,12 +4,16 @@ declare(strict_types=1);
 namespace Tinect\Redirects\Content\Redirect;
 
 use Shopware\Core\Framework\DataAbstractionLayer\EntityDefinition;
+use Shopware\Core\Framework\DataAbstractionLayer\Field\BoolField;
+use Shopware\Core\Framework\DataAbstractionLayer\Field\FkField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\IdField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\IntField;
+use Shopware\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\StringField;
 use Shopware\Core\Framework\DataAbstractionLayer\FieldCollection;
+use Shopware\Core\System\SalesChannel\Aggregate\SalesChannelDomain\SalesChannelDomainDefinition;
 
 class RedirectDefinition extends EntityDefinition
 {
@@ -37,6 +41,10 @@ class RedirectDefinition extends EntityDefinition
             new StringField('source', 'source'),
             new StringField('target', 'target'),
             new IntField('http_code', 'httpCode'),
+            new BoolField('active', 'active'),
+            new FkField('sales_channel_domain_id', 'salesChannelDomainId', SalesChannelDomainDefinition::class),
+
+            new ManyToOneAssociationField('salesChannelDomain', 'sales_channel_domain_id', SalesChannelDomainDefinition::class, 'id', false),
         ]);
     }
 }

@@ -4,9 +4,6 @@
       "title": "Weiterleitungen"
     },
     "list": {
-      "columnSourceUrl": "Quell-URL",
-      "columnTargetUrl": "Ziel-URL",
-      "columnHttpCode": "Http-Code",
       "createButton": "Weiterleitung anlegen"
     },
     "detail": {
@@ -16,10 +13,20 @@
       "cancelButton": "Abbrechen",
       "saveButton": "Speichern",
       "errorTitle": "Fehler",
+      "activeLabel": "aktiv",
+      "salesChannelDomain": "Domain",
       "errorSameUrlDescription": "Die Quell URL und Ziel URL dürfen nicht gleich sein",
       "httpCodeLabelValues": {
         "301": "301 (Permanent verschoben)",
         "302": "302 (Gefunden / Temporär verschoben)"
+      }
+    },
+    "sidebar": {
+      "refresh": "Neuladen",
+      "filter": "Filter",
+      "filters": {
+        "search": "Suche",
+        "resetFilter": "Filter zurücksetzen"
       }
     }
   }

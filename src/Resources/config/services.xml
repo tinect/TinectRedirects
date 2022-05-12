@@ -1,17 +1,17 @@
 <?xml version="1.0" ?>
 
 <container xmlns="http://symfony.com/schema/dic/services"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
-	<services>
-		<service id="Tinect\Redirects\Content\Redirect\RedirectDefinition">
-			<tag name="shopware.entity.definition" />
-		</service>
-		<service id="Tinect\Redirects\Subscriber\RequestSubscriber">
-			<tag name="kernel.event_subscriber"/>
-			 <argument type="service" id="tinect_redirects_redirect.repository" />
-             <argument type="service" id="seo_url.repository" />
-		</service>
-	</services>
+    <services>
+        <service id="Tinect\Redirects\Content\Redirect\RedirectDefinition">
+            <tag name="shopware.entity.definition"/>
+        </service>
+        <service id="Tinect\Redirects\Subscriber\ExceptionSubscriber">
+            <tag name="kernel.event_subscriber"/>
+            <argument type="service" id="tinect_redirects_redirect.repository"/>
+            <argument type="service" id="Shopware\Core\Content\Seo\SeoUrlPlaceholderHandlerInterface"/>
+        </service>
+    </services>
 </container>

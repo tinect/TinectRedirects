@@ -20,9 +20,15 @@ class Migration160198215Redirect extends MigrationStep
         `id` BINARY(16) NOT NULL,
         `source` VARCHAR(255) NOT NULL,
         `target` VARCHAR(255) NOT NULL,
-        `http_code` INT(3),
+        `http_code` INT(3) DEFAULT 302,
+        `sales_channel_domain_id` BINARY(16) NULL,
+        `active` TINYINT(1) NOT NULL DEFAULT 0,
         `created_at` DATETIME(3) NOT NULL,
-        `updated_at` DATETIME(3) NULL
+        `updated_at` DATETIME(3) NULL,
+
+        KEY `fk.tinect_redirects_redirect.sales_channel_domain_id` (`sales_channel_domain_id`),
+        CONSTRAINT tinect_redirects_redirect_uc_source UNIQUE (`source`, `sales_channel_domain_id`),
+        CONSTRAINT `fk.tinect_redirects_redirect.sales_channel_domain_id` FOREIGN KEY (`sales_channel_domain_id`) REFERENCES `sales_channel_domain` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
         )
         ENGINE = InnoDB
         DEFAULT CHARSET = utf8mb4

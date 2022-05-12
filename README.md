@@ -1,4 +1,5 @@
 # Redirects for Shopware 6
+
 ## IN DEVELOPMENT!!!!
 
 Manage 301 and 302 redirects in your Shopware 6 shop.
@@ -9,6 +10,8 @@ The plugin has been forked from [RuneLaenenRedirects](https://github.com/runelae
 - 301 redirects
 - 302 (temporary) redirects
 - Import/Export profile
+- redirect just when there would be a error
+- auto add 404 error in list
 
 ## 🚀 How to install
 ### Composer install (recommended)

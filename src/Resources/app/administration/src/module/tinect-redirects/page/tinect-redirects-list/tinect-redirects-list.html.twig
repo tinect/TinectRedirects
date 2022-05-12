@@ -10,13 +10,42 @@
 		<template slot="content">
 			{% block tinect_redirects_list_content %}
 				<sw-entity-listing
-					v-if="redirects"
-					:items="redirects"
+					v-if="items"
+					:items="items"
 					:repository="redirectRepository"
 					:columns="columns"
+                    :isLoading="isLoading"
 					detailRoute="tinect.redirect.details">
 				</sw-entity-listing>
 			{% endblock %}
 		</template>
+
+        <sw-sidebar slot="sidebar">
+            <sw-sidebar-item
+                icon="default-arrow-360-left"
+                :title="$tc('tinect-redirects.sidebar.refresh')"
+                @click="onRefresh">
+            </sw-sidebar-item>
+
+            <sw-sidebar-item icon="default-action-filter"
+                             :title="$tc('tinect-redirects.sidebar.filter')">
+                <sw-text-field :label="$tc('tinect-redirects.sidebar.filters.search')" v-model="filter.term"></sw-text-field>
+
+                <sw-entity-single-select
+                    v-model="filter.salesChannelDomainId"
+                    :label="$tc('tinect-redirects.detail.salesChannelDomain')"
+                    entity="sales_channel_domain"
+                    labelProperty="url"
+                    show-clearable-button
+                ></sw-entity-single-select>
+
+                <sw-button
+                    variant="ghost"
+                    @click="resetFilter">
+                    {{ $tc('tinect-redirects.sidebar.filters.resetFilter') }}
+                </sw-button>
+            </sw-sidebar-item>
+
+        </sw-sidebar>
 	</sw-page>
 {% endblock %}

@@ -4,53 +4,21 @@ namespace Tinect\Redirects\Content\Redirect;
 
 use Shopware\Core\Framework\DataAbstractionLayer\Entity;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityIdTrait;
+use Shopware\Core\System\SalesChannel\Aggregate\SalesChannelDomain\SalesChannelDomainEntity;
 
 class RedirectEntity extends Entity
 {
     use EntityIdTrait;
 
-    /**
-     * @var string
-     */
-    protected $source;
+    public string $source = '';
 
-    /**
-     * @var string
-     */
-    protected $target;
+    public string $target = '';
 
-    /**
-     * @var int
-     */
-    protected $httpCode;
+    public int $httpCode = 301;
 
-    public function getSource(): string
-    {
-        return $this->source;
-    }
+    public bool $active = false;
 
-    public function setSource(string $source): void
-    {
-        $this->source = $source;
-    }
+    public ?string $salesChannelDomainId = null;
 
-    public function getTarget(): string
-    {
-        return $this->target;
-    }
-
-    public function setTarget(string $target): void
-    {
-        $this->target = $target;
-    }
-
-    public function getHttpCode(): int
-    {
-        return $this->httpCode;
-    }
-
-    public function setHttpCode(int $httpCode): void
-    {
-        $this->httpCode = $httpCode;
-    }
+    public ?SalesChannelDomainEntity $salesChannelDomain = null;
 }

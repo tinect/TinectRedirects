@@ -4,7 +4,8 @@ Component.extend('tinect-redirects-create', 'tinect-redirects-details', {
     methods: {
         getRedirect() {
             this.redirect = this.redirectRepository.create(Shopware.Context.api);
-            this.redirect.httpCode = 301;
+            this.redirect.httpCode = 302;
+            this.redirect.active = false;
 
             this.isLoading = false;
         },

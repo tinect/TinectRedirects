@@ -4,9 +4,6 @@
       "title": "Redirects"
     },
     "list": {
-      "columnSourceUrl": "Source URL",
-      "columnTargetUrl": "Target URL",
-      "columnHttpCode": "Http Code",
       "createButton": "Add Redirect"
     },
     "detail": {
@@ -16,10 +13,20 @@
       "cancelButton": "Cancel",
       "saveButton": "Save",
       "errorTitle": "Error",
+      "activeLabel": "active",
+      "salesChannelDomain": "Domain",
       "errorSameUrlDescription": "The source URL and target URL must not be the same",
       "httpCodeLabelValues": {
         "301": "301 (Moved Permanently)",
         "302": "302 (Found / Moved Temporarily)"
+      }
+    },
+    "sidebar": {
+      "refresh": "Refresh",
+      "filter": "Filter",
+      "filters": {
+        "search": "Search",
+        "resetFilter": "Reset filter"
       }
     }
   }
