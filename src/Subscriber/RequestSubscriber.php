@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace RuneLaenen\Redirects\Subscriber;
+namespace Tinect\Redirects\Subscriber;
 
-use RuneLaenen\Redirects\Content\Redirect\RedirectEntity;
+use Tinect\Redirects\Content\Redirect\RedirectEntity;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;

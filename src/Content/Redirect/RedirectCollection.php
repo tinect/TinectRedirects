@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace RuneLaenen\Redirects\Content\Redirect;
+namespace Tinect\Redirects\Content\Redirect;
 
 use Shopware\Core\Framework\DataAbstractionLayer\EntityCollection;
 

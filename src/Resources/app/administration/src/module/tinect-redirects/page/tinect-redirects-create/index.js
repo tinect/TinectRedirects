@@ -1,6 +1,6 @@
 const { Component } = Shopware;
 
-Component.extend('rl-redirects-create', 'rl-redirects-details', {
+Component.extend('tinect-redirects-create', 'tinect-redirects-details', {
     methods: {
         getRedirect() {
             this.redirect = this.redirectRepository.create(Shopware.Context.api);
@@ -12,8 +12,8 @@ Component.extend('rl-redirects-create', 'rl-redirects-details', {
         onClickSave() {
             if (this.redirect.source === this.redirect.target) {
                 this.createNotificationError({
-                    title: this.$tc('rl-redirects.detail.errorTitle'),
-                    message: this.$tc('rl-redirects.detail.errorSameUrlDescription'),
+                    title: this.$tc('tinect-redirects.detail.errorTitle'),
+                    message: this.$tc('tinect-redirects.detail.errorSameUrlDescription'),
                 });
                 return;
             }
@@ -21,11 +21,11 @@ Component.extend('rl-redirects-create', 'rl-redirects-details', {
             this.isLoading = true;
             this.redirectRepository.save(this.redirect, Shopware.Context.api).then(() => {
                 this.isLoading = false;
-                this.$router.push({ name: 'rl.redirects.details', params: { id: this.redirect.id } });
+                this.$router.push({ name: 'tinect.redirects.details', params: { id: this.redirect.id } });
             }).catch((exception) => {
                 this.isLoading = false;
                 this.createNotificationError({
-                    title: this.$tc('rl-redirects.detail.errorTitle'),
+                    title: this.$tc('tinect-redirects.detail.errorTitle'),
                     message: exception,
                 });
             });

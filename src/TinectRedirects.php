@@ -1,12 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace RuneLaenen\Redirects;
+namespace Tinect\Redirects;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Core\Framework\Plugin;
 use Shopware\Core\Framework\Plugin\Context\UninstallContext;
 
-class RuneLaenenRedirects extends Plugin
+class TinectRedirects extends Plugin
 {
     public function uninstall(UninstallContext $uninstallContext): void
     {
@@ -18,6 +18,6 @@ class RuneLaenenRedirects extends Plugin
 
         /** @var Connection $connection */
         $connection = $this->container->get(Connection::class);
-        $connection->executeUpdate('DROP TABLE IF EXISTS `rl_redirects_redirect`;');
+        $connection->executeStatement('DROP TABLE IF EXISTS `tinect_redirects_redirect`;');
     }
 }

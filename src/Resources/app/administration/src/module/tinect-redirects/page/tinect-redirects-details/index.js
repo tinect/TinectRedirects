@@ -1,8 +1,8 @@
-import template from './rl-redirects-details.html.twig';
+import template from './tinect-redirects-details.html.twig';
 
 const { Component, Mixin } = Shopware;
 
-Component.register('rl-redirects-details', {
+Component.register('tinect-redirects-details', {
     template,
 
     inject: [
@@ -37,7 +37,7 @@ Component.register('rl-redirects-details', {
 
     computed: {
         redirectRepository() {
-            return this.repositoryFactory.create('rl_redirects_redirect');
+            return this.repositoryFactory.create('tinect_redirects_redirect');
         },
     },
 
@@ -60,8 +60,8 @@ Component.register('rl-redirects-details', {
         onClickSave() {
             if (this.redirect.source === this.redirect.target) {
                 this.createNotificationError({
-                    title: this.$tc('rl-redirects.detail.errorTitle'),
-                    message: this.$tc('rl-redirects.detail.errorSameUrlDescription'),
+                    title: this.$tc('tinect-redirects.detail.errorTitle'),
+                    message: this.$tc('tinect-redirects.detail.errorSameUrlDescription'),
                 });
                 return;
             }
@@ -76,7 +76,7 @@ Component.register('rl-redirects-details', {
                 this.isLoading = false;
 
                 this.createNotificationError({
-                    title: this.$tc('rl-redirects.detail.errorTitle'),
+                    title: this.$tc('tinect-redirects.detail.errorTitle'),
                     message: exception,
                 });
             });

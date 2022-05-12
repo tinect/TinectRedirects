@@ -5,12 +5,12 @@
 	xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
 	<services>
-		<service id="RuneLaenen\Redirects\Content\Redirect\RedirectDefinition">
+		<service id="Tinect\Redirects\Content\Redirect\RedirectDefinition">
 			<tag name="shopware.entity.definition" />
 		</service>
-		<service id="RuneLaenen\Redirects\Subscriber\RequestSubscriber">
+		<service id="Tinect\Redirects\Subscriber\RequestSubscriber">
 			<tag name="kernel.event_subscriber"/>
-			 <argument type="service" id="rl_redirects_redirect.repository" />
+			 <argument type="service" id="tinect_redirects_redirect.repository" />
              <argument type="service" id="seo_url.repository" />
 		</service>
 	</services>

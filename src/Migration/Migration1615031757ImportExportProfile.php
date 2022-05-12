@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace RuneLaenen\Redirects\Migration;
+namespace Tinect\Redirects\Migration;
 
 use Doctrine\DBAL\Connection;
-use RuneLaenen\Redirects\Content\Redirect\RedirectDefinition;
+use Tinect\Redirects\Content\Redirect\RedirectDefinition;
 use Shopware\Core\Defaults;
 use Shopware\Core\Framework\Migration\MigrationStep;
 use Shopware\Core\Framework\Uuid\Uuid;

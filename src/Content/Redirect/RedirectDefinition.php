@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace RuneLaenen\Redirects\Content\Redirect;
+namespace Tinect\Redirects\Content\Redirect;
 
 use Shopware\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
@@ -13,7 +13,7 @@ use Shopware\Core\Framework\DataAbstractionLayer\FieldCollection;
 
 class RedirectDefinition extends EntityDefinition
 {
-    public const ENTITY_NAME = 'rl_redirects_redirect';
+    public const ENTITY_NAME = 'tinect_redirects_redirect';
 
     public function getEntityName(): string
     {

@@ -1,0 +1,22 @@
+{% block tinect_redirects_list %}
+	<sw-page class="tinect-redirects-list">
+		<template slot="smart-bar-actions">
+			{% block tinect_redirects_list_smarbar %}
+				<sw-button variant="primary" :routerLink="{name: 'tinect.redirects.create'}">
+					{{ $t('tinect-redirects.list.createButton') }}
+				</sw-button>
+			{% endblock %}
+		</template>
+		<template slot="content">
+			{% block tinect_redirects_list_content %}
+				<sw-entity-listing
+					v-if="redirects"
+					:items="redirects"
+					:repository="redirectRepository"
+					:columns="columns"
+					detailRoute="tinect.redirect.details">
+				</sw-entity-listing>
+			{% endblock %}
+		</template>
+	</sw-page>
+{% endblock %}

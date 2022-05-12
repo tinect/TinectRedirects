@@ -1,8 +1,8 @@
-{% block rl_redirects_details %}
-    <sw-page class="rl-redirects-details">
+{% block tinect_redirects_details %}
+    <sw-page class="tinect-redirects-details">
         <template slot="smart-bar-actions">
-            <sw-button :routerLink="{name: 'scop.platform.redirect.list'}">
-                {{ $t('rl-redirects.detail.cancelButton') }}
+            <sw-button :routerLink="{name: 'tinect.redirects.list'}">
+                {{ $t('tinect-redirects.detail.cancelButton') }}
             </sw-button>
 
             <sw-button-process :isLoading="isLoading"
@@ -10,25 +10,26 @@
                                variant="primary"
                                @process-finish="saveFinish"
                                @click="onClickSave">
-                {{ $t('rl-redirects.detail.saveButton') }}
+                {{ $t('tinect-redirects.detail.saveButton') }}
             </sw-button-process>
         </template>
+
         <template slot="content">
             <sw-card-view>
                 <sw-card :isLoading="isLoading">
-                    <sw-field :label="$t('rl-redirects.detail.sourceUrlLabel')"
+                    <sw-field :label="$t('tinect-redirects.detail.sourceUrlLabel')"
                               v-model="redirect.source"
                               validation="required"></sw-field>
 
-                    <sw-field :label="$t('rl-redirects.detail.targetUrlLabel')"
+                    <sw-field :label="$t('tinect-redirects.detail.targetUrlLabel')"
                               v-model="redirect.target"
                               validation="required"></sw-field>
 
-                    <sw-select-number-field :label="$t('rl-redirects.detail.httpCodeLabel')"
+                    <sw-select-number-field :label="$t('tinect-redirects.detail.httpCodeLabel')"
                                             v-model="redirect.httpCode"
                                             validation="required">
-                        <option value=301>{{ $t('rl-redirects.detail.httpCodeLabelValues.301') }}</option>
-                        <option value=302>{{ $t('rl-redirects.detail.httpCodeLabelValues.302') }}</option>
+                        <option value=301>{{ $t('tinect-redirects.detail.httpCodeLabelValues.301') }}</option>
+                        <option value=302>{{ $t('tinect-redirects.detail.httpCodeLabelValues.302') }}</option>
                     </sw-select-number-field>
                 </sw-card>
             </sw-card-view>

@@ -1,9 +1,9 @@
-import template from './rl-redirects-list.html.twig';
+import template from './tinect-redirects-list.html.twig';
 
 const { Component } = Shopware;
 const Criteria = Shopware.Data.Criteria;
 
-Component.register('rl-redirects-list', {
+Component.register('tinect-redirects-list', {
     template,
 
     inject: [
@@ -27,26 +27,26 @@ Component.register('rl-redirects-list', {
             return [{
                 property: 'source',
                 dataIndex: 'source',
-                label: this.$tc('rl-redirects.list.columnSourceUrl'),
-                routerLink: 'rl.redirects.details',
+                label: this.$tc('tinect-redirects.list.columnSourceUrl'),
+                routerLink: 'tinect.redirects.details',
                 inlineEdit: 'string',
                 allowResize: true,
                 primary: true,
             }, {
                 property: 'target',
                 dataIndex: 'target',
-                label: this.$tc('rl-redirects.list.columnTargetUrl'),
+                label: this.$tc('tinect-redirects.list.columnTargetUrl'),
                 inlineEdit: 'string',
                 allowResize: true,
             }, {
                 property: 'httpCode',
                 dataIndex: 'httpCode',
-                label: this.$tc('rl-redirects.list.columnHttpCode'),
+                label: this.$tc('tinect-redirects.list.columnHttpCode'),
                 allowResize: true,
             }];
         },
         redirectRepository() {
-            return this.repositoryFactory.create('rl_redirects_redirect');
+            return this.repositoryFactory.create('tinect_redirects_redirect');
         },
     },
 

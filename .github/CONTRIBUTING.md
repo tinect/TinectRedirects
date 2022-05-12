@@ -2,9 +2,9 @@
 
 #### **Did you find a bug?**
 
-* **Ensure the bug was not already reported** by searching on GitHub under [Issues](https://github.com/runelaenen/sw6-redirects/issues).
+* **Ensure the bug was not already reported** by searching on GitHub under [Issues](https://github.com/tinect/TinectRedirects/issues).
 
-* If you're unable to find an open issue addressing the problem, [open a new one](https://github.com/runelaenen/sw6-redirects/issues/new). Be sure to include a **title and clear description**, as much relevant information as possible. Images or screen-captures are very welcome.
+* If you're unable to find an open issue addressing the problem, [open a new one](https://github.com/tinect/TinectRedirects/issues/new). Be sure to include a **title and clear description**, as much relevant information as possible. Images or screen-captures are very welcome.
 
 #### **Is this your first time contributing to an open source project on GitHub?**
 

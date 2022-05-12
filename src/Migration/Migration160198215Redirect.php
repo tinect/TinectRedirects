@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace RuneLaenen\Redirects\Migration;
+namespace Tinect\Redirects\Migration;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Core\Framework\Migration\MigrationStep;
@@ -14,9 +14,9 @@ class Migration160198215Redirect extends MigrationStep
 
     public function update(Connection $connection): void
     {
-        $connection->executeUpdate(
+        $connection->executeStatement(
             <<<SQL
-        CREATE TABLE IF NOT EXISTS `rl_redirects_redirect` (
+        CREATE TABLE IF NOT EXISTS `tinect_redirects_redirect` (
         `id` BINARY(16) NOT NULL,
         `source` VARCHAR(255) NOT NULL,
         `target` VARCHAR(255) NOT NULL,

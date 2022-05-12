@@ -1,2 +1,2 @@
-import './module/rl-redirects';
+import './module/tinect-redirects';
 import './module/sw-import-export';
