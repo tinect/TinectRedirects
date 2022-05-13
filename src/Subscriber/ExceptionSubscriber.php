@@ -56,6 +56,10 @@ class ExceptionSubscriber implements EventSubscriberInterface
     {
         $request = $event->getRequest();
 
+        if ($request->getMethod() !== Request::METHOD_GET) {
+            return;
+        }
+
         if (!$request->attributes->get(SalesChannelRequest::ATTRIBUTE_IS_SALES_CHANNEL_REQUEST)) {
             return;
         }
