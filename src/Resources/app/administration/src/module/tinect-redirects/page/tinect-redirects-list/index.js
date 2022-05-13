@@ -35,18 +35,15 @@ Component.register('tinect-redirects-list', {
         columns() {
             return [
                 {
-                    property: 'salesChannelDomain.url',
-                    dataIndex: 'salesChannelDomain.url',
-                    label: this.$tc('tinect-redirects.detail.salesChannelDomain'),
+                    property: 'active',
+                    dataIndex: 'active',
+                    label: this.$tc('tinect-redirects.detail.activeLabel'),
                     routerLink: 'tinect.redirects.details',
-                    allowResize: true,
-                    primary: true,
                 },
                 {
                     property: 'source',
                     dataIndex: 'source',
                     label: this.$tc('tinect-redirects.detail.sourceUrlLabel'),
-                    routerLink: 'tinect.redirects.details',
                     allowResize: true,
                     primary: true,
                 },
@@ -62,13 +59,9 @@ Component.register('tinect-redirects-list', {
                     label: this.$tc('tinect-redirects.detail.httpCodeLabel'),
                     allowResize: true,
                 },
-                {
-                    property: 'active',
-                    dataIndex: 'active',
-                    label: this.$tc('tinect-redirects.detail.activeLabel'),
-                },
             ];
         },
+
         redirectRepository() {
             return this.repositoryFactory.create('tinect_redirects_redirect');
         },

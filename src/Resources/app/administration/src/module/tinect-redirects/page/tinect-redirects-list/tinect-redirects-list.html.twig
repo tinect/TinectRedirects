@@ -16,6 +16,25 @@
 					:columns="columns"
                     :isLoading="isLoading"
 					detailRoute="tinect.redirect.details">
+                    <template slot="column-source" slot-scope="{ item }">
+                        <router-link
+                            class="sw-data-grid__cell-value"
+                            :to="{ name: 'tinect.redirects.details', params: { id: item.id } }"
+                        >
+                            <template v-if="item.salesChannelDomainId">
+                                {{ item.salesChannelDomain.url }}{{ item.source }}
+                            </template>
+                            <template v-else>
+                                {{ item.source }}
+                            </template>
+                        </router-link>
+                    </template>
+
+                    <template slot="detail-action" slot-scope="{ item }">
+                        <sw-context-menu-item class="sw-entity-listing__context-menu-show-action" :routerLink="{ name: 'tinect.redirects.details', params: { id: item.id } }">
+                            {{ $tc('sw-customer.list.contextMenuEdit') }}
+                        </sw-context-menu-item>
+                    </template>
 				</sw-entity-listing>
 			{% endblock %}
 		</template>
