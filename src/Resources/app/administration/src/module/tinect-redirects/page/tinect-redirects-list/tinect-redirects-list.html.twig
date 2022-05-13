@@ -7,6 +7,9 @@
 				</sw-button>
 			{% endblock %}
 		</template>
+		<template slot="smart-bar-header">
+            <h2>{{ $tc('tinect-redirects.general.title') }} ({{ total }})</h2>
+        </template>
 		<template slot="content">
 			{% block tinect_redirects_list_content %}
 				<sw-entity-listing
@@ -49,6 +52,13 @@
             <sw-sidebar-item icon="default-action-filter"
                              :title="$tc('tinect-redirects.sidebar.filter')">
                 <sw-text-field :label="$tc('tinect-redirects.sidebar.filters.search')" v-model="filter.term"></sw-text-field>
+
+                <sw-select-field :label="$t('tinect-redirects.detail.activeLabel')"
+                                        v-model="filter.active">
+                    <option value=""></option>
+                    <option value="1">true</option>
+                    <option value="0">false</option>
+                </sw-select-field>
 
                 <sw-entity-single-select
                     v-model="filter.salesChannelDomainId"
