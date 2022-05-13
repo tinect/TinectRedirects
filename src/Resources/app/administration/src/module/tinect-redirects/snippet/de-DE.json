@@ -16,6 +16,7 @@
       "activeLabel": "aktiv",
       "salesChannelDomain": "Domain",
       "errorSameUrlDescription": "Die Quell URL und Ziel URL dürfen nicht gleich sein",
+      "salesChannelDomainHelpText": "Sie können die salesChannelDomain entfernen, um auf jedem Verkaufskanal umzuleiten",
       "httpCodeLabelValues": {
         "301": "301 (Permanent verschoben)",
         "302": "302 (Gefunden / Temporär verschoben)"

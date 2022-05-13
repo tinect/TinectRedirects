@@ -9,4 +9,3 @@ build:
                 paths:
                     - var
                     - .gitignore
-                    - src/Resources/app/administration/src

@@ -16,6 +16,7 @@
       "activeLabel": "active",
       "salesChannelDomain": "Domain",
       "errorSameUrlDescription": "The source URL and target URL must not be the same",
+      "salesChannelDomainHelpText": "You can remove the salesChannelDomain to have it redirected on every saleschannel",
       "httpCodeLabelValues": {
         "301": "301 (Moved Permanently)",
         "302": "302 (Found / Moved Temporarily)"
