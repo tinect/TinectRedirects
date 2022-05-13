@@ -83,7 +83,7 @@ Component.register('tinect-redirects-list', {
             }
 
             criteria.addSorting(Criteria.sort('active', 'ASC'));
-            criteria.addSorting(Criteria.sort('source', 'ASC'));
+            criteria.addSorting(Criteria.sort('createdAt', 'DESC'));
 
             return this.redirectRepository.search(criteria, Shopware.Context.api)
                 .then((searchResult) => {
