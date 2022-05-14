@@ -83,6 +83,11 @@ class ExceptionSubscriber implements EventSubscriberInterface
     {
         $path = $request->getPathInfo();
 
+        // do not track bot requests building useless urls with "https://oldurl'https://newurl'"
+        if (preg_match('/(.?)\'(.*)\'/', $path)) {
+            return null;
+        }
+
         $context = new Context(new SystemSource());
 
         $criteria = (new Criteria())
