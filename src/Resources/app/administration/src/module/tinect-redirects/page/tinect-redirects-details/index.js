@@ -39,6 +39,10 @@ Component.register('tinect-redirects-details', {
         redirectRepository() {
             return this.repositoryFactory.create('tinect_redirects_redirect');
         },
+
+        hasSwUrlExt() {
+            return Component.getComponentRegistry().has('sw-url-ext-field');
+        },
     },
 
     created() {

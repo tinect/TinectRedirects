@@ -34,9 +34,16 @@
                               v-model="redirect.source"
                               validation="required"></sw-field>
 
-                    <sw-field :label="$t('tinect-redirects.detail.targetUrlLabel')"
-                              v-model="redirect.target"
-                              validation="required"></sw-field>
+                    <template v-if="hasSwUrlExt">
+                        <sw-url-ext-field :label="$t('tinect-redirects.detail.targetUrlLabel')"
+                                          v-model="redirect.target"
+                                          validation="required"></sw-url-ext-field>
+                    </template>
+                    <template v-else>
+                        <sw-field :label="$t('tinect-redirects.detail.targetUrlLabel')"
+                                  v-model="redirect.target"
+                                  validation="required"></sw-field>
+                    </template>
 
                     <sw-select-number-field :label="$t('tinect-redirects.detail.httpCodeLabel')"
                                             v-model="redirect.httpCode"
