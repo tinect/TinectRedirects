@@ -17,7 +17,7 @@
       "errorTitle": "Fehler",
       "activeLabel": "aktiv",
       "commentLabel": "Kommentar",
-      "salesChannelDomain": "Domain",
+      "salesChannelDomain": "Quell-SalesChannelDomain",
       "errorSameUrlDescription": "Die Quell URL und Ziel URL dürfen nicht gleich sein",
       "salesChannelDomainHelpText": "Sie können die salesChannelDomain entfernen, um auf jedem Verkaufskanal umzuleiten",
       "httpCodeLabelValues": {

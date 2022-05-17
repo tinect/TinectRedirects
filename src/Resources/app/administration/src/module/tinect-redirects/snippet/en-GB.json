@@ -17,7 +17,7 @@
       "errorTitle": "Error",
       "activeLabel": "active",
       "commentLabel": "Comment",
-      "salesChannelDomain": "Domain",
+      "salesChannelDomain": "Source SalesChannelDomain",
       "errorSameUrlDescription": "The source URL and target URL must not be the same",
       "salesChannelDomainHelpText": "You can remove the salesChannelDomain to have it redirected on every saleschannel",
       "httpCodeLabelValues": {

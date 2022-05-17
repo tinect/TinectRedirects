@@ -24,7 +24,7 @@ Component.register('tinect-redirects-details', {
 
     data() {
         return {
-            redirect: null,
+            detail: null,
             isLoading: true,
             processSuccess: false,
         };
@@ -57,13 +57,13 @@ Component.register('tinect-redirects-details', {
                 this.redirectId,
                 Shopware.Context.api,
             ).then((entity) => {
-                this.redirect = entity;
+                this.detail = entity;
                 this.isLoading = false;
             });
         },
 
         onClickSave() {
-            if (this.redirect.source === this.redirect.target) {
+            if (this.detail.source === this.detail.target) {
                 this.createNotificationError({
                     title: this.$tc('tinect-redirects.detail.errorTitle'),
                     message: this.$tc('tinect-redirects.detail.errorSameUrlDescription'),
@@ -72,7 +72,7 @@ Component.register('tinect-redirects-details', {
             }
 
             this.isLoading = true;
-            this.redirectRepository.save(this.redirect, Shopware.Context.api).then(() => {
+            this.redirectRepository.save(this.detail, Shopware.Context.api).then(() => {
                 this.getRedirect();
 
                 this.isLoading = false;
