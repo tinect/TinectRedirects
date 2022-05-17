@@ -22,7 +22,8 @@ Component.register('tinect-redirects-list', {
             filter: {
                 term: null,
                 salesChannelDomainId: null,
-                active: null
+                active: null,
+                hidden: 0
             },
         };
     },
@@ -88,6 +89,8 @@ Component.register('tinect-redirects-list', {
                 criteria.addFilter(Criteria.equals('active', this.filter.active));
             }
 
+            criteria.addFilter(Criteria.equals('hidden', this.filter.hidden));
+
             criteria.addSorting(Criteria.sort('active', 'ASC'));
             criteria.addSorting(Criteria.sort('createdAt', 'DESC'));
 
@@ -104,6 +107,7 @@ Component.register('tinect-redirects-list', {
                 term: null,
                 salesChannelDomainId: null,
                 active: null,
+                hidden: 0,
             };
         },
     },

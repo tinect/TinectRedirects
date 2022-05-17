@@ -18,6 +18,10 @@ class RedirectEntity extends Entity
 
     public bool $active = false;
 
+    public bool $hidden = false;
+
+    public ?string $comment = null;
+
     public ?string $salesChannelDomainId = null;
 
     public ?SalesChannelDomainEntity $salesChannelDomain = null;

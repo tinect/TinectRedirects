@@ -60,6 +60,12 @@
                     <option value="0">false</option>
                 </sw-select-field>
 
+                <sw-select-number-field :label="$t('tinect-redirects.detail.hiddenLabel')"
+                                        v-model="filter.hidden">
+                    <option value=1>true</option>
+                    <option value=0>false</option>
+                </sw-select-number-field>
+
                 <sw-entity-single-select
                     v-model="filter.salesChannelDomainId"
                     :label="$tc('tinect-redirects.detail.salesChannelDomain')"

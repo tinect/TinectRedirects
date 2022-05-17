@@ -7,13 +7,16 @@
       "createButton": "Add Redirect"
     },
     "detail": {
-      "sourceUrlLabel": "Source URL",
+      "sourceUrlLabel": "Source Path",
       "targetUrlLabel": "Target URL",
       "httpCodeLabel": "Http Code",
+      "hiddenLabel": "hidden",
+      "hiddenHelpText": "Mark this entry to be hidden in list",
       "cancelButton": "Cancel",
       "saveButton": "Save",
       "errorTitle": "Error",
       "activeLabel": "active",
+      "commentLabel": "Comment",
       "salesChannelDomain": "Domain",
       "errorSameUrlDescription": "The source URL and target URL must not be the same",
       "salesChannelDomainHelpText": "You can remove the salesChannelDomain to have it redirected on every saleschannel",

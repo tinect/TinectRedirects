@@ -6,6 +6,7 @@ Component.extend('tinect-redirects-create', 'tinect-redirects-details', {
             this.redirect = this.redirectRepository.create(Shopware.Context.api);
             this.redirect.httpCode = 302;
             this.redirect.active = false;
+            this.redirect.hidden = 0;
 
             this.isLoading = false;
         },

@@ -1,3 +1,4 @@
+import './index.scss';
 import template from './tinect-redirects-details.html.twig';
 
 const { Component, Mixin } = Shopware;

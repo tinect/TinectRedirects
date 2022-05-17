@@ -7,13 +7,16 @@
       "createButton": "Weiterleitung anlegen"
     },
     "detail": {
-      "sourceUrlLabel": "Quell-URL",
+      "sourceUrlLabel": "Quell-Pfad",
       "targetUrlLabel": "Ziel-URL",
       "httpCodeLabel": "Http-Code",
+      "hiddenLabel": "versteckt",
+      "hiddenHelpText": "Diesen Eintrag in der Liste standardmäßig ausblenden",
       "cancelButton": "Abbrechen",
       "saveButton": "Speichern",
       "errorTitle": "Fehler",
       "activeLabel": "aktiv",
+      "commentLabel": "Kommentar",
       "salesChannelDomain": "Domain",
       "errorSameUrlDescription": "Die Quell URL und Ziel URL dürfen nicht gleich sein",
       "salesChannelDomainHelpText": "Sie können die salesChannelDomain entfernen, um auf jedem Verkaufskanal umzuleiten",

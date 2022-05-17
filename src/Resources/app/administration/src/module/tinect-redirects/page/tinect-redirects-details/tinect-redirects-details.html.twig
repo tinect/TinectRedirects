@@ -17,9 +17,11 @@
         <template slot="content">
             <sw-card-view>
                 <sw-card :isLoading="isLoading">
-
-                    <sw-checkbox-field :label="$t('tinect-redirects.detail.activeLabel')"
-                                       v-model="redirect.active"></sw-checkbox-field>
+                    <sw-container class="no-flex-grow-field">
+                        <sw-checkbox-field :label="$t('tinect-redirects.detail.activeLabel')"
+                                           v-model="redirect.active">
+                        </sw-checkbox-field>
+                    </sw-container>
 
                     <sw-entity-single-select :label="$tc('tinect-redirects.detail.salesChannelDomain')"
                                              :value="redirect.salesChannelDomainId"
@@ -51,6 +53,15 @@
                         <option value=301>{{ $t('tinect-redirects.detail.httpCodeLabelValues.301') }}</option>
                         <option value=302>{{ $t('tinect-redirects.detail.httpCodeLabelValues.302') }}</option>
                     </sw-select-number-field>
+
+                    <sw-container class="no-flex-grow-field">
+                        <sw-checkbox-field :helpText="$t('tinect-redirects.detail.hiddenHelpText')"
+                                           :label="$t('tinect-redirects.detail.hiddenLabel')"
+                                           v-model="redirect.hidden">
+                        </sw-checkbox-field>
+                    </sw-container>
+
+                    <sw-text-editor :label="$t('tinect-redirects.detail.commentLabel')" v-model="redirect.comment"></sw-text-editor>
                 </sw-card>
             </sw-card-view>
         </template>

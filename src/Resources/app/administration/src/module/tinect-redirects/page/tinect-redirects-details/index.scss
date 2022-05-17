@@ -1,0 +1,13 @@
+.no-flex-grow-field {
+    .sw-field {
+        .sw-field__label {
+            label {
+                flex-grow: 0;
+            }
+
+            .sw-help-text {
+                margin-left: 3px;
+            }
+        }
+    }
+}
