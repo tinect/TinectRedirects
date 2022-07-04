@@ -1,3 +1,4 @@
+import './page/tinect-redirects-index';
 import './page/tinect-redirects-list';
 import './page/tinect-redirects-details';
 import './page/tinect-redirects-create';
@@ -12,7 +13,7 @@ Shopware.Module.register('tinect-redirects', {
 
     routes: {
         list: {
-            component: 'tinect-redirects-list',
+            component: 'tinect-redirects-index',
             path: 'list',
         },
         details: {

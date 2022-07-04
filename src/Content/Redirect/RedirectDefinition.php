@@ -48,7 +48,7 @@ class RedirectDefinition extends EntityDefinition
             (new LongTextField('comment', 'comment'))->addFlags(new AllowHtml()),
             new FkField('sales_channel_domain_id', 'salesChannelDomainId', SalesChannelDomainDefinition::class),
 
-            new ManyToOneAssociationField('salesChannelDomain', 'sales_channel_domain_id', SalesChannelDomainDefinition::class, 'id', false),
+            new ManyToOneAssociationField('salesChannelDomain', 'sales_channel_domain_id', SalesChannelDomainDefinition::class, 'id', true),
         ]);
     }
 }

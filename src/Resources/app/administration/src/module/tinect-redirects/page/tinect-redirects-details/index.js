@@ -1,5 +1,6 @@
 import './index.scss';
 import template from './tinect-redirects-details.html.twig';
+const Criteria = Shopware.Data.Criteria;
 
 const { Component, Mixin } = Shopware;
 
@@ -27,6 +28,8 @@ Component.register('tinect-redirects-details', {
             detail: null,
             isLoading: true,
             processSuccess: false,
+            similarItems: null,
+            similarItemsIsLoading: true,
         };
     },
 
@@ -59,6 +62,18 @@ Component.register('tinect-redirects-details', {
             ).then((entity) => {
                 this.detail = entity;
                 this.isLoading = false;
+
+                let criteria = new Criteria();
+                criteria.addFilter(Criteria.equals('source', entity.source));
+                criteria.addFilter(Criteria.not('and', [
+                    Criteria.equals('id', entity.id),
+                ]));
+
+                this.redirectRepository.search(criteria, Shopware.Context.api)
+                    .then((searchResult) => {
+                        this.similarItems = searchResult;
+                        this.similarItemsIsLoading = false;
+                    });
             });
         },
 
@@ -92,4 +107,13 @@ Component.register('tinect-redirects-details', {
         },
     },
 
+    watch: {
+        '$route.params.id': {
+            handler: function(id) {
+                if (this.detail && this.detail['id'] !== id) {
+                    this.$router.go();
+                }
+            },
+        }
+    },
 });
