@@ -65,7 +65,18 @@
 
                     <sw-text-editor :label="$t('tinect-redirects.detail.commentLabel')" v-model="detail.comment"></sw-text-editor>
                 </sw-card>
+
+                <sw-card :isLoading="similarItemsIsLoading" v-if="similarItems">
+                    <template slot="title">
+                        {{ similarItems.total }} similar Entries
+                    </template>
+                    <sw-container>
+                        <tinect-redirects-list :items="similarItems" :isLoading="similarItemsIsLoading" :isFullPage="!1">
+                        </tinect-redirects-list>
+                    </sw-container>
+                </sw-card>
             </sw-card-view>
+
         </template>
     </sw-page>
 {% endblock %}
