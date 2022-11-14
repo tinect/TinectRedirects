@@ -25,7 +25,7 @@ Component.register('tinect-redirects-details', {
 
     data() {
         return {
-            detail: null,
+            detail: {},
             isLoading: true,
             processSuccess: false,
             similarItems: null,
