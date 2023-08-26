@@ -3,6 +3,7 @@
 namespace Tinect\Redirects\Message;
 
 use Shopware\Core\Framework\MessageQueue\AsyncMessageInterface;
+use Shopware\Core\Framework\Uuid\Uuid;
 
 class TinectRedirectUpdateMessage implements AsyncMessageInterface
 {
@@ -16,7 +17,7 @@ class TinectRedirectUpdateMessage implements AsyncMessageInterface
     public function getId(): string
     {
         if ($this->id === null) {
-            $this->id = hash('xxh128', $this->source . $this->salesChannelDomainId);
+            $this->id = Uuid::randomHex();
         }
 
         return $this->id;
