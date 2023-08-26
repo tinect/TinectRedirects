@@ -11,7 +11,6 @@ use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\MultiFilter;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
-use Shopware\Core\Framework\Uuid\Uuid;
 use Shopware\Core\PlatformRequest;
 use Shopware\Core\SalesChannelRequest;
 use Shopware\Core\System\SalesChannel\Context\AbstractSalesChannelContextFactory;
@@ -27,14 +26,17 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\KernelEvents;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Tinect\Redirects\Content\Redirect\RedirectEntity;
+use Tinect\Redirects\Message\TinectRedirectUpdateMessage;
 
 class ExceptionSubscriber implements EventSubscriberInterface
 {
     public function __construct(
         private readonly EntityRepository $tinectRedirectsRedirectRepository,
         private readonly SeoUrlPlaceholderHandlerInterface $seoUrlPlaceholderHandler,
-        #[Autowire(service: SalesChannelContextFactory::class)] private readonly AbstractSalesChannelContextFactory $salesChannelContextFactory
+        #[Autowire(service: SalesChannelContextFactory::class)] private readonly AbstractSalesChannelContextFactory $salesChannelContextFactory,
+        private readonly MessageBusInterface $messageBus,
     ) {
     }
 
@@ -63,7 +65,7 @@ class ExceptionSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $salesChannelDomainId = $request->attributes->get(SalesChannelRequest::ATTRIBUTE_DOMAIN_ID);
+        $salesChannelDomainId = $request->attributes->getString(SalesChannelRequest::ATTRIBUTE_DOMAIN_ID);
 
         $response = $this->handleRequest($request, $salesChannelDomainId);
 
@@ -72,13 +74,17 @@ class ExceptionSubscriber implements EventSubscriberInterface
         }
     }
 
-    private function handleRequest(Request $request, ?string $salesChannelDomainId): ?Response
+    private function handleRequest(Request $request, string $salesChannelDomainId): ?Response
     {
         $path = $request->getPathInfo();
 
         // do not track bot requests building useless urls with "https://oldurl'https://newurl'"
         if (preg_match('/(.?)\'(.*)\'/', $path)) {
             return null;
+        }
+
+        if (empty($salesChannelDomainId)) {
+            $salesChannelDomainId = null;
         }
 
         $context = new Context(new SystemSource());
@@ -92,18 +98,23 @@ class ExceptionSubscriber implements EventSubscriberInterface
             ->addSorting(new FieldSorting('salesChannelDomainId', FieldSorting::DESCENDING))
             ->setLimit(1);
 
-        /** @var RedirectEntity $redirect */
+        /** @var ?RedirectEntity $redirect */
         $redirect = $this->tinectRedirectsRedirectRepository->search($criteria, $context)->first();
 
-        if (!$redirect) {
-            $this->tinectRedirectsRedirectRepository->create([[
-                'id' => Uuid::randomHex(),
-                'source' => $path,
-                'salesChannelDomainId' => $salesChannelDomainId,
-            ]], $context);
+        if ($redirect === null) {
+            $this->messageBus->dispatch(new TinectRedirectUpdateMessage(
+                source: $path,
+                salesChannelDomainId:  $salesChannelDomainId
+            ));
 
             return null;
         }
+
+        $this->messageBus->dispatch(new TinectRedirectUpdateMessage(
+            source: $path,
+            salesChannelDomainId: $salesChannelDomainId,
+            id: $redirect->getId()
+        ));
 
         if (!$redirect->active) {
             return null;
@@ -125,13 +136,23 @@ class ExceptionSubscriber implements EventSubscriberInterface
     {
         $salesChannelContext = $request->attributes->get(PlatformRequest::ATTRIBUTE_SALES_CHANNEL_CONTEXT_OBJECT);
 
-        if ($salesChannelContext) {
+        if ($salesChannelContext instanceof SalesChannelContext) {
             return $salesChannelContext;
         }
 
+        $salesChannelId = $request->attributes->getString(PlatformRequest::ATTRIBUTE_SALES_CHANNEL_ID);
+        if (empty($salesChannelId)) {
+            throw new \RuntimeException('No sales channel id found in request.');
+        }
+
+        $languageId = $request->headers->get(PlatformRequest::HEADER_LANGUAGE_ID);
+        if (empty($languageId)) {
+            throw new \RuntimeException('No language id found in request.');
+        }
+
         return $this->createSalesChannelContext(
-            $request->attributes->get(PlatformRequest::ATTRIBUTE_SALES_CHANNEL_ID),
-            $request->headers->get(PlatformRequest::HEADER_LANGUAGE_ID)
+            $salesChannelId,
+            $languageId
         );
     }
 

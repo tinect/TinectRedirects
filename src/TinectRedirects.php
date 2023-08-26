@@ -16,6 +16,10 @@ class TinectRedirects extends Plugin
             return;
         }
 
+        if ($this->container === null) {
+            return;
+        }
+
         /** @var Connection $connection */
         $connection = $this->container->get(Connection::class);
         $connection->executeStatement('DROP TABLE IF EXISTS `tinect_redirects_redirect`;');

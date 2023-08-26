@@ -45,6 +45,7 @@ class RedirectDefinition extends EntityDefinition
             new IntField('http_code', 'httpCode'),
             new BoolField('active', 'active'),
             new BoolField('hidden', 'hidden'),
+            new IntField('count', 'count'),
             (new LongTextField('comment', 'comment'))->addFlags(new AllowHtml()),
             new FkField('sales_channel_domain_id', 'salesChannelDomainId', SalesChannelDomainDefinition::class),
 
