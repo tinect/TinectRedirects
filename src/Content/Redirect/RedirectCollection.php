@@ -5,13 +5,7 @@ namespace Tinect\Redirects\Content\Redirect;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityCollection;
 
 /**
- * @method void                add(RedirectEntity $entity)
- * @method void                set(string $key, RedirectEntity $entity)
- * @method RedirectEntity[]    getIterator()
- * @method RedirectEntity[]    getElements()
- * @method RedirectEntity|null get(string $key)
- * @method RedirectEntity|null first()
- * @method RedirectEntity|null last()
+ * @extends EntityCollection<RedirectEntity>
  */
 class RedirectCollection extends EntityCollection
 {
