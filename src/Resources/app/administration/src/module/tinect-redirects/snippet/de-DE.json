@@ -23,7 +23,8 @@
       "httpCodeLabelValues": {
         "301": "301 (Permanent verschoben)",
         "302": "302 (Gefunden / Temporär verschoben)"
-      }
+      },
+      "countLabel": "Aufrufe"
     },
     "sidebar": {
       "refresh": "Neuladen",

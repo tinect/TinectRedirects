@@ -9,7 +9,7 @@ Shopware.Module.register('tinect-redirects', {
     title: 'tinect-redirects.general.title',
     description: 'tinect-redirects.general.title',
     color: '#189eff',
-    icon: 'default-object-rocket',
+    icon: 'regular-rocket',
 
     routes: {
         list: {
@@ -45,7 +45,7 @@ Shopware.Module.register('tinect-redirects', {
         parent: 'sw-settings',
         group: 'plugins',
         to: 'tinect.redirects.list',
-        icon: 'small-arrow-large-double-right',
+        icon: 'regular-double-chevron-right-s',
         label: 'tinect-redirects.general.title'
     }],
 });

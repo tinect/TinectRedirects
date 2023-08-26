@@ -23,7 +23,8 @@
       "httpCodeLabelValues": {
         "301": "301 (Moved Permanently)",
         "302": "302 (Found / Moved Temporarily)"
-      }
+      },
+      "countLabel": "Requests"
     },
     "sidebar": {
       "refresh": "Refresh",

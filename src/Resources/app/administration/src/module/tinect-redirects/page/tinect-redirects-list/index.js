@@ -63,6 +63,12 @@ Component.register('tinect-redirects-list', {
                     label: this.$tc('tinect-redirects.detail.httpCodeLabel'),
                     allowResize: true,
                 },
+                {
+                    property: 'count',
+                    dataIndex: 'count',
+                    label: this.$tc('tinect-redirects.detail.countLabel'),
+                    allowResize: true,
+                },
             ];
         },
 
