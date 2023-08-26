@@ -5,7 +5,5 @@ Shopware.Component.override('sw-import-export-edit-profile-modal', {
             value: 'tinect_redirects_redirect',
             label: this.$tc('sw-import-export.profile.rlRedirectLabel'),
         });
-
-        console.log(this.supportedEntities);
     },
 });

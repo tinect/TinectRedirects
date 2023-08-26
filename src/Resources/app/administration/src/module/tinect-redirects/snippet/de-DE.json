@@ -4,7 +4,8 @@
       "title": "Weiterleitungen"
     },
     "list": {
-      "createButton": "Weiterleitung anlegen"
+      "createButton": "Weiterleitung anlegen",
+      "countColumn": "Aufrufe | Aufrufe seit 1 Tag | Aufrufe letzte {count} Tage"
     },
     "detail": {
       "sourceUrlLabel": "Quell-Pfad",
@@ -24,7 +25,10 @@
         "301": "301 (Permanent verschoben)",
         "302": "302 (Gefunden / Temporär verschoben)"
       },
-      "countLabel": "Aufrufe"
+      "countLabel": "keine Aufrufe | 1 Aufruf | {count} Aufrufe",
+      "columnIpAddress": "IP-Adresse",
+      "columnUserAgent": "User-Agent",
+      "columnCreatedAt": "aufgerufen am"
     },
     "sidebar": {
       "refresh": "Neuladen",

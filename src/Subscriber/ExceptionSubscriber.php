@@ -87,6 +87,13 @@ class ExceptionSubscriber implements EventSubscriberInterface
             $salesChannelDomainId = null;
         }
 
+        $message = new TinectRedirectUpdateMessage(
+            source: $path,
+            salesChannelDomainId:  $salesChannelDomainId,
+            ipAddress: $request->getClientIp() ?? '',
+            userAgent: $request->headers->get('User-Agent') ?? '',
+        );
+
         $context = new Context(new SystemSource());
 
         $criteria = (new Criteria())
@@ -102,19 +109,13 @@ class ExceptionSubscriber implements EventSubscriberInterface
         $redirect = $this->tinectRedirectsRedirectRepository->search($criteria, $context)->first();
 
         if ($redirect === null) {
-            $this->messageBus->dispatch(new TinectRedirectUpdateMessage(
-                source: $path,
-                salesChannelDomainId:  $salesChannelDomainId
-            ));
+            $this->messageBus->dispatch($message);
 
             return null;
         }
 
-        $this->messageBus->dispatch(new TinectRedirectUpdateMessage(
-            source: $path,
-            salesChannelDomainId: $salesChannelDomainId,
-            id: $redirect->getId()
-        ));
+        $message->setId($redirect->getId());
+        $this->messageBus->dispatch($message);
 
         if (!$redirect->active) {
             return null;

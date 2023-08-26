@@ -36,10 +36,6 @@
                         <sw-field :label="$t('tinect-redirects.detail.sourceUrlLabel')"
                                   v-model="detail.source"
                                   validation="required"></sw-field>
-
-                        <sw-field :label="$t('tinect-redirects.detail.countLabel')"
-                                  v-model="detail.count"
-                                  disabled></sw-field>
                     </sw-card>
 
                     <template v-if="hasSwUrlExt">
@@ -78,6 +74,29 @@
                         <tinect-redirects-list :items="similarItems" :isLoading="similarItemsIsLoading" :isFullPage="!1">
                         </tinect-redirects-list>
                     </sw-container>
+                </sw-card>
+
+                <sw-card v-if="detail">
+                    <template slot="title">
+                        {{ $tc('tinect-redirects.detail.countLabel', redirectRequestsTotal) }}
+                    </template>
+                    <template>
+                        <sw-entity-listing
+                            :fullPage="false"
+                            :repository="redirectRequestRepository"
+                            :columns="redirectRequestColumns"
+                            :items="redirectRequests"
+                            @page-change="onPageChange"
+                            @column-sort="onSortColumn"
+                            :criteria-limit="limit"
+                            :sort-by="currentSortBy"
+                            :sort-direction="redirectRequestsSortDirection"
+                        >
+                            <template slot="column-createdAt" slot-scope="{ item }">
+                                {{ item.createdAt | date }}
+                            </template>
+                        </sw-entity-listing>
+                    </template>
                 </sw-card>
             </sw-card-view>
 

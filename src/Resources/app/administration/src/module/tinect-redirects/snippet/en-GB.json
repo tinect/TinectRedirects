@@ -4,7 +4,8 @@
       "title": "Redirects"
     },
     "list": {
-      "createButton": "Add Redirect"
+      "createButton": "Add Redirect",
+      "countColumn": "Requests | Requests since 1 day | Requests last {count} days"
     },
     "detail": {
       "sourceUrlLabel": "Source Path",
@@ -24,7 +25,10 @@
         "301": "301 (Moved Permanently)",
         "302": "302 (Found / Moved Temporarily)"
       },
-      "countLabel": "Requests"
+      "countLabel": "no requests | 1 request | {count} requests",
+      "columnIpAddress": "IP-Address",
+      "columnUserAgent": "User-Agent",
+      "columnCreatedAt": "Requested at"
     },
     "sidebar": {
       "refresh": "Refresh",

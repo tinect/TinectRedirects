@@ -1,6 +1,7 @@
 import template from './tinect-redirects-list.html.twig';
 
 const { Component} = Shopware;
+const { Criteria } = Shopware.Data;
 
 Component.register('tinect-redirects-list', {
     template,
@@ -23,9 +24,26 @@ Component.register('tinect-redirects-list', {
         },
     },
 
+    data() {
+        return {
+            firstEntryDate: null
+        }
+    },
+
     inject: [
         'repositoryFactory',
     ],
+
+    async created() {
+        const criteria = new Criteria();
+        criteria.addAggregation(Criteria.min('createdAt', 'createdAt'));
+        criteria.setLimit(1);
+
+        await this.redirectRequestRepository.search(criteria, Shopware.Context.api).then((result) => {
+            const today = new Date();
+            this.firstEntryDate = Math.ceil((today - new Date(result.aggregations.createdAt.min)) / (1000 * 60 * 60 * 24));
+        });
+    },
 
     computed: {
         open(id)  {
@@ -66,7 +84,7 @@ Component.register('tinect-redirects-list', {
                 {
                     property: 'count',
                     dataIndex: 'count',
-                    label: this.$tc('tinect-redirects.detail.countLabel'),
+                    label: this.$tc('tinect-redirects.list.countColumn', this.firstEntryDate),
                     allowResize: true,
                 },
             ];
@@ -74,6 +92,10 @@ Component.register('tinect-redirects-list', {
 
         redirectRepository() {
             return this.repositoryFactory.create('tinect_redirects_redirect');
+        },
+
+        redirectRequestRepository() {
+            return this.repositoryFactory.create('tinect_redirects_redirect_request');
         },
     },
 

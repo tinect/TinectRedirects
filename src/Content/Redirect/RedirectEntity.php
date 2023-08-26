@@ -27,4 +27,6 @@ class RedirectEntity extends Entity
     public ?SalesChannelDomainEntity $salesChannelDomain = null;
 
     public int $count = 0;
+
+    public ?RedirectRequestCollection $requests = null;
 }

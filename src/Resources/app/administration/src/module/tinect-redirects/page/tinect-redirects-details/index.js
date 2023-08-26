@@ -13,6 +13,7 @@ Component.register('tinect-redirects-details', {
 
     mixins: [
         Mixin.getByName('notification'),
+        Mixin.getByName('listing'),
     ],
 
     props: {
@@ -30,6 +31,10 @@ Component.register('tinect-redirects-details', {
             processSuccess: false,
             similarItems: null,
             similarItemsIsLoading: true,
+            redirectRequests: null,
+            redirectRequestsSortBy: 'createdAt',
+            redirectRequestsSortDirection: 'DESC',
+            redirectRequestsTotal: 0,
         };
     },
 
@@ -42,6 +47,36 @@ Component.register('tinect-redirects-details', {
     computed: {
         redirectRepository() {
             return this.repositoryFactory.create('tinect_redirects_redirect');
+        },
+
+        redirectRequestRepository() {
+            return this.repositoryFactory.create('tinect_redirects_redirect_request');
+        },
+
+        redirectRequestColumns() {
+            return [{
+                property: 'ipAddress',
+                label: 'tinect-redirects.detail.columnIpAddress',
+                allowResize: true,
+            }, {
+                property: 'userAgent',
+                label: 'tinect-redirects.detail.columnUserAgent',
+                allowResize: true,
+            }, {
+                property: 'createdAt',
+                label: 'tinect-redirects.detail.columnCreatedAt',
+                allowResize: true,
+            }];
+        },
+
+        redirectRequestCriteria() {
+            const criteria = new Criteria(this.page, this.limit);
+            criteria.addFilter(Criteria.equals('redirectId', this.redirectId));
+
+            criteria.setTerm(this.term);
+            criteria.addSorting(Criteria.sort(this.redirectRequestsSortBy, this.redirectRequestsSortDirection, this.naturalSorting));
+
+            return criteria;
         },
 
         hasSwUrlExt() {
@@ -104,6 +139,16 @@ Component.register('tinect-redirects-details', {
 
         saveFinish() {
             this.processSuccess = false;
+        },
+
+        async getList() {
+            const criteria = await this.addQueryScores(this.term, this.redirectRequestCriteria);
+
+            return this.redirectRequestRepository.search(criteria)
+                .then(searchResult => {
+                    this.redirectRequests = searchResult;
+                    this.redirectRequestsTotal = searchResult.total;
+                });
         },
     },
 

@@ -13,6 +13,7 @@ use Shopware\Core\Framework\DataAbstractionLayer\Field\IdField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\IntField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\LongTextField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField;
+use Shopware\Core\Framework\DataAbstractionLayer\Field\OneToManyAssociationField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\StringField;
 use Shopware\Core\Framework\DataAbstractionLayer\FieldCollection;
 use Shopware\Core\System\SalesChannel\Aggregate\SalesChannelDomain\SalesChannelDomainDefinition;
@@ -49,7 +50,8 @@ class RedirectDefinition extends EntityDefinition
             (new LongTextField('comment', 'comment'))->addFlags(new AllowHtml()),
             new FkField('sales_channel_domain_id', 'salesChannelDomainId', SalesChannelDomainDefinition::class),
 
-            new ManyToOneAssociationField('salesChannelDomain', 'sales_channel_domain_id', SalesChannelDomainDefinition::class, 'id', true),
+            new ManyToOneAssociationField('salesChannelDomain', 'sales_channel_domain_id', SalesChannelDomainDefinition::class, 'id'),
+            new OneToManyAssociationField('requests', RedirectRequestDefinition::class, 'tinect_redirects_redirect_id', 'id'),
         ]);
     }
 }
