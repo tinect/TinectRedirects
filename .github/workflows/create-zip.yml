@@ -1,14 +1,14 @@
 name: BuildPlugin
 on:
-    push:
-        branches:
-            - main
+  push:
+    branches:
+      - main
 
 jobs:
-    build:
-        uses: FriendsOfShopware/workflows/.github/workflows/github.yml@main
-        with:
-            extensionName: ${{ github.event.repository.name }}
-            shopwareVersion: '6.4.10'
-        secrets:
-            ghToken: ${{ secrets.GITHUB_TOKEN }}
+  build:
+    uses: FriendsOfShopware/workflows/.github/workflows/github.yml@main
+    with:
+      extensionName: ${{ github.event.repository.name }}
+      shopwareVersion: '6.5.0'
+    secrets:
+      ghToken: ${{ secrets.GITHUB_TOKEN }}

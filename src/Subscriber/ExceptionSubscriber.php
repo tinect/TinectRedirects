@@ -6,7 +6,7 @@ use Shopware\Core\Content\Category\Exception\CategoryNotFoundException;
 use Shopware\Core\Content\Seo\SeoUrlPlaceholderHandlerInterface;
 use Shopware\Core\Framework\Api\Context\SystemSource;
 use Shopware\Core\Framework\Context;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\MultiFilter;
@@ -15,9 +15,11 @@ use Shopware\Core\Framework\Uuid\Uuid;
 use Shopware\Core\PlatformRequest;
 use Shopware\Core\SalesChannelRequest;
 use Shopware\Core\System\SalesChannel\Context\AbstractSalesChannelContextFactory;
+use Shopware\Core\System\SalesChannel\Context\SalesChannelContextFactory;
 use Shopware\Core\System\SalesChannel\Context\SalesChannelContextService;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Shopware\Storefront\Framework\Routing\RequestTransformer;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,20 +31,11 @@ use Tinect\Redirects\Content\Redirect\RedirectEntity;
 
 class ExceptionSubscriber implements EventSubscriberInterface
 {
-    private EntityRepositoryInterface $redirectRepository;
-
-    private SeoUrlPlaceholderHandlerInterface $seoUrlPlaceholderHandler;
-
-    private AbstractSalesChannelContextFactory $salesChannelContextFactory;
-
     public function __construct(
-        EntityRepositoryInterface $redirectRepository,
-        SeoUrlPlaceholderHandlerInterface $seoUrlPlaceholderHandler,
-        AbstractSalesChannelContextFactory $salesChannelContextFactory
+        private readonly EntityRepository $tinectRedirectsRedirectRepository,
+        private readonly SeoUrlPlaceholderHandlerInterface $seoUrlPlaceholderHandler,
+        #[Autowire(service: SalesChannelContextFactory::class)] private readonly AbstractSalesChannelContextFactory $salesChannelContextFactory
     ) {
-        $this->redirectRepository = $redirectRepository;
-        $this->seoUrlPlaceholderHandler = $seoUrlPlaceholderHandler;
-        $this->salesChannelContextFactory = $salesChannelContextFactory;
     }
 
     public static function getSubscribedEvents(): array
@@ -100,10 +93,10 @@ class ExceptionSubscriber implements EventSubscriberInterface
             ->setLimit(1);
 
         /** @var RedirectEntity $redirect */
-        $redirect = $this->redirectRepository->search($criteria, $context)->first();
+        $redirect = $this->tinectRedirectsRedirectRepository->search($criteria, $context)->first();
 
         if (!$redirect) {
-            $this->redirectRepository->create([[
+            $this->tinectRedirectsRedirectRepository->create([[
                 'id' => Uuid::randomHex(),
                 'source' => $path,
                 'salesChannelDomainId' => $salesChannelDomainId,
@@ -112,7 +105,7 @@ class ExceptionSubscriber implements EventSubscriberInterface
             return null;
         }
 
-        if ($redirect->active === false) {
+        if (!$redirect->active) {
             return null;
         }
 

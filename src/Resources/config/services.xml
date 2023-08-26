@@ -5,14 +5,7 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-        <service id="Tinect\Redirects\Content\Redirect\RedirectDefinition">
-            <tag name="shopware.entity.definition"/>
-        </service>
-        <service id="Tinect\Redirects\Subscriber\ExceptionSubscriber">
-            <tag name="kernel.event_subscriber"/>
-            <argument type="service" id="tinect_redirects_redirect.repository"/>
-            <argument type="service" id="Shopware\Core\Content\Seo\SeoUrlPlaceholderHandlerInterface"/>
-            <argument type="service" id="Shopware\Core\System\SalesChannel\Context\SalesChannelContextFactory" />
-        </service>
+        <defaults autowire="true" autoconfigure="true" />
+        <prototype namespace="Tinect\Redirects\" resource="../../" exclude="../../{Resources,TinectRedirects.php}" />
     </services>
 </container>
