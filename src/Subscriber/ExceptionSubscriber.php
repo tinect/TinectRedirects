@@ -28,10 +28,14 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Tinect\Redirects\Content\Redirect\RedirectEntity;
+use Tinect\Redirects\Content\Redirect\RedirectRequestCollection;
 use Tinect\Redirects\Message\TinectRedirectUpdateMessage;
 
 class ExceptionSubscriber implements EventSubscriberInterface
 {
+    /**
+     * @param EntityRepository<RedirectRequestCollection> $tinectRedirectsRedirectRepository
+     */
     public function __construct(
         private readonly EntityRepository $tinectRedirectsRedirectRepository,
         private readonly SeoUrlPlaceholderHandlerInterface $seoUrlPlaceholderHandler,
