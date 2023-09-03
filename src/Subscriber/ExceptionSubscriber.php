@@ -117,11 +117,11 @@ class ExceptionSubscriber implements EventSubscriberInterface
         $message->setId($redirect->getId());
         $this->messageBus->dispatch($message);
 
-        if (!$redirect->active) {
+        if (!$redirect->isActive()) {
             return null;
         }
 
-        $targetURL = $redirect->target;
+        $targetURL = $redirect->getTarget();
 
         $host = $request->attributes->get(RequestTransformer::SALES_CHANNEL_ABSOLUTE_BASE_URL)
             . $request->attributes->get(RequestTransformer::SALES_CHANNEL_BASE_URL);
@@ -130,7 +130,7 @@ class ExceptionSubscriber implements EventSubscriberInterface
 
         $targetURL = $this->seoUrlPlaceholderHandler->replace($targetURL, $host, $salesChannelContext);
 
-        return new RedirectResponse($targetURL, $redirect->httpCode);
+        return new RedirectResponse($targetURL, $redirect->getHttpCode());
     }
 
     private function getSalesChannelContext(Request $request): SalesChannelContext
