@@ -21,5 +21,8 @@ jobs:
 
       - name: PHPStan
         run: |
+          mysql -V
+          php -v
+          cp -r "./" "/plugins/TinectRedirects"
           cd /plugins/TinectRedirects
           /opt/shopware/vendor/bin/phpstan analyse -c phpstan.neon
