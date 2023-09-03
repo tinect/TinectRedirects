@@ -29,3 +29,7 @@ parameters:
             count: 1
             path: src/Task/CleanupTaskHandler.php
             reportUnmatched: false
+
+        -
+            message: '#.* generic class Shopware\\Core\\Framework\\DataAbstractionLayer\\EntityRepository.*not specify its types: TEntityCollection#'
+            reportUnmatched: false

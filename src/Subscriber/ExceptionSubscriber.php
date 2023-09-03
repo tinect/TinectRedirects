@@ -33,9 +33,6 @@ use Tinect\Redirects\Message\TinectRedirectUpdateMessage;
 
 class ExceptionSubscriber implements EventSubscriberInterface
 {
-    /**
-     * @param EntityRepository<RedirectRequestCollection> $tinectRedirectsRedirectRepository
-     */
     public function __construct(
         private readonly EntityRepository $tinectRedirectsRedirectRepository,
         private readonly SeoUrlPlaceholderHandlerInterface $seoUrlPlaceholderHandler,

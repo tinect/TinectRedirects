@@ -14,9 +14,6 @@ use Tinect\Redirects\Content\Redirect\RedirectRequestDefinition;
 #[AsMessageHandler(handles: CleanupTask::class)]
 class CleanupTaskHandler extends ScheduledTaskHandler
 {
-    /**
-     * @param EntityRepository<ScheduledTaskCollection> $scheduledTaskRepository
-     */
     public function __construct(
         EntityRepository $scheduledTaskRepository,
         private readonly SystemConfigService $configService,
