@@ -6,6 +6,8 @@ on:
     tags-ignore:
       - '*'
   pull_request:
+  schedule:
+    - cron: "5 15 * * *"
 
 jobs:
   test:
