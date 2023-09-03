@@ -28,7 +28,6 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Tinect\Redirects\Content\Redirect\RedirectEntity;
-use Tinect\Redirects\Content\Redirect\RedirectRequestCollection;
 use Tinect\Redirects\Message\TinectRedirectUpdateMessage;
 
 class ExceptionSubscriber implements EventSubscriberInterface

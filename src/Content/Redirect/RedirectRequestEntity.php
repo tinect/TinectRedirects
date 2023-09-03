@@ -9,11 +9,51 @@ class RedirectRequestEntity extends Entity
 {
     use EntityIdTrait;
 
-    public ?string $redirectId = null;
+    protected ?string $redirectId = null;
 
-    public ?RedirectEntity $redirect = null;
+    protected ?RedirectEntity $redirect = null;
 
-    public string $ipAddress = '';
+    protected string $ipAddress = '';
 
-    public string $userAgent = '';
+    protected string $userAgent = '';
+
+    public function getRedirectId(): ?string
+    {
+        return $this->redirectId;
+    }
+
+    public function setRedirectId(?string $redirectId): void
+    {
+        $this->redirectId = $redirectId;
+    }
+
+    public function getRedirect(): ?RedirectEntity
+    {
+        return $this->redirect;
+    }
+
+    public function setRedirect(?RedirectEntity $redirect): void
+    {
+        $this->redirect = $redirect;
+    }
+
+    public function getIpAddress(): string
+    {
+        return $this->ipAddress;
+    }
+
+    public function setIpAddress(string $ipAddress): void
+    {
+        $this->ipAddress = $ipAddress;
+    }
+
+    public function getUserAgent(): string
+    {
+        return $this->userAgent;
+    }
+
+    public function setUserAgent(string $userAgent): void
+    {
+        $this->userAgent = $userAgent;
+    }
 }
