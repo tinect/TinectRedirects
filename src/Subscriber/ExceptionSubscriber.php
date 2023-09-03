@@ -65,16 +65,14 @@ class ExceptionSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $salesChannelDomainId = $request->attributes->getString(SalesChannelRequest::ATTRIBUTE_DOMAIN_ID);
-
-        $response = $this->handleRequest($request, $salesChannelDomainId);
+        $response = $this->handleRequest($request);
 
         if ($response instanceof Response) {
             $event->setResponse($response);
         }
     }
 
-    private function handleRequest(Request $request, string $salesChannelDomainId): ?Response
+    private function handleRequest(Request $request): ?Response
     {
         $path = $request->getPathInfo();
 
@@ -83,7 +81,9 @@ class ExceptionSubscriber implements EventSubscriberInterface
             return null;
         }
 
-        if (empty($salesChannelDomainId)) {
+        $salesChannelDomainId = $request->attributes->get(SalesChannelRequest::ATTRIBUTE_DOMAIN_ID);
+
+        if (!\is_string($salesChannelDomainId) || empty($salesChannelDomainId)) {
             $salesChannelDomainId = null;
         }
 
@@ -141,8 +141,9 @@ class ExceptionSubscriber implements EventSubscriberInterface
             return $salesChannelContext;
         }
 
-        $salesChannelId = $request->attributes->getString(PlatformRequest::ATTRIBUTE_SALES_CHANNEL_ID);
-        if (empty($salesChannelId)) {
+        $salesChannelId = $request->attributes->get(PlatformRequest::ATTRIBUTE_SALES_CHANNEL_ID);
+
+        if (!\is_string($salesChannelId) || empty($salesChannelId)) {
             throw new \RuntimeException('No sales channel id found in request.');
         }
 

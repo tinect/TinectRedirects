@@ -43,6 +43,13 @@ class Migration1615031757ImportExportProfile extends MigrationStep
         // implement update destructive
     }
 
+    /**
+     * @return array<int, array{
+     *     name: string,
+     *     source_entity: string,
+     *     mapping: array<int, array{'key': string, 'mappedKey': string}>
+     *     }>
+     */
     private function getProfiles(): array
     {
         return [
