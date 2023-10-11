@@ -10,7 +10,7 @@
     "detail": {
       "sourceUrlLabel": "Source Path",
       "targetUrlLabel": "Target URL",
-      "httpCodeLabel": "Http Code",
+      "httpCodeLabel": "HTTP Code",
       "hiddenLabel": "hidden",
       "hiddenHelpText": "Mark this entry to be hidden in list",
       "cancelButton": "Cancel",
@@ -18,14 +18,16 @@
       "errorTitle": "Error",
       "activeLabel": "active",
       "commentLabel": "Comment",
-      "salesChannelDomain": "Source SalesChannelDomain",
-      "errorSameUrlDescription": "The source URL and target URL must not be the same",
-      "salesChannelDomainHelpText": "You can remove the salesChannelDomain to have it redirected on every saleschannel",
+      "salesChannelDomain": "Source Domain",
+      "errorSameUrlDescription": "The source path and target URL must not be the same",
+      "salesChannelDomainHelpText": "You can remove the domain to have it redirected on every sales channel",
+      "targetUrlHelpText": "The target URL can be an internal URL (e.g. /shopware) or an external URL (e.g. https://shopware.com/example)",
       "httpCodeLabelValues": {
         "301": "301 (Moved Permanently)",
         "302": "302 (Found / Moved Temporarily)"
       },
       "countLabel": "no requests | 1 request | {count} requests",
+      "similarItemsLabel": "no similar entries | 1 similar entry | {count} similar entries",
       "columnIpAddress": "IP-Address",
       "columnUserAgent": "User-Agent",
       "columnCreatedAt": "Requested at"

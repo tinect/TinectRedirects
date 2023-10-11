@@ -61,6 +61,7 @@ Component.register('tinect-redirects-list', {
                     dataIndex: 'active',
                     label: this.$tc('tinect-redirects.detail.activeLabel'),
                     routerLink: 'tinect.redirects.details',
+                    align: 'center',
                 },
                 {
                     property: 'source',

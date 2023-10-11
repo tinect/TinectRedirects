@@ -7,6 +7,22 @@
         :isLoading="isLoading"
         :fullPage="isFullPage"
         detailRoute="tinect.redirect.details">
+        <template slot="column-active" slot-scope="{ item }">
+            <sw-icon
+                    v-if="item.active"
+                    name="regular-checkmark-xs"
+                    small
+                    class="sw-icon--product-status is--active"
+            />
+
+            <sw-icon
+                    v-else
+                    name="regular-times-s"
+                    small
+                    class="sw-icon--product-status is--inactive"
+            />
+        </template>
+
         <template slot="column-source" slot-scope="{ item }">
             <router-link
                 class="sw-data-grid__cell-value"
