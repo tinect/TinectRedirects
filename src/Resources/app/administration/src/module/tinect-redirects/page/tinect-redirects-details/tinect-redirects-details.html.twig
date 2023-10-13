@@ -41,12 +41,16 @@
                     <template v-if="hasSwUrlExt">
                         <sw-url-ext-field :label="$t('tinect-redirects.detail.targetUrlLabel')"
                                           v-model="detail.target"
-                                          validation="required"></sw-url-ext-field>
+                                          validation="required"
+                                          :helpText="$tc('tinect-redirects.detail.salesChannelDomainHelpText')">
+                        </sw-url-ext-field>
                     </template>
                     <template v-else>
                         <sw-field :label="$t('tinect-redirects.detail.targetUrlLabel')"
                                   v-model="detail.target"
-                                  validation="required"></sw-field>
+                                  validation="required"
+                                  :helpText="$tc('tinect-redirects.detail.targetUrlHelpText')">
+                        </sw-field>
                     </template>
 
                     <sw-select-number-field :label="$t('tinect-redirects.detail.httpCodeLabel')"
@@ -68,7 +72,7 @@
 
                 <sw-card :isLoading="similarItemsIsLoading" v-if="similarItems">
                     <template slot="title">
-                        {{ similarItems.total }} similar Entries
+                        {{ $tc('tinect-redirects.detail.similarItemsLabel', similarItems.total) }}
                     </template>
                     <sw-container>
                         <tinect-redirects-list :items="similarItems" :isLoading="similarItemsIsLoading" :isFullPage="!1">
