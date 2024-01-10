@@ -180,7 +180,7 @@ class ExceptionSubscriber implements EventSubscriberInterface
         return $request->getClientIp() ?? '';
     }
 
-    private function canSaveIpAddress(string $salesChannelId): bool
+    private function canSaveIpAddress(?string $salesChannelId): bool
     {
         return $this->systemConfigService->getBool('TinectRedirects.config.saveIpAddresses', $salesChannelId);
     }
