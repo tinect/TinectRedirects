@@ -13,8 +13,7 @@ use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 class TinectRedirectUpdateHandler
 {
     public function __construct(
-        private readonly Connection $connection,
-        private readonly SystemConfigService $systemConfigService,
+        private readonly Connection $connection
     ) {
     }
 
@@ -55,16 +54,11 @@ class TinectRedirectUpdateHandler
         $params = [
             'id' => Uuid::randomBytes(),
             'redirectId' => $id,
-            'ipAddress' => $this->canSaveIpAddress() ? $message->getIpAddress() : '',
+            'ipAddress' => $message->getIpAddress(),
             'userAgent' => $message->getUserAgent(),
             'createdAt' => $message->getCreatedAt()->format(Defaults::STORAGE_DATE_TIME_FORMAT),
         ];
 
         $query->execute($params);
-    }
-
-    private function canSaveIpAddress(): bool
-    {
-        return $this->systemConfigService->getBool('TinectRedirects.config.saveIpAddresses');
     }
 }
