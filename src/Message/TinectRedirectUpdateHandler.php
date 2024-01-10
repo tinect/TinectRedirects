@@ -6,13 +6,15 @@ use Doctrine\DBAL\Connection;
 use Shopware\Core\Defaults;
 use Shopware\Core\Framework\DataAbstractionLayer\Doctrine\RetryableQuery;
 use Shopware\Core\Framework\Uuid\Uuid;
+use Shopware\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 #[AsMessageHandler(priority: 100)]
 class TinectRedirectUpdateHandler
 {
     public function __construct(
-        private readonly Connection $connection
+        private readonly Connection $connection,
+        private readonly SystemConfigService $systemConfigService,
     ) {
     }
 
@@ -53,11 +55,16 @@ class TinectRedirectUpdateHandler
         $params = [
             'id' => Uuid::randomBytes(),
             'redirectId' => $id,
-            'ipAddress' => $message->getIpAddress(),
+            'ipAddress' => $this->canSaveIpAddress() ? $message->getIpAddress() : '',
             'userAgent' => $message->getUserAgent(),
             'createdAt' => $message->getCreatedAt()->format(Defaults::STORAGE_DATE_TIME_FORMAT),
         ];
 
         $query->execute($params);
+    }
+
+    private function canSaveIpAddress(): bool
+    {
+        return $this->systemConfigService->getBool('TinectRedirects.config.saveIpAddresses');
     }
 }
