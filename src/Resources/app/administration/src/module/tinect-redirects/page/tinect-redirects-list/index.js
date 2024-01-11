@@ -1,6 +1,6 @@
 import template from './tinect-redirects-list.html.twig';
 
-const { Component} = Shopware;
+const { Component } = Shopware;
 const { Criteria } = Shopware.Data;
 
 Component.register('tinect-redirects-list', {
@@ -26,8 +26,8 @@ Component.register('tinect-redirects-list', {
 
     data() {
         return {
-            firstEntryDate: null
-        }
+            firstEntryDate: null,
+        };
     },
 
     inject: [
@@ -46,10 +46,10 @@ Component.register('tinect-redirects-list', {
     },
 
     computed: {
-        open(id)  {
+        open(id) {
             const resolved = this.$router.resolve({
                 name: 'tinect.redirects.details',
-                params: { id: id }
+                params: { id: id },
             });
             window.location.replace(resolved.href);
         },
