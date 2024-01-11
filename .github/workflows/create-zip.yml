@@ -10,5 +10,6 @@ jobs:
     with:
       extensionName: ${{ github.event.repository.name }}
       shopwareVersion: '6.5.0'
+      cliVersion: '0.4.5'
     secrets:
       ghToken: ${{ secrets.GITHUB_TOKEN }}
