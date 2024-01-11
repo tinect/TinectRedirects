@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Tinect\Redirects\Subscriber;
 
@@ -89,37 +91,33 @@ class ExceptionSubscriber implements EventSubscriberInterface
             $salesChannelDomainId = null;
         }
 
-        $message = new TinectRedirectUpdateMessage(
-            source: $path,
-            salesChannelDomainId:  $salesChannelDomainId,
-            ipAddress: $this->getIpAddress($request),
-            userAgent: $request->headers->get('User-Agent') ?? '',
-        );
-
         $context = new Context(new SystemSource());
-
         $criteria = (new Criteria())
             ->addFilter(new EqualsFilter('source', $path))
-            ->addFilter(new MultiFilter(MultiFilter::CONNECTION_OR, [
-                new EqualsFilter('salesChannelDomainId', $salesChannelDomainId),
-                new EqualsFilter('salesChannelDomainId', null),
-            ]))
+            ->addFilter(
+                new MultiFilter(MultiFilter::CONNECTION_OR, [
+                    new EqualsFilter('salesChannelDomainId', $salesChannelDomainId),
+                    new EqualsFilter('salesChannelDomainId', null),
+                ])
+            )
             ->addSorting(new FieldSorting('salesChannelDomainId', FieldSorting::DESCENDING))
             ->setLimit(1);
 
         /** @var ?RedirectEntity $redirect */
         $redirect = $this->tinectRedirectsRedirectRepository->search($criteria, $context)->first();
 
-        if ($redirect === null) {
-            $this->messageBus->dispatch($message);
+        $message = new TinectRedirectUpdateMessage(
+            source: $path,
+            salesChannelDomainId: $salesChannelDomainId,
+            ipAddress: $this->getIpAddress($request),
+            userAgent: $request->headers->get('User-Agent') ?? '',
+            createRedirect: $this->canCreateRedirect($salesChannelDomainId),
+            id: $redirect?->getId(),
+        );
 
-            return null;
-        }
-
-        $message->setId($redirect->getId());
         $this->messageBus->dispatch($message);
 
-        if (!$redirect->isActive()) {
+        if ($redirect === null || !$redirect->isActive()) {
             return null;
         }
 
@@ -162,7 +160,11 @@ class ExceptionSubscriber implements EventSubscriberInterface
 
     private function createSalesChannelContext(string $salesChannelId, string $languageId): SalesChannelContext
     {
-        return $this->salesChannelContextFactory->create('', $salesChannelId, [SalesChannelContextService::LANGUAGE_ID => $languageId]);
+        return $this->salesChannelContextFactory->create(
+            '',
+            $salesChannelId,
+            [SalesChannelContextService::LANGUAGE_ID => $languageId]
+        );
     }
 
     private function getIpAddress(Request $request): string
@@ -183,5 +185,10 @@ class ExceptionSubscriber implements EventSubscriberInterface
     private function canSaveIpAddress(?string $salesChannelId): bool
     {
         return $this->systemConfigService->getBool('TinectRedirects.config.saveIpAddresses', $salesChannelId);
+    }
+
+    private function canCreateRedirect(?string $salesChannelId): bool
+    {
+        return $this->systemConfigService->getBool('TinectRedirects.config.createNewRedirects', $salesChannelId);
     }
 }

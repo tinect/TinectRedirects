@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Tinect\Redirects\Message;
 
@@ -12,21 +14,38 @@ use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 class TinectRedirectUpdateHandler
 {
     public function __construct(
-        private readonly Connection $connection
+        private readonly Connection $connection,
     ) {
     }
 
     public function __invoke(TinectRedirectUpdateMessage $message): void
     {
+        $redirectId = $message->getId();
+
+        if ($message->isCreateRedirect()) {
+            $redirectId = $this->createOrUpdateRedirect($message);
+        } else {
+            $this->updateRedirectCount($message);
+        }
+
+        if (\is_string($redirectId)) {
+            $this->createRedirectRequest($message, $redirectId);
+        }
+    }
+
+    private function createOrUpdateRedirect(TinectRedirectUpdateMessage $message): string
+    {
         $query = new RetryableQuery(
             $this->connection,
-            $this->connection->prepare('INSERT INTO `tinect_redirects_redirect` (`id`, `source`, `sales_channel_domain_id`, `created_at`)
+            $this->connection->prepare(
+                'INSERT INTO `tinect_redirects_redirect` (`id`, `source`, `sales_channel_domain_id`, `created_at`)
                       VALUES (:id, :source, :salesChannelDomainId, :createdAt)
-                      ON DUPLICATE KEY UPDATE `count` = count + 1')
+                      ON DUPLICATE KEY UPDATE `count` = count + 1, `updated_at` = NOW()'
+            )
         );
 
         $params = [
-            'id' => Uuid::fromHexToBytes($message->getId()),
+            'id' => \is_string($message->getId()) ? Uuid::fromHexToBytes($message->getId()) : Uuid::randomBytes(),
             'source' => $message->getSource(),
             'salesChannelDomainId' => null,
             'createdAt' => $message->getCreatedAt()->format(Defaults::STORAGE_DATE_TIME_FORMAT),
@@ -38,21 +57,42 @@ class TinectRedirectUpdateHandler
 
         $query->execute($params);
 
-        $query = $this->connection->prepare('SELECT `id` FROM `tinect_redirects_redirect` WHERE `source`=:source AND `sales_channel_domain_id`=:salesChannelDomainId');
-        $id = $query->executeQuery([
-            'source' => $message->getSource(),
-            'salesChannelDomainId' => $params['salesChannelDomainId'],
-        ])->fetchOne();
+        return Uuid::fromBytesToHex($params['id']);
+    }
+
+    private function updateRedirectCount(TinectRedirectUpdateMessage $message): void
+    {
+        if (!\is_string($message->getId())) {
+            return;
+        }
 
         $query = new RetryableQuery(
             $this->connection,
-            $this->connection->prepare('INSERT INTO `tinect_redirects_redirect_request` (`id`, `tinect_redirects_redirect_id`, `ip_address`, `user_agent`, `created_at`)
-                      VALUES (:id, :redirectId, :ipAddress, :userAgent, :createdAt)')
+            $this->connection->prepare(
+                'UPDATE `tinect_redirects_redirect` SET `count` = count + 1, `updated_at` = NOW() WHERE `id` = :id'
+            )
+        );
+
+        $params = [
+            'id' => Uuid::fromHexToBytes($message->getId()),
+        ];
+
+        $query->execute($params);
+    }
+
+    private function createRedirectRequest(TinectRedirectUpdateMessage $message, string $redirectId): void
+    {
+        $query = new RetryableQuery(
+            $this->connection,
+            $this->connection->prepare(
+                'INSERT INTO `tinect_redirects_redirect_request` (`id`, `tinect_redirects_redirect_id`, `ip_address`, `user_agent`, `created_at`)
+                      VALUES (:id, :redirectId, :ipAddress, :userAgent, :createdAt)'
+            )
         );
 
         $params = [
             'id' => Uuid::randomBytes(),
-            'redirectId' => $id,
+            'redirectId' => Uuid::fromHexToBytes($redirectId),
             'ipAddress' => $message->getIpAddress(),
             'userAgent' => $message->getUserAgent(),
             'createdAt' => $message->getCreatedAt()->format(Defaults::STORAGE_DATE_TIME_FORMAT),

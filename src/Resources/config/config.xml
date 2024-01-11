@@ -22,5 +22,14 @@
             <helpText lang="de-DE">IP-Adressen von Aufrufen speichern</helpText>
             <defaultValue>true</defaultValue>
         </input-field>
+
+        <input-field type="bool">
+            <name>createNewRedirects</name>
+            <label>Create new redirects when URI is unknown</label>
+            <label lang="de-DE">Neue Weiterleitungen erstellen, wenn URI unbekannt ist</label>
+            <defaultValue>true</defaultValue>
+            <helpText>If enabled, new redirects will be created when the URI is unknown. These redirects are inactive and can be configured if needed.</helpText>
+            <helpText lang="de-DE">Wenn aktiviert, werden neue Weiterleitungen erstellt, wenn die URI unbekannt ist. Diese Weiterleitungen sind inaktiv, und können bei Bedarf konfiguriert werden.</helpText>
+        </input-field>
     </card>
 </config>
