@@ -4,6 +4,7 @@
     <card>
         <title>Cleanup</title>
         <title lang="de-DE">Aufräumen</title>
+
         <input-field type="int">
             <name>deleteRequestsAfterDays</name>
             <label>Delete requests after x days</label>
@@ -11,6 +12,15 @@
             <helpText>This is also be used to calculate the count in listing</helpText>
             <helpText lang="de-DE">Dies wird auch zur Berechnung der Anzahl im Listing verwendet</helpText>
             <defaultValue>30</defaultValue>
+        </input-field>
+
+        <input-field type="bool">
+            <name>saveIpAddresses</name>
+            <label>Save IP addresses</label>
+            <label lang="de-DE">IP-Adressen speichern</label>
+            <helpText>Save IP addresses of requests</helpText>
+            <helpText lang="de-DE">IP-Adressen von Aufrufen speichern</helpText>
+            <defaultValue>true</defaultValue>
         </input-field>
     </card>
 </config>

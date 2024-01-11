@@ -17,6 +17,7 @@ use Shopware\Core\System\SalesChannel\Context\AbstractSalesChannelContextFactory
 use Shopware\Core\System\SalesChannel\Context\SalesChannelContextFactory;
 use Shopware\Core\System\SalesChannel\Context\SalesChannelContextService;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
+use Shopware\Core\System\SystemConfig\SystemConfigService;
 use Shopware\Storefront\Framework\Routing\RequestTransformer;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -36,6 +37,7 @@ class ExceptionSubscriber implements EventSubscriberInterface
         private readonly EntityRepository $tinectRedirectsRedirectRepository,
         private readonly SeoUrlPlaceholderHandlerInterface $seoUrlPlaceholderHandler,
         #[Autowire(service: SalesChannelContextFactory::class)] private readonly AbstractSalesChannelContextFactory $salesChannelContextFactory,
+        private readonly SystemConfigService $systemConfigService,
         private readonly MessageBusInterface $messageBus,
     ) {
     }
@@ -90,7 +92,7 @@ class ExceptionSubscriber implements EventSubscriberInterface
         $message = new TinectRedirectUpdateMessage(
             source: $path,
             salesChannelDomainId:  $salesChannelDomainId,
-            ipAddress: $request->getClientIp() ?? '',
+            ipAddress: $this->getIpAddress($request),
             userAgent: $request->headers->get('User-Agent') ?? '',
         );
 
@@ -161,5 +163,25 @@ class ExceptionSubscriber implements EventSubscriberInterface
     private function createSalesChannelContext(string $salesChannelId, string $languageId): SalesChannelContext
     {
         return $this->salesChannelContextFactory->create('', $salesChannelId, [SalesChannelContextService::LANGUAGE_ID => $languageId]);
+    }
+
+    private function getIpAddress(Request $request): string
+    {
+        $salesChannelId = $request->attributes->get(PlatformRequest::ATTRIBUTE_SALES_CHANNEL_ID);
+
+        if (!\is_string($salesChannelId) || empty($salesChannelId)) {
+            $salesChannelId = null;
+        }
+
+        if (!$this->canSaveIpAddress($salesChannelId)) {
+            return '';
+        }
+
+        return $request->getClientIp() ?? '';
+    }
+
+    private function canSaveIpAddress(?string $salesChannelId): bool
+    {
+        return $this->systemConfigService->getBool('TinectRedirects.config.saveIpAddresses', $salesChannelId);
     }
 }
