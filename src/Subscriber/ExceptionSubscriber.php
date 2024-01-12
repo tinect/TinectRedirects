@@ -38,11 +38,11 @@ class ExceptionSubscriber implements EventSubscriberInterface
     public function __construct(
         private readonly EntityRepository $tinectRedirectsRedirectRepository,
         private readonly SeoUrlPlaceholderHandlerInterface $seoUrlPlaceholderHandler,
-        #[Autowire(service: SalesChannelContextFactory::class)] private readonly AbstractSalesChannelContextFactory $salesChannelContextFactory,
+        #[Autowire(service: SalesChannelContextFactory::class)]
+        private readonly AbstractSalesChannelContextFactory $salesChannelContextFactory,
         private readonly SystemConfigService $systemConfigService,
         private readonly MessageBusInterface $messageBus,
-    ) {
-    }
+    ) {}
 
     public static function getSubscribedEvents(): array
     {

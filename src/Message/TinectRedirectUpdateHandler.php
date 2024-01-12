@@ -15,8 +15,7 @@ class TinectRedirectUpdateHandler
 {
     public function __construct(
         private readonly Connection $connection,
-    ) {
-    }
+    ) {}
 
     public function __invoke(TinectRedirectUpdateMessage $message): void
     {

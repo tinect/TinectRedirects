@@ -24,5 +24,9 @@
         "psr-4": {
             "Tinect\\Redirects\\": "src/"
         }
+    },
+    "scripts": {
+        "cs-fix": "docker run --rm -v $(pwd):$(pwd) -w $(pwd) oskarstark/php-cs-fixer-ga --diff",
+        "phpstan": "docker run --rm -v $(pwd):/app aragon999/phpstan-shopware:v6.5.7 analyse ."
     }
 }
