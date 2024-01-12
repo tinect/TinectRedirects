@@ -9,7 +9,7 @@ The plugin has been forked from [RuneLaenenRedirects](https://github.com/runelae
 - 302 (temporary) redirects
 - Import/Export profile
 - redirect just when there would be a error
-- auto add 404 error in list
+- auto add 404 error in list (configurable)
 
 ## 🚀 How to install
 ### Composer install (recommended)
