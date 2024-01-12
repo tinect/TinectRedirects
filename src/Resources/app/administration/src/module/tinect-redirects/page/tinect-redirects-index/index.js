@@ -23,7 +23,7 @@ Component.register('tinect-redirects-index', {
                 term: null,
                 salesChannelDomainId: null,
                 active: null,
-                hidden: 0
+                hidden: 0,
             },
         };
     },
@@ -44,7 +44,7 @@ Component.register('tinect-redirects-index', {
         getList() {
             this.isLoading = true;
 
-            let criteria = new Criteria();
+            const criteria = new Criteria();
 
             if (this.filter.term) {
                 criteria.setTerm(this.filter.term);
@@ -86,8 +86,8 @@ Component.register('tinect-redirects-index', {
             deep: true,
             handler: Shopware.Utils.debounce(function () {
                 this.getList();
-            }, 400)
-        }
-    }
+            }, 400),
+        },
+    },
 
 });

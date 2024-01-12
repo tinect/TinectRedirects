@@ -1,9 +1,10 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Tinect\Redirects\Message;
 
 use Shopware\Core\Framework\MessageQueue\AsyncMessageInterface;
-use Shopware\Core\Framework\Uuid\Uuid;
 
 class TinectRedirectUpdateMessage implements AsyncMessageInterface
 {
@@ -14,23 +15,15 @@ class TinectRedirectUpdateMessage implements AsyncMessageInterface
         private readonly ?string $salesChannelDomainId,
         private readonly string $ipAddress,
         private readonly string $userAgent,
-        private ?string $id = null,
+        private readonly bool $createRedirect,
+        private readonly ?string $id,
     ) {
         $this->createdAt = new \DateTimeImmutable();
     }
 
-    public function getId(): string
+    public function getId(): ?string
     {
-        if ($this->id === null) {
-            $this->id = Uuid::randomHex();
-        }
-
         return $this->id;
-    }
-
-    public function setId(?string $id): void
-    {
-        $this->id = $id;
     }
 
     public function getSource(): string
@@ -51,6 +44,11 @@ class TinectRedirectUpdateMessage implements AsyncMessageInterface
     public function getUserAgent(): string
     {
         return $this->userAgent;
+    }
+
+    public function isCreateRedirect(): bool
+    {
+        return $this->createRedirect;
     }
 
     public function getCreatedAt(): \DateTimeImmutable

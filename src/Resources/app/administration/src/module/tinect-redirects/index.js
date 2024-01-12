@@ -46,6 +46,6 @@ Shopware.Module.register('tinect-redirects', {
         group: 'plugins',
         to: 'tinect.redirects.list',
         icon: 'regular-double-chevron-right-s',
-        label: 'tinect-redirects.general.title'
+        label: 'tinect-redirects.general.title',
     }],
 });
