@@ -1,4 +1,4 @@
-import './index.scss';
+import './index.css';
 import template from './tinect-redirects-details.html.twig';
 
 const Criteria = Shopware.Data.Criteria;
