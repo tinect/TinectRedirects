@@ -19,12 +19,14 @@ Component.register('tinect-redirects-index', {
             items: null,
             isLoading: true,
             total: 0,
+            isFullPage: true,
             filter: {
                 term: null,
                 salesChannelDomainId: null,
                 active: null,
                 hidden: 0,
             },
+            firstEntryDate: null,
         };
     },
 
@@ -34,9 +36,61 @@ Component.register('tinect-redirects-index', {
         };
     },
 
+    async created() {
+        const criteria = new Criteria();
+        criteria.addAggregation(Criteria.min('createdAt', 'createdAt'));
+        criteria.setLimit(1);
+
+        await this.redirectRequestRepository.search(criteria, Shopware.Context.api).then((result) => {
+            const today = new Date();
+            this.firstEntryDate = Math.ceil((today - new Date(result.aggregations.createdAt.min)) / (1000 * 60 * 60 * 24));
+        });
+    },
+
     computed: {
         redirectRepository() {
             return this.repositoryFactory.create('tinect_redirects_redirect');
+        },
+
+        redirectRequestRepository() {
+            return this.repositoryFactory.create('tinect_redirects_redirect_request');
+        },
+
+        columns() {
+            return [
+                {
+                    property: 'active',
+                    dataIndex: 'active',
+                    label: this.$tc('tinect-redirects.detail.activeLabel'),
+                    routerLink: 'tinect.redirects.details',
+                    align: 'center',
+                },
+                {
+                    property: 'source',
+                    dataIndex: 'source',
+                    label: this.$tc('tinect-redirects.detail.sourceUrlLabel'),
+                    allowResize: true,
+                    primary: true,
+                },
+                {
+                    property: 'target',
+                    dataIndex: 'target',
+                    label: this.$tc('tinect-redirects.detail.targetUrlLabel'),
+                    allowResize: true,
+                },
+                {
+                    property: 'httpCode',
+                    dataIndex: 'httpCode',
+                    label: this.$tc('tinect-redirects.detail.httpCodeLabel'),
+                    allowResize: true,
+                },
+                {
+                    property: 'count',
+                    dataIndex: 'count',
+                    label: this.$tc('tinect-redirects.list.countColumn', this.firstEntryDate),
+                    allowResize: true,
+                },
+            ];
         },
     },
 
@@ -44,7 +98,7 @@ Component.register('tinect-redirects-index', {
         getList() {
             this.isLoading = true;
 
-            const criteria = new Criteria();
+            const criteria = new Criteria(this.page, this.limit);
 
             if (this.filter.term) {
                 criteria.setTerm(this.filter.term);

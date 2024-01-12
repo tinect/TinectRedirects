@@ -1,5 +1,4 @@
 import './page/tinect-redirects-index';
-import './page/tinect-redirects-list';
 import './page/tinect-redirects-details';
 import './page/tinect-redirects-create';
 

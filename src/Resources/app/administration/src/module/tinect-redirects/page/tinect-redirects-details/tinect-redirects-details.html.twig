@@ -1,7 +1,7 @@
 {% block tinect_redirects_details %}
     <sw-page class="tinect-redirects-details">
         <template slot="smart-bar-actions">
-            <sw-button :routerLink="{name: 'tinect.redirects.list'}">
+            <sw-button :routerLink="{ name: 'tinect.redirects.list', query: { limit, page }}">
                 {{ $t('tinect-redirects.detail.cancelButton') }}
             </sw-button>
 
@@ -104,6 +104,22 @@
                 </sw-card>
             </sw-card-view>
 
+        </template>
+
+        <template slot="smart-bar-back">
+            <router-link
+                    class="smart-bar__back-btn"
+                    :to="{name: 'tinect.redirects.list', query: { limit, page }}"
+            >
+                <sw-icon
+                        name="regular-chevron-left"
+                        small
+                />
+                <sw-icon
+                        name="regular-rocket"
+                        small
+                />
+            </router-link>
         </template>
     </sw-page>
 {% endblock %}

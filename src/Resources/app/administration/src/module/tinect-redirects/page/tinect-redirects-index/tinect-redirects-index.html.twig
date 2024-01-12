@@ -12,9 +12,57 @@
         </template>
 		<template slot="content">
 			{% block tinect_redirects_list_content %}
-                <tinect-redirects-list :items="items" :isLoading="isLoading">
-                </tinect-redirects-list>
-			{% endblock %}
+                <sw-entity-listing
+                        v-if="items"
+                        :items="items"
+                        :repository="redirectRepository"
+                        :columns="columns"
+                        :sort-by="currentSortBy"
+                        :sort-direction="sortDirection"
+                        :isLoading="isLoading"
+                        :disable-data-fetching="true"
+                        :fullPage="isFullPage"
+                        detailRoute="tinect.redirect.details"
+                        @page-change="onPageChange"
+                        @column-sort="onSortColumn"
+                >
+                    <template slot="column-active" slot-scope="{ item }">
+                        <sw-icon
+                                v-if="item.active"
+                                name="regular-checkmark-xs"
+                                small
+                                class="sw-icon--product-status is--active"
+                        />
+
+                        <sw-icon
+                                v-else
+                                name="regular-times-s"
+                                small
+                                class="sw-icon--product-status is--inactive"
+                        />
+                    </template>
+
+                    <template slot="column-source" slot-scope="{ item }">
+                        <router-link
+                                class="sw-data-grid__cell-value"
+                                :to="{ name: 'tinect.redirects.details', params: { id: item.id }, query: { limit, page } }"
+                        >
+                            <template v-if="item.salesChannelDomain">
+                                {{ item.salesChannelDomain.url }}{{ item.source }}
+                            </template>
+                            <template v-else>
+                                {{ item.source }}
+                            </template>
+                        </router-link>
+                    </template>
+
+                    <template slot="detail-action" slot-scope="{ item }">
+                        <sw-context-menu-item class="sw-entity-listing__context-menu-show-action" :routerLink="{ name: 'tinect.redirects.details', params: { id: item.id }, query: { limit, page } }">
+                            {{ $tc('sw-customer.list.contextMenuEdit') }}
+                        </sw-context-menu-item>
+                    </template>
+                </sw-entity-listing>
+            {% endblock %}
 		</template>
 
         <template slot="sidebar">
