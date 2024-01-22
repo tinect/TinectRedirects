@@ -28,6 +28,7 @@ class Migration160198215Redirect extends MigrationStep
         `created_at` DATETIME(3) NOT NULL,
         `updated_at` DATETIME(3) NULL,
 
+        PRIMARY KEY (`id`),
         KEY `fk.tinect_redirects_redirect.sales_channel_domain_id` (`sales_channel_domain_id`),
         CONSTRAINT tinect_redirects_redirect_uc_source UNIQUE (`source`, `sales_channel_domain_id`),
         CONSTRAINT `fk.tinect_redirects_redirect.sales_channel_domain_id` FOREIGN KEY (`sales_channel_domain_id`) REFERENCES `sales_channel_domain` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
