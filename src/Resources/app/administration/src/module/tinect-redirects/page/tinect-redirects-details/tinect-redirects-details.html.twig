@@ -23,7 +23,7 @@
                         </sw-checkbox-field>
                     </sw-container>
 
-                    <sw-card>
+                    <sw-card :title="$t('tinect-redirects.detail.source')">
                         <sw-entity-single-select :label="$tc('tinect-redirects.detail.salesChannelDomain')"
                                                  :value="detail.salesChannelDomainId"
                                                  v-model="detail.salesChannelDomainId"
@@ -38,20 +38,20 @@
                                   validation="required"></sw-field>
                     </sw-card>
 
-                    <template v-if="hasSwUrlExt">
-                        <sw-url-ext-field :label="$t('tinect-redirects.detail.targetUrlLabel')"
-                                          v-model="detail.target"
-                                          validation="required"
-                                          :helpText="$tc('tinect-redirects.detail.salesChannelDomainHelpText')">
-                        </sw-url-ext-field>
-                    </template>
-                    <template v-else>
-                        <sw-field :label="$t('tinect-redirects.detail.targetUrlLabel')"
-                                  v-model="detail.target"
-                                  validation="required"
-                                  :helpText="$tc('tinect-redirects.detail.targetUrlHelpText')">
-                        </sw-field>
-                    </template>
+                    <sw-card :title="$t('tinect-redirects.detail.target')">
+                        <template v-if="hasSwUrlExt">
+                            <sw-url-ext-field :label="$t('tinect-redirects.detail.targetUrlLabel')"
+                                              v-model="detail.target"
+                                              validation="required">
+                            </sw-url-ext-field>
+                        </template>
+                        <template v-else>
+                            <sw-dynamic-url-field
+                                    v-model="detail.target"
+                                    validation="required">
+                            </sw-dynamic-url-field>
+                        </template>
+                    </sw-card>
 
                     <sw-select-number-field :label="$t('tinect-redirects.detail.httpCodeLabel')"
                                             v-model="detail.httpCode"

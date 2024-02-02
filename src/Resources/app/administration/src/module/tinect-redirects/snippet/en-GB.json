@@ -8,7 +8,9 @@
       "countColumn": "Requests | Requests since 1 day | Requests last {count} days"
     },
     "detail": {
+      "source": "Called URL",
       "sourceUrlLabel": "Source Path",
+      "target": "Target",
       "targetUrlLabel": "Target URL",
       "httpCodeLabel": "HTTP Code",
       "hiddenLabel": "hidden",
