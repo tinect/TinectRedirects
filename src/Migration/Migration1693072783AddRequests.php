@@ -17,16 +17,16 @@ class Migration1693072783AddRequests extends MigrationStep
     public function update(Connection $connection): void
     {
         $sql = <<<SQL
-            SELECT COUNT(*) AS count 
-            FROM information_schema.table_constraints 
-            WHERE constraint_schema = DATABASE() 
-            AND table_name = 'tinect_redirects_redirect' 
+            SELECT COUNT(*) AS count
+            FROM information_schema.table_constraints
+            WHERE constraint_schema = DATABASE()
+            AND table_name = 'tinect_redirects_redirect'
             AND constraint_type = 'PRIMARY KEY'
         SQL;
 
-        $result = $connection->fetchOne($sql);
+        $result = (int) $connection->fetchOne($sql);
 
-        if ($result == 0) {
+        if ($result === 0) {
             $connection->executeStatement(<<<SQL
                 ALTER TABLE `tinect_redirects_redirect`
                 ADD PRIMARY KEY (`id`);
