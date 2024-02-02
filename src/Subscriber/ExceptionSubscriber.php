@@ -13,6 +13,7 @@ use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\MultiFilter;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
+use Shopware\Core\Framework\Event\BeforeSendResponseEvent;
 use Shopware\Core\PlatformRequest;
 use Shopware\Core\SalesChannelRequest;
 use Shopware\Core\System\SalesChannel\Context\AbstractSalesChannelContextFactory;
@@ -47,29 +48,17 @@ class ExceptionSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            KernelEvents::EXCEPTION => 'onKernelException',
+            BeforeSendResponseEvent::class => 'onBeforeSendResponse',
         ];
     }
 
-    public function onKernelException(ExceptionEvent $event): void
+    public function onBeforeSendResponse(BeforeSendResponseEvent $event): void
     {
-        $request = $event->getRequest();
-
-        if ($request->getMethod() !== Request::METHOD_GET) {
+        if ($event->getResponse()->getStatusCode() !== Response::HTTP_NOT_FOUND) {
             return;
         }
 
-        if (!$request->attributes->get(SalesChannelRequest::ATTRIBUTE_IS_SALES_CHANNEL_REQUEST)) {
-            return;
-        }
-
-        $exception = $event->getThrowable();
-
-        if (!($exception instanceof NotFoundHttpException) && !($exception instanceof CategoryNotFoundException)) {
-            return;
-        }
-
-        $response = $this->handleRequest($request);
+        $response = $this->handleRequest($event->getRequest());
 
         if ($response instanceof Response) {
             $event->setResponse($response);
@@ -78,7 +67,19 @@ class ExceptionSubscriber implements EventSubscriberInterface
 
     private function handleRequest(Request $request): ?Response
     {
-        $path = $request->getPathInfo();
+        $path = $request->attributes->get(RequestTransformer::ORIGINAL_REQUEST_URI);
+
+        if (!\is_string($path) || empty($path)) {
+            return null;
+        }
+
+        $salesChannelBaseUrl = $request->attributes->get(RequestTransformer::SALES_CHANNEL_BASE_URL);
+
+        if (\is_string($salesChannelBaseUrl)
+            && !empty($salesChannelBaseUrl)
+            && \str_starts_with($path, $salesChannelBaseUrl . '/')) {
+            $path = \substr($path, \strlen($salesChannelBaseUrl));
+        }
 
         // do not track bot requests building useless urls with "https://oldurl'https://newurl'"
         if (preg_match('/(.?)\'(.*)\'/', $path)) {
@@ -124,7 +125,7 @@ class ExceptionSubscriber implements EventSubscriberInterface
         $targetURL = $redirect->getTarget();
 
         $host = $request->attributes->get(RequestTransformer::SALES_CHANNEL_ABSOLUTE_BASE_URL)
-            . $request->attributes->get(RequestTransformer::SALES_CHANNEL_BASE_URL);
+            . $salesChannelBaseUrl;
 
         $salesChannelContext = $this->getSalesChannelContext($request);
 
