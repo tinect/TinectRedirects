@@ -1,16 +1,16 @@
 {% block tinect_redirects_list %}
 	<sw-page class="tinect-redirects-list">
-		<template slot="smart-bar-actions">
+		<template #smart-bar-actions>
 			{% block tinect_redirects_list_smarbar %}
 				<sw-button variant="primary" :routerLink="{name: 'tinect.redirects.create'}">
 					{{ $t('tinect-redirects.list.createButton') }}
 				</sw-button>
 			{% endblock %}
 		</template>
-		<template slot="smart-bar-header">
+		<template #smart-bar-header>
             <h2>{{ $tc('tinect-redirects.general.title') }} ({{ total }})</h2>
         </template>
-		<template slot="content">
+		<template #content>
 			{% block tinect_redirects_list_content %}
                 <sw-entity-listing
                         v-if="items"
@@ -26,7 +26,7 @@
                         @page-change="onPageChange"
                         @column-sort="onSortColumn"
                 >
-                    <template slot="column-active" slot-scope="{ item }">
+                    <template #column-active="{ item }">
                         <sw-icon
                                 v-if="item.active"
                                 name="regular-checkmark-xs"
@@ -42,7 +42,7 @@
                         />
                     </template>
 
-                    <template slot="column-source" slot-scope="{ item }">
+                    <template #column-source="{ item }">
                         <router-link
                                 class="sw-data-grid__cell-value"
                                 :to="{ name: 'tinect.redirects.details', params: { id: item.id }, query: { limit, page } }"
@@ -56,7 +56,7 @@
                         </router-link>
                     </template>
 
-                    <template slot="detail-action" slot-scope="{ item }">
+                    <template #detail-action="{ item }">
                         <sw-context-menu-item class="sw-entity-listing__context-menu-show-action" :routerLink="{ name: 'tinect.redirects.details', params: { id: item.id }, query: { limit, page } }">
                             {{ $tc('sw-customer.list.contextMenuEdit') }}
                         </sw-context-menu-item>
@@ -65,7 +65,7 @@
             {% endblock %}
 		</template>
 
-        <template slot="sidebar">
+        <template #sidebar>
             <sw-sidebar>
                 <sw-sidebar-item
                     icon="regular-undo"

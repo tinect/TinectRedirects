@@ -1,6 +1,6 @@
 {% block tinect_redirects_details %}
     <sw-page class="tinect-redirects-details">
-        <template slot="smart-bar-actions">
+        <template #smart-bar-actions>
             <sw-button :routerLink="{ name: 'tinect.redirects.list', query: { limit, page }}">
                 {{ $t('tinect-redirects.detail.cancelButton') }}
             </sw-button>
@@ -14,7 +14,7 @@
             </sw-button-process>
         </template>
 
-        <template slot="content">
+        <template #content>
             <sw-card-view>
                 <sw-card :isLoading="isLoading">
                     <sw-container class="no-flex-grow-field">
@@ -71,7 +71,7 @@
                 </sw-card>
 
                 <sw-card :isLoading="similarItemsIsLoading" v-if="similarItems">
-                    <template slot="title">
+                    <template #title>
                         {{ $tc('tinect-redirects.detail.similarItemsLabel', similarItems.total) }}
                     </template>
                     <sw-container>
@@ -81,7 +81,7 @@
                 </sw-card>
 
                 <sw-card v-if="detail">
-                    <template slot="title">
+                    <template #title>
                         {{ $tc('tinect-redirects.detail.countLabel', redirectRequestsTotal) }}
                     </template>
                     <template>
@@ -96,7 +96,7 @@
                             :sort-by="currentSortBy"
                             :sort-direction="redirectRequestsSortDirection"
                         >
-                            <template slot="column-createdAt" slot-scope="{ item }">
+                            <template #column-createdAt="{ item }">
                                 {{ item.createdAt | date }}
                             </template>
                         </sw-entity-listing>
@@ -106,7 +106,7 @@
 
         </template>
 
-        <template slot="smart-bar-back">
+        <template #smart-bar-back>
             <router-link
                     class="smart-bar__back-btn"
                     :to="{name: 'tinect.redirects.list', query: { limit, page }}"
