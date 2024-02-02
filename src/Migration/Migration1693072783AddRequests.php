@@ -24,7 +24,11 @@ class Migration1693072783AddRequests extends MigrationStep
             AND constraint_type = 'PRIMARY KEY'
         SQL;
 
-        $result = (int) $connection->fetchOne($sql);
+        $result = $connection->fetchOne($sql);
+
+        if (\is_string($result)) {
+            $result = (int) $result;
+        }
 
         if ($result === 0) {
             $connection->executeStatement(<<<SQL
