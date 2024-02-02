@@ -8,7 +8,9 @@
       "countColumn": "Aufrufe | Aufrufe seit 1 Tag | Aufrufe letzte {count} Tage"
     },
     "detail": {
+      "source": "Aufgerufene URL",
       "sourceUrlLabel": "Quell-Pfad",
+      "target": "Ziel",
       "targetUrlLabel": "Ziel-URL",
       "httpCodeLabel": "HTTP-Code",
       "hiddenLabel": "versteckt",
