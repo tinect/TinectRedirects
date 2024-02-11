@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Tinect\Redirects\Subscriber;
 
-use Shopware\Core\Content\Category\Exception\CategoryNotFoundException;
 use Shopware\Core\Content\Seo\SeoUrlPlaceholderHandlerInterface;
 use Shopware\Core\Framework\Api\Context\SystemSource;
 use Shopware\Core\Framework\Context;
@@ -27,14 +26,11 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Event\ExceptionEvent;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Tinect\Redirects\Content\Redirect\RedirectEntity;
 use Tinect\Redirects\Message\TinectRedirectUpdateMessage;
 
-class ExceptionSubscriber implements EventSubscriberInterface
+class BeforeSendResponseSubscriber implements EventSubscriberInterface
 {
     public function __construct(
         private readonly EntityRepository $tinectRedirectsRedirectRepository,
@@ -43,7 +39,8 @@ class ExceptionSubscriber implements EventSubscriberInterface
         private readonly AbstractSalesChannelContextFactory $salesChannelContextFactory,
         private readonly SystemConfigService $systemConfigService,
         private readonly MessageBusInterface $messageBus,
-    ) {}
+    ) {
+    }
 
     public static function getSubscribedEvents(): array
     {
@@ -92,7 +89,7 @@ class ExceptionSubscriber implements EventSubscriberInterface
             $salesChannelDomainId = null;
         }
 
-        $context = new Context(new SystemSource());
+        $context  = new Context(new SystemSource());
         $criteria = (new Criteria())
             ->addFilter(new EqualsFilter('source', $path))
             ->addFilter(
@@ -149,6 +146,7 @@ class ExceptionSubscriber implements EventSubscriberInterface
         }
 
         $languageId = $request->headers->get(PlatformRequest::HEADER_LANGUAGE_ID);
+
         if (empty($languageId)) {
             throw new \RuntimeException('No language id found in request.');
         }

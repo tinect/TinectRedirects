@@ -1,0 +1,5 @@
+{
+    "require-dev": {
+        "k10r/codestyle": "^3.1"
+    }
+}
