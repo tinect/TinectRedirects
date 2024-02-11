@@ -20,21 +20,21 @@ class Migration1615031757ImportExportProfile extends MigrationStep
     public function update(Connection $connection): void
     {
         foreach ($this->getProfiles() as $profile) {
-            $profile['id'] = Uuid::randomBytes();
+            $profile['id']             = Uuid::randomBytes();
             $profile['system_default'] = 1;
-            $profile['file_type'] = 'text/csv';
-            $profile['delimiter'] = ';';
-            $profile['enclosure'] = '"';
-            $profile['mapping'] = json_encode($profile['mapping'], \JSON_THROW_ON_ERROR);
-            $profile['created_at'] = (new \DateTime())->format(Defaults::STORAGE_DATE_TIME_FORMAT);
+            $profile['file_type']      = 'text/csv';
+            $profile['delimiter']      = ';';
+            $profile['enclosure']      = '"';
+            $profile['mapping']        = json_encode($profile['mapping'], \JSON_THROW_ON_ERROR);
+            $profile['created_at']     = (new \DateTime())->format(Defaults::STORAGE_DATE_TIME_FORMAT);
 
             $connection->insert('import_export_profile', $profile);
 
             $translation = [
                 'import_export_profile_id' => $profile['id'],
-                'language_id' => Uuid::fromHexToBytes(Defaults::LANGUAGE_SYSTEM),
-                'label' => $profile['name'],
-                'created_at' => (new \DateTime())->format(Defaults::STORAGE_DATE_TIME_FORMAT),
+                'language_id'              => Uuid::fromHexToBytes(Defaults::LANGUAGE_SYSTEM),
+                'label'                    => $profile['name'],
+                'created_at'               => (new \DateTime())->format(Defaults::STORAGE_DATE_TIME_FORMAT),
             ];
             $connection->insert('import_export_profile_translation', $translation);
         }
@@ -56,9 +56,9 @@ class Migration1615031757ImportExportProfile extends MigrationStep
     {
         return [
             [
-                'name' => 'Default redirect',
+                'name'          => 'Default redirect',
                 'source_entity' => RedirectDefinition::ENTITY_NAME,
-                'mapping' => [
+                'mapping'       => [
                     ['key' => 'id', 'mappedKey' => 'id'],
                     ['key' => 'httpCode', 'mappedKey' => 'http_code'],
                     ['key' => 'source', 'mappedKey' => 'source'],

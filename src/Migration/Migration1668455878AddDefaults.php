@@ -18,9 +18,9 @@ class Migration1668455878AddDefaults extends MigrationStep
     {
         $connection->executeStatement(
             <<<SQL
-ALTER TABLE `tinect_redirects_redirect` MODIFY `source` varchar(512) DEFAULT '';
-ALTER TABLE `tinect_redirects_redirect` MODIFY `target` varchar(512) DEFAULT '';
-SQL
+                ALTER TABLE `tinect_redirects_redirect` MODIFY `source` varchar(512) DEFAULT '';
+                ALTER TABLE `tinect_redirects_redirect` MODIFY `target` varchar(512) DEFAULT '';
+                SQL
         );
     }
 

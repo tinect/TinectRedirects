@@ -18,9 +18,9 @@ class Migration1652526588Redirect301Default extends MigrationStep
     {
         $connection->executeStatement(
             <<<SQL
-ALTER TABLE `tinect_redirects_redirect` ALTER `http_code` SET DEFAULT 301;
-UPDATE `tinect_redirects_redirect` SET `http_code` = 301;
-SQL
+                ALTER TABLE `tinect_redirects_redirect` ALTER `http_code` SET DEFAULT 301;
+                UPDATE `tinect_redirects_redirect` SET `http_code` = 301;
+                SQL
         );
     }
 

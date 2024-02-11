@@ -25,7 +25,18 @@
         }
     },
     "scripts": {
-        "cs-fix": "docker run --rm -v $(pwd):$(pwd) -w $(pwd) oskarstark/php-cs-fixer-ga --diff",
+        "init-ci": "composer install --working-dir=.ci",
+        "phpcs-check": [
+            "@init-ci",
+            "@php-cs-fixer --dry-run"
+        ],
+        "phpcs": [
+            "@init-ci",
+            "@php-cs-fixer"
+        ],
+        "php-cs-fixer": [
+            ".ci/vendor/bin/php-cs-fixer fix --diff --config=.ci/.php-cs-fixer.dist.php"
+        ],
         "phpstan": "docker run --rm -v $(pwd):/app aragon999/phpstan-shopware:v6.5.7 analyse ."
     }
 }
