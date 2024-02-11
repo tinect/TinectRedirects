@@ -15,7 +15,8 @@ class TinectRedirectUpdateHandler
 {
     public function __construct(
         private readonly Connection $connection,
-    ) {}
+    ) {
+    }
 
     public function __invoke(TinectRedirectUpdateMessage $message): void
     {
@@ -44,10 +45,10 @@ class TinectRedirectUpdateHandler
         );
 
         $params = [
-            'id' => \is_string($message->getId()) ? Uuid::fromHexToBytes($message->getId()) : Uuid::randomBytes(),
-            'source' => $message->getSource(),
+            'id'                   => \is_string($message->getId()) ? Uuid::fromHexToBytes($message->getId()) : Uuid::randomBytes(),
+            'source'               => $message->getSource(),
             'salesChannelDomainId' => null,
-            'createdAt' => $message->getCreatedAt()->format(Defaults::STORAGE_DATE_TIME_FORMAT),
+            'createdAt'            => $message->getCreatedAt()->format(Defaults::STORAGE_DATE_TIME_FORMAT),
         ];
 
         if (\is_string($message->getSalesChannelDomainId())) {
@@ -90,11 +91,11 @@ class TinectRedirectUpdateHandler
         );
 
         $params = [
-            'id' => Uuid::randomBytes(),
+            'id'         => Uuid::randomBytes(),
             'redirectId' => Uuid::fromHexToBytes($redirectId),
-            'ipAddress' => $message->getIpAddress(),
-            'userAgent' => $message->getUserAgent(),
-            'createdAt' => $message->getCreatedAt()->format(Defaults::STORAGE_DATE_TIME_FORMAT),
+            'ipAddress'  => $message->getIpAddress(),
+            'userAgent'  => $message->getUserAgent(),
+            'createdAt'  => $message->getCreatedAt()->format(Defaults::STORAGE_DATE_TIME_FORMAT),
         ];
 
         $query->execute($params);

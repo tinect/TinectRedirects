@@ -18,11 +18,11 @@ class Migration1652791720AddFields extends MigrationStep
     {
         $connection->executeStatement(
             <<<SQL
-    ALTER TABLE `tinect_redirects_redirect`
-        ADD COLUMN `hidden` TINYINT(1) NOT NULL DEFAULT 0 AFTER `sales_channel_domain_id`;
-    ALTER TABLE `tinect_redirects_redirect`
-        ADD COLUMN `comment` LONGTEXT NULL AFTER `hidden`;
-SQL
+                    ALTER TABLE `tinect_redirects_redirect`
+                        ADD COLUMN `hidden` TINYINT(1) NOT NULL DEFAULT 0 AFTER `sales_channel_domain_id`;
+                    ALTER TABLE `tinect_redirects_redirect`
+                        ADD COLUMN `comment` LONGTEXT NULL AFTER `hidden`;
+                SQL
         );
     }
 

@@ -18,10 +18,12 @@ class Migration1693072562CountDefault extends MigrationStep
     {
         $connection->executeStatement(
             <<<SQL
-ALTER TABLE `tinect_redirects_redirect` MODIFY `count` bigint(20) NOT NULL DEFAULT 1;
-SQL
+                ALTER TABLE `tinect_redirects_redirect` MODIFY `count` bigint(20) NOT NULL DEFAULT 1;
+                SQL
         );
     }
 
-    public function updateDestructive(Connection $connection): void {}
+    public function updateDestructive(Connection $connection): void
+    {
+    }
 }
