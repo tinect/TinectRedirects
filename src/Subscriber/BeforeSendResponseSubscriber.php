@@ -128,6 +128,10 @@ class BeforeSendResponseSubscriber implements EventSubscriberInterface
 
         $targetURL = $this->seoUrlPlaceholderHandler->replace($targetURL, $host, $salesChannelContext);
 
+        if (!parse_url($targetURL, PHP_URL_SCHEME)) {
+            $targetURL = $host . $targetURL;
+        }
+
         return new RedirectResponse($targetURL, $redirect->getHttpCode());
     }
 
