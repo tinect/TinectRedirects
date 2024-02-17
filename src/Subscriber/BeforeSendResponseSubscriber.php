@@ -82,11 +82,6 @@ class BeforeSendResponseSubscriber implements EventSubscriberInterface
             $path = \substr($path, \strlen($salesChannelBaseUrl));
         }
 
-        // do not track bot requests building useless urls with "https://oldurl'https://newurl'"
-        if (preg_match('/(.?)\'(.*)\'/', $path)) {
-            return null;
-        }
-
         $salesChannelDomainId = $request->attributes->get(SalesChannelRequest::ATTRIBUTE_DOMAIN_ID);
 
         if (!\is_string($salesChannelDomainId) || empty($salesChannelDomainId)) {
@@ -113,7 +108,7 @@ class BeforeSendResponseSubscriber implements EventSubscriberInterface
             salesChannelDomainId: $salesChannelDomainId,
             ipAddress: $this->getIpAddress($request),
             userAgent: $request->headers->get('User-Agent') ?? '',
-            createRedirect: $this->canCreateRedirect($salesChannelDomainId),
+            createRedirect: $this->canCreateRedirect($path, $salesChannelDomainId),
             id: $redirect?->getId(),
         );
 
@@ -194,8 +189,29 @@ class BeforeSendResponseSubscriber implements EventSubscriberInterface
         return $this->systemConfigService->getBool('TinectRedirects.config.saveIpAddresses', $salesChannelId);
     }
 
-    private function canCreateRedirect(?string $salesChannelId): bool
+    private function canCreateRedirect(string $path, ?string $salesChannelId): bool
     {
-        return $this->systemConfigService->getBool('TinectRedirects.config.createNewRedirects', $salesChannelId);
+        if (!$this->systemConfigService->getBool('TinectRedirects.config.createNewRedirects', $salesChannelId)) {
+            return false;
+        }
+
+        return $this->canCreateRedirectByExcludes($path, $salesChannelId);
+    }
+
+    private function canCreateRedirectByExcludes(string $path, ?string $salesChannelId): bool
+    {
+        $excludes = \explode(PHP_EOL, $this->systemConfigService->getString('TinectRedirects.config.excludes', $salesChannelId));
+
+        foreach ($excludes as $exclude) {
+            try {
+                if (\preg_match($exclude, $path)) {
+                    return false;
+                }
+            } catch (\Throwable) {
+                // nth, we don't care whether the regex is valid
+            }
+        }
+
+        return true;
     }
 }
