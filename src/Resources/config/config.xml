@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/shopware/platform/trunk/src/Core/System/SystemConfig/Schema/config.xsd">
+        xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/shopware/shopware/trunk/src/Core/System/SystemConfig/Schema/config.xsd">
     <card>
         <title>Cleanup</title>
         <title lang="de-DE">Aufräumen</title>
@@ -22,14 +22,33 @@
             <helpText lang="de-DE">IP-Adressen von Aufrufen speichern</helpText>
             <defaultValue>true</defaultValue>
         </input-field>
+    </card>
 
+    <card>
+        <title>New entries</title>
+        <title lang="de-DE">Neue Einträge</title>
         <input-field type="bool">
             <name>createNewRedirects</name>
-            <label>Create new redirects when URI is unknown</label>
-            <label lang="de-DE">Neue Weiterleitungen erstellen, wenn URI unbekannt ist</label>
+            <label>Create new entries when URI is unknown</label>
+            <label lang="de-DE">Neue Einträge erstellen, wenn URI unbekannt ist</label>
             <defaultValue>true</defaultValue>
-            <helpText>If enabled, new redirects will be created when the URI is unknown. These redirects are inactive and can be configured if needed.</helpText>
-            <helpText lang="de-DE">Wenn aktiviert, werden neue Weiterleitungen erstellt, wenn die URI unbekannt ist. Diese Weiterleitungen sind inaktiv, und können bei Bedarf konfiguriert werden.</helpText>
+            <helpText>If enabled, new entries will be created when the URI is unknown. These entries are inactive and can be configured if needed. Dedicated paths can also be excluded below instead of deactivating this option completely.</helpText>
+            <helpText lang="de-DE">Wenn aktiviert, werden neue Einträge erstellt, wenn die URI unbekannt ist. Diese Einträge sind inaktiv, und können bei Bedarf konfiguriert werden. Weiter unten können auch dedizierte Pfade ausgeschlossen werden, anstatt diese Option komplett zu deaktivieren.</helpText>
+        </input-field>
+
+        <input-field type="textarea">
+            <name>excludes</name>
+            <label>List of regex rules excluded from tracking</label>
+            <label lang="de-DE">Liste von Regex-Regeln, die ignoriert werden</label>
+            <defaultValue><![CDATA[#/\.#
+#(.?)'(.*)'#i
+#.(gz|zip|rar|py|php|ashx)$#i
+#/wp-includes#i
+#.js.map$#i
+#/wp-config#i
+]]></defaultValue>
+            <helpText>Every line is managed an own regex rule. You can check them e.g. at regex101.com</helpText>
+            <helpText lang="de-DE">Jede Zeile wird mit einer eigenen Regex-Regel verwaltet. Sie können diese z.B. bei regex101.com nachlesen</helpText>
         </input-field>
     </card>
 </config>
