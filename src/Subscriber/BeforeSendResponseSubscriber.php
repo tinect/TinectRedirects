@@ -51,6 +51,10 @@ class BeforeSendResponseSubscriber implements EventSubscriberInterface
 
     public function onBeforeSendResponse(BeforeSendResponseEvent $event): void
     {
+        if ($event->getRequest()->getMethod() !== Request::METHOD_GET) {
+            return;
+        }
+
         if ($event->getResponse()->getStatusCode() !== Response::HTTP_NOT_FOUND) {
             return;
         }
@@ -64,7 +68,7 @@ class BeforeSendResponseSubscriber implements EventSubscriberInterface
 
     private function handleRequest(Request $request): ?Response
     {
-        $path = $request->attributes->get(RequestTransformer::ORIGINAL_REQUEST_URI);
+        $path = $request->attributes->get(RequestTransformer::SALES_CHANNEL_RESOLVED_URI);
 
         if (!\is_string($path) || empty($path)) {
             return null;
