@@ -45,7 +45,7 @@ class BeforeSendResponseSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            BeforeSendResponseEvent::class => 'onBeforeSendResponse',
+            BeforeSendResponseEvent::class => ['onBeforeSendResponse', 1000],
         ];
     }
 
