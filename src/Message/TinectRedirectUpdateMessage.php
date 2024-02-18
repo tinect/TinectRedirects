@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Tinect\Redirects\Message;
 
-use Shopware\Core\Framework\MessageQueue\AsyncMessageInterface;
+use Shopware\Core\Framework\MessageQueue\LowPriorityMessageInterface;
 
-class TinectRedirectUpdateMessage implements AsyncMessageInterface
+class TinectRedirectUpdateMessage implements LowPriorityMessageInterface
 {
     private readonly \DateTimeImmutable $createdAt;
 

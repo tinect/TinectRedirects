@@ -10,7 +10,7 @@ use Shopware\Core\Framework\DataAbstractionLayer\Doctrine\RetryableQuery;
 use Shopware\Core\Framework\Uuid\Uuid;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
-#[AsMessageHandler(priority: 100)]
+#[AsMessageHandler]
 class TinectRedirectUpdateHandler
 {
     public function __construct(
