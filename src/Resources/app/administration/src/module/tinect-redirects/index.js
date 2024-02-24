@@ -1,6 +1,9 @@
-import './page/tinect-redirects-index';
-import './page/tinect-redirects-details';
-import './page/tinect-redirects-create';
+const { Component, Module } = Shopware;
+
+Component.register('tinect-redirects-index', () => import('./page/tinect-redirects-index'));
+Component.register('tinect-redirects-details', () => import('./page/tinect-redirects-details'));
+Component.register('tinect-similar-requests', () => import('./component/requests'));
+Component.register('tinect-similar-redirects', () => import('./component/similar-redirects'));
 
 Shopware.Module.register('tinect-redirects', {
     type: 'plugin',
@@ -9,11 +12,19 @@ Shopware.Module.register('tinect-redirects', {
     description: 'tinect-redirects.general.title',
     color: '#189eff',
     icon: 'regular-rocket',
+    entity: 'tinect_redirects_redirect',
 
     routes: {
-        list: {
+        index: {
             component: 'tinect-redirects-index',
-            path: 'list',
+            path: 'index',
+        },
+        create: {
+            component: 'tinect-redirects-details',
+            path: 'create',
+            meta: {
+                parentPath: 'tinect.redirects.index',
+            },
         },
         details: {
             component: 'tinect-redirects-details',
@@ -26,25 +37,31 @@ Shopware.Module.register('tinect-redirects', {
                 },
             },
             meta: {
-                parentPath: 'tinect.redirects.list',
+                parentPath: 'tinect.redirects.index',
             },
-        },
-        create: {
-            component: 'tinect-redirects-create',
-            path: 'create',
-            meta: {
-                parentPath: 'tinect.redirects.list',
-            },
-        },
+        }
     },
 
     settingsItem: [{
         id: 'tinect-redirects',
-        path: 'tinect.redirects.list',
+        path: 'tinect.redirects.index',
         parent: 'sw-settings',
+        color: '#189eff',
         group: 'plugins',
-        to: 'tinect.redirects.list',
+        to: 'tinect.redirects.index',
         icon: 'regular-double-chevron-right-s',
         label: 'tinect-redirects.general.title',
     }],
+
+    defaultSearchConfiguration: {
+        _searchable: true,
+        source: {
+            _searchable: true,
+            _score: 500,
+        },
+        target: {
+            _searchable: true,
+            _score: 500,
+        },
+    },
 });

@@ -10,6 +10,7 @@ use Shopware\Core\Framework\DataAbstractionLayer\Field\FkField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\Flag\AllowHtml;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
+use Shopware\Core\Framework\DataAbstractionLayer\Field\Flag\SearchRanking;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\IdField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\IntField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\LongTextField;
@@ -42,8 +43,8 @@ class RedirectDefinition extends EntityDefinition
     {
         return new FieldCollection([
             (new IdField('id', 'id'))->addFlags(new PrimaryKey(), new Required()),
-            new StringField('source', 'source'),
-            new StringField('target', 'target'),
+            (new StringField('source', 'source'))->addFlags(new SearchRanking(SearchRanking::HIGH_SEARCH_RANKING, true)),
+            (new StringField('target', 'target'))->addFlags(new SearchRanking(SearchRanking::HIGH_SEARCH_RANKING, true)),
             new IntField('http_code', 'httpCode'),
             new BoolField('active', 'active'),
             new BoolField('hidden', 'hidden'),
