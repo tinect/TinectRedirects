@@ -1,0 +1,29 @@
+<sw-card :isLoading="isLoading" v-if="redirect" position-identifier="tinect-redirects-similar">
+    <template #title>
+        {{ $tc('tinect-redirects.similar.title', total) }}
+    </template>
+    <template #grid>
+        <sw-entity-listing
+                v-if="total > 0"
+                :fullPage="false"
+                :repository="repository"
+                :columns="columns"
+                :items="items"
+                :sort-by="sortBy"
+                :sort-direction="sortDirection"
+                :allow-edit="false"
+                :allow-delete="false"
+                identifier="tinect-redirects-similar-list"
+                :is-loading="isLoading"
+                @page-change="onPageChange"
+                @update-records="updateTotal"
+        />
+        <sw-empty-state
+                v-else
+                :absolute="false"
+                icon="regular-rocket"
+                :title="$tc('tinect-redirects.similar.empty')"
+                subline=""
+        />
+    </template>
+</sw-card>

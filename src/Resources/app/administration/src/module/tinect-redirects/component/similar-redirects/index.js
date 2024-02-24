@@ -1,7 +1,7 @@
 import template from './template.html.twig';
 
 const { Mixin } = Shopware;
-const Criteria = Shopware.Data.Criteria;
+const { Criteria } = Shopware.Data;
 
 export default {
     template,
@@ -14,32 +14,25 @@ export default {
         Mixin.getByName('listing'),
     ],
 
+    props: {
+        redirect: {
+            type: Object,
+            default: null,
+        },
+    },
+
     data() {
         return {
             items: null,
             isLoading: true,
-            total: 0,
             sortBy: 'createdAt',
             sortDirection: 'DESC',
-            filter: {
-                salesChannelDomainId: null,
-                active: null,
-                hidden: 0,
-            }
-        };
-    },
-
-    metaInfo() {
-        return {
-            title: this.$createTitle(),
+            page: 1,
+            limit: 10,
         };
     },
 
     computed: {
-        redirectRepository() {
-            return this.repositoryFactory.create('tinect_redirects_redirect');
-        },
-
         columns() {
             return [
                 {
@@ -48,6 +41,7 @@ export default {
                     label: this.$tc('tinect-redirects.detail.activeLabel'),
                     routerLink: 'tinect.redirects.details',
                     align: 'center',
+                    sortable: false,
                 },
                 {
                     property: 'source',
@@ -56,81 +50,60 @@ export default {
                     routerLink: 'tinect.redirects.details',
                     allowResize: true,
                     primary: true,
+                    sortable: false,
                 },
                 {
                     property: 'target',
                     dataIndex: 'target',
                     label: this.$tc('tinect-redirects.detail.targetUrlLabel'),
-                    routerLink: 'tinect.redirects.details',
                     allowResize: true,
+                    sortable: false,
                 },
                 {
                     property: 'httpCode',
                     dataIndex: 'httpCode',
                     label: this.$tc('tinect-redirects.detail.httpCodeLabel'),
-                    routerLink: 'tinect.redirects.details',
                     allowResize: true,
+                    sortable: false,
                 },
                 {
                     property: 'count',
                     dataIndex: 'count',
                     label: this.$tc('tinect-redirects.list.countColumn'),
-                    routerLink: 'tinect.redirects.details',
                     allowResize: true,
+                    sortable: false,
                 },
             ];
         },
 
+        repository() {
+            return this.repositoryFactory.create('tinect_redirects_redirect');
+        },
+
         criteria() {
             const criteria = new Criteria(this.page, this.limit);
-
-            criteria.setTerm(this.term);
-            criteria.addFilter(Criteria.equals('hidden', this.filter.hidden));
-            criteria.addSorting(Criteria.sort(this.sortBy, this.sortDirection, this.naturalSorting));
-
-            if (this.filter.salesChannelDomainId) {
-                criteria.addFilter(Criteria.equals('salesChannelDomainId', this.filter.salesChannelDomainId));
-            }
-
-            if (this.filter.active) {
-                criteria.addFilter(Criteria.equals('active', this.filter.active));
-            }
+            criteria.addFilter(Criteria.equals('source', this.redirect.source));
+            criteria.addFilter(Criteria.not('and', [
+                Criteria.equals('id', this.redirect.id),
+            ]));
+            criteria.addSorting(Criteria.sort(this.sortBy, this.sortDirection));
 
             return criteria;
-        },
-    },
-
-    watch: {
-        filter: {
-            handler() {
-                this.getList();
-            },
-            deep: true,
         },
     },
 
     methods: {
         getList() {
             this.isLoading = true;
-
-            return this.redirectRepository.search(this.criteria, Shopware.Context.api)
-                .then((searchResult) => {
-                    this.items = searchResult;
-                    this.total = searchResult.total;
-                    this.isLoading = false;
-                });
-        },
-
-        resetFilter() {
-            this.filter = {
-                salesChannelDomainId: null,
-                active: null,
-                hidden: 0,
-            };
+            return this.repository.search(this.criteria, Shopware.Context.api).then((result) => {
+                this.total = result.total;
+                this.items = result;
+                this.isLoading = false;
+            });
         },
 
         updateTotal({ total }) {
             this.total = total;
         },
-    },
-};
+    }
+}
