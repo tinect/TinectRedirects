@@ -1,46 +1,71 @@
 {
-  "tinect-redirects": {
-    "general": {
-      "title": "Weiterleitungen"
+    "global": {
+        "entities": {
+            "tinect_redirects": "Weiterleitung | Weiterleitungen"
+        }
     },
-    "list": {
-      "createButton": "Weiterleitung anlegen",
-      "countColumn": "Aufrufe | Aufrufe seit 1 Tag | Aufrufe letzte {count} Tage"
-    },
-    "detail": {
-      "source": "Aufgerufene URL",
-      "sourceUrlLabel": "Quell-Pfad",
-      "target": "Ziel",
-      "targetUrlLabel": "Ziel-URL",
-      "httpCodeLabel": "HTTP-Code",
-      "hiddenLabel": "versteckt",
-      "hiddenHelpText": "Diesen Eintrag in der Liste standardmäßig ausblenden",
-      "cancelButton": "Abbrechen",
-      "saveButton": "Speichern",
-      "errorTitle": "Fehler",
-      "activeLabel": "Aktiv",
-      "commentLabel": "Kommentar",
-      "salesChannelDomain": "Quell-Domain",
-      "errorSameUrlDescription": "Der Quell-Pfad und die Ziel-URL dürfen nicht gleich sein",
-      "salesChannelDomainHelpText": "Sie können die Quell-Domain entfernen, um auf jedem Verkaufskanal umzuleiten",
-      "targetUrlHelpText": "Die Ziel-URL kann entweder eine interne URL (z.B. /shopware) oder eine externe URL (z.B. https://shopware.com/example) sein",
-      "httpCodeLabelValues": {
-        "301": "301 (Permanent verschoben)",
-        "302": "302 (Gefunden / Temporär verschoben)"
-      },
-      "countLabel": "keine Aufrufe | 1 Aufruf | {count} Aufrufe",
-      "similarItemsLabel": "keine ähnlichen Einträge | 1 ähnlicher Eintrag | {count} ähnliche Einträge",
-      "columnIpAddress": "IP-Adresse",
-      "columnUserAgent": "User-Agent",
-      "columnCreatedAt": "aufgerufen am"
-    },
-    "sidebar": {
-      "refresh": "Neuladen",
-      "filter": "Filter",
-      "filters": {
-        "search": "Suche",
-        "resetFilter": "Filter zurücksetzen"
-      }
+    "tinect-redirects": {
+        "general": {
+            "title": "Weiterleitungen"
+        },
+        "list": {
+            "createButton": "Weiterleitung anlegen",
+            "countColumn": "Aufrufe",
+            "placeholderSearchBar": "Weiterleitungen durchsuchen"
+        },
+        "detail": {
+            "source": "Aufgerufene URL",
+            "sourceUrlLabel": "Quell-Pfad",
+            "target": "Ziel",
+            "targetUrlLabel": "Ziel-URL",
+            "httpCodeLabel": "HTTP-Code",
+            "hiddenLabel": "versteckt",
+            "hiddenHelpText": "Diesen Eintrag in der Liste standardmäßig ausblenden",
+            "cancelButton": "Abbrechen",
+            "saveButton": "Speichern",
+            "errorTitle": "Fehler",
+            "activeLabel": "Aktiv",
+            "commentLabel": "Kommentar",
+            "salesChannelDomain": "Quell-Domain",
+            "errorSameUrlDescription": "Der Quell-Pfad und die Ziel-URL dürfen nicht gleich sein",
+            "salesChannelDomainHelpText": "Sie können die Quell-Domain entfernen, um auf jedem Verkaufskanal umzuleiten",
+            "targetUrlHelpText": "Die Ziel-URL kann entweder eine interne URL (z.B. /shopware) oder eine externe URL (z.B. https://shopware.com/example) sein",
+            "httpCodeLabelValues": {
+                "301": "301 (Permanent verschoben)",
+                "302": "302 (Gefunden / Temporär verschoben)"
+            },
+            "columnIpAddress": "IP-Adresse",
+            "columnUserAgent": "User-Agent",
+            "columnCreatedAt": "aufgerufen am"
+        },
+        "similar": {
+            "title": "Ähnlichen Einträge | 1 ähnlicher Eintrag | {count} ähnliche Einträge",
+            "empty": "Keine ähnlichen Einträge gefunden"
+        },
+        "requests": {
+            "title": "Aufrufe | 1 Aufruf | {count} Aufrufe",
+            "empty": "Keine Aufrufe gefunden"
+        },
+        "sidebar": {
+            "refresh": "Neuladen",
+            "filter": {
+                "title": "Filter",
+                "resetFilter": "Filter zurücksetzen",
+                "active": {
+                    "label": "Aktiv",
+                    "values": {
+                        "all": "Alle",
+                        "yes": "Ja",
+                        "no": "Nein"
+                    }
+                },
+                "hidden": {
+                    "label": "Versteckte Einträge"
+                },
+                "domain": {
+                    "label": "Verkaufskanal-Domain"
+                }
+            }
+        }
     }
-  }
 }

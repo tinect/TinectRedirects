@@ -1,46 +1,71 @@
 {
-  "tinect-redirects": {
-    "general": {
-      "title": "Redirects"
+    "global": {
+        "entities": {
+            "tinect_redirects": "Redirect | Redirects"
+        }
     },
-    "list": {
-      "createButton": "Add Redirect",
-      "countColumn": "Requests | Requests since 1 day | Requests last {count} days"
-    },
-    "detail": {
-      "source": "Called URL",
-      "sourceUrlLabel": "Source Path",
-      "target": "Target",
-      "targetUrlLabel": "Target URL",
-      "httpCodeLabel": "HTTP Code",
-      "hiddenLabel": "hidden",
-      "hiddenHelpText": "Mark this entry to be hidden in list",
-      "cancelButton": "Cancel",
-      "saveButton": "Save",
-      "errorTitle": "Error",
-      "activeLabel": "active",
-      "commentLabel": "Comment",
-      "salesChannelDomain": "Source Domain",
-      "errorSameUrlDescription": "The source path and target URL must not be the same",
-      "salesChannelDomainHelpText": "You can remove the domain to have it redirected on every sales channel",
-      "targetUrlHelpText": "The target URL can be an internal URL (e.g. /shopware) or an external URL (e.g. https://shopware.com/example)",
-      "httpCodeLabelValues": {
-        "301": "301 (Moved Permanently)",
-        "302": "302 (Found / Moved Temporarily)"
-      },
-      "countLabel": "no requests | 1 request | {count} requests",
-      "similarItemsLabel": "no similar entries | 1 similar entry | {count} similar entries",
-      "columnIpAddress": "IP-Address",
-      "columnUserAgent": "User-Agent",
-      "columnCreatedAt": "Requested at"
-    },
-    "sidebar": {
-      "refresh": "Refresh",
-      "filter": "Filter",
-      "filters": {
-        "search": "Search",
-        "resetFilter": "Reset filter"
-      }
+    "tinect-redirects": {
+        "general": {
+            "title": "Redirects"
+        },
+        "list": {
+            "createButton": "Add Redirect",
+            "countColumn": "Requests",
+            "placeholderSearchBar": "Search redirects"
+        },
+        "detail": {
+            "source": "Called URL",
+            "sourceUrlLabel": "Source Path",
+            "target": "Target",
+            "targetUrlLabel": "Target URL",
+            "httpCodeLabel": "HTTP Code",
+            "hiddenLabel": "hidden",
+            "hiddenHelpText": "Mark this entry to be hidden in list",
+            "cancelButton": "Cancel",
+            "saveButton": "Save",
+            "errorTitle": "Error",
+            "activeLabel": "active",
+            "commentLabel": "Comment",
+            "salesChannelDomain": "Source Domain",
+            "errorSameUrlDescription": "The source path and target URL must not be the same",
+            "salesChannelDomainHelpText": "You can remove the domain to have it redirected on every sales channel",
+            "targetUrlHelpText": "The target URL can be an internal URL (e.g. /shopware) or an external URL (e.g. https://shopware.com/example)",
+            "httpCodeLabelValues": {
+                "301": "301 (Moved Permanently)",
+                "302": "302 (Found / Moved Temporarily)"
+            },
+            "columnIpAddress": "IP-Address",
+            "columnUserAgent": "User-Agent",
+            "columnCreatedAt": "Requested at"
+        },
+        "similar": {
+            "title": "Similar entries | 1 similar entry | {count} similar entries",
+            "empty": "No similar entries found"
+        },
+        "requests": {
+            "title": "Requests | 1 request | {count} requests",
+            "empty": "No requests found"
+        },
+        "sidebar": {
+            "refresh": "Refresh",
+            "filter": {
+                "title": "Filter",
+                "resetFilter": "Reset Filter",
+                "active": {
+                    "label": "Active",
+                    "values": {
+                        "all": "All",
+                        "yes": "Yes",
+                        "no": "No"
+                    }
+                },
+                "hidden": {
+                    "label": "Hidden entries"
+                },
+                "domain": {
+                    "label": "Sales Channel Domain"
+                }
+            }
+        }
     }
-  }
 }

@@ -1,0 +1,33 @@
+<sw-card :isLoading="isLoading" v-if="redirect" position-identifier="tinect-redirects-requests">
+    <template #title>
+        {{ $tc('tinect-redirects.requests.title', total) }}
+    </template>
+    <template #grid>
+        <sw-entity-listing
+                v-if="total > 0"
+                :fullPage="false"
+                :repository="repository"
+                :columns="columns"
+                :items="items"
+                :sort-by="sortBy"
+                :sort-direction="sortDirection"
+                :allow-edit="true"
+                :allow-delete="true"
+                identifier="tinect-redirects-requests-list"
+                :is-loading="isLoading"
+                @page-change="onPageChange"
+                @update-records="updateTotal"
+        >
+            <template #column-createdAt="{ item }">
+                {{ date(item.createdAt) }}
+            </template>
+        </sw-entity-listing>
+        <sw-empty-state
+                v-else
+                :absolute="false"
+                icon="regular-rocket"
+                :title="$tc('tinect-redirects.requests.empty')"
+                subline=""
+        />
+    </template>
+</sw-card>

@@ -1,0 +1,94 @@
+{% block tinect_redirects_details %}
+    <sw-page class="tinect-redirects-details">
+        <template #smart-bar-actions>
+            <sw-button
+                    v-tooltip.bottom="tooltipCancel"
+                    :disabled="redirect !== null && isLoading"
+                    @click="onCancel"
+            >
+                {{ $tc('global.default.cancel') }}
+            </sw-button>
+
+            <sw-button-process
+                    v-model="isSaveSuccessful"
+                    v-tooltip.bottom="tooltipSave"
+                    :is-loading="isLoading"
+                    :disabled="isLoading"
+                    variant="primary"
+                    @click.prevent="onSave"
+            >
+                {{ $tc('global.default.save') }}
+            </sw-button-process>
+        </template>
+
+        <template #content>
+            <sw-card-view>
+                <template v-if="isLoading">
+                    <sw-skeleton variant="detail-bold"/>
+                    <sw-skeleton/>
+                </template>
+                <template v-else>
+                    <sw-card position-identifier="tinect-redirects-details">
+                        <sw-container class="no-flex-grow-field">
+                            <sw-checkbox-field :label="$t('tinect-redirects.detail.activeLabel')"
+                                               v-model="redirect.active">
+                            </sw-checkbox-field>
+                        </sw-container>
+
+                        <sw-card :title="$t('tinect-redirects.detail.source')"
+                                 position-identifier="tinect-redirects-details-source">
+                            <sw-entity-single-select :label="$tc('tinect-redirects.detail.salesChannelDomain')"
+                                                     :value="redirect.salesChannelDomainId"
+                                                     v-model="redirect.salesChannelDomainId"
+                                                     entity="sales_channel_domain"
+                                                     show-clearable-button
+                                                     labelProperty="url"
+                                                     :helpText="$tc('tinect-redirects.detail.salesChannelDomainHelpText')">
+                            </sw-entity-single-select>
+
+                            <sw-field :label="$t('tinect-redirects.detail.sourceUrlLabel')"
+                                      v-model="redirect.source"
+                                      validation="required"></sw-field>
+                        </sw-card>
+
+                        <sw-card :title="$t('tinect-redirects.detail.target')"
+                                 position-identifier="tinect-redirects-details-target">
+                            <template v-if="hasSwUrlExt">
+                                <sw-url-ext-field :label="$t('tinect-redirects.detail.targetUrlLabel')"
+                                                  v-model="redirect.target"
+                                                  validation="required">
+                                </sw-url-ext-field>
+                            </template>
+                            <template v-else>
+                                <sw-dynamic-url-field
+                                        v-model="redirect.target"
+                                        validation="required">
+                                </sw-dynamic-url-field>
+                            </template>
+                        </sw-card>
+
+                        <sw-select-number-field :label="$t('tinect-redirects.detail.httpCodeLabel')"
+                                                v-model="redirect.httpCode"
+                                                validation="required">
+                            <option value=301>{{ $t('tinect-redirects.detail.httpCodeLabelValues.301') }}</option>
+                            <option value=302>{{ $t('tinect-redirects.detail.httpCodeLabelValues.302') }}</option>
+                        </sw-select-number-field>
+
+                        <sw-container class="no-flex-grow-field">
+                            <sw-checkbox-field :helpText="$t('tinect-redirects.detail.hiddenHelpText')"
+                                               :label="$t('tinect-redirects.detail.hiddenLabel')"
+                                               v-model="redirect.hidden">
+                            </sw-checkbox-field>
+                        </sw-container>
+
+                        <sw-text-editor :label="$t('tinect-redirects.detail.commentLabel')"
+                                        v-model="redirect.comment"></sw-text-editor>
+                    </sw-card>
+
+                    <tinect-similar-redirects :redirect="redirect" v-if="!redirect._isNew" />
+                    <tinect-similar-requests :redirect="redirect"  v-if="!redirect._isNew" />
+                </template>
+            </sw-card-view>
+        </template>
+    </sw-page>
+{% endblock %}
