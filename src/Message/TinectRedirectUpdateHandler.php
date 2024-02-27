@@ -85,7 +85,7 @@ class TinectRedirectUpdateHandler
         $query = new RetryableQuery(
             $this->connection,
             $this->connection->prepare(
-                'INSERT INTO `tinect_redirects_redirect_request` (`id`, `tinect_redirects_redirect_id`, `ip_address`, `user_agent`, `created_at`)
+                'INSERT IGNORE INTO `tinect_redirects_redirect_request` (`id`, `tinect_redirects_redirect_id`, `ip_address`, `user_agent`, `created_at`)
                       VALUES (:id, :redirectId, :ipAddress, :userAgent, :createdAt)'
             )
         );
