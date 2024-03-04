@@ -10,7 +10,7 @@
             </sw-button>
 
             <sw-button-process
-                    v-model="isSaveSuccessful"
+                    v-model:processSuccess="isSaveSuccessful"
                     v-tooltip.bottom="tooltipSave"
                     :is-loading="isLoading"
                     :disabled="isLoading"
@@ -31,7 +31,7 @@
                     <sw-card position-identifier="tinect-redirects-details">
                         <sw-container class="no-flex-grow-field">
                             <sw-checkbox-field :label="$t('tinect-redirects.detail.activeLabel')"
-                                               v-model="redirect.active">
+                                               v-model:value="redirect.active">
                             </sw-checkbox-field>
                         </sw-container>
 
@@ -39,7 +39,7 @@
                                  position-identifier="tinect-redirects-details-source">
                             <sw-entity-single-select :label="$tc('tinect-redirects.detail.salesChannelDomain')"
                                                      :value="redirect.salesChannelDomainId"
-                                                     v-model="redirect.salesChannelDomainId"
+                                                     v-model:value="redirect.salesChannelDomainId"
                                                      entity="sales_channel_domain"
                                                      show-clearable-button
                                                      labelProperty="url"
@@ -47,7 +47,7 @@
                             </sw-entity-single-select>
 
                             <sw-field :label="$t('tinect-redirects.detail.sourceUrlLabel')"
-                                      v-model="redirect.source"
+                                      v-model:value="redirect.source"
                                       validation="required"></sw-field>
                         </sw-card>
 
@@ -55,20 +55,20 @@
                                  position-identifier="tinect-redirects-details-target">
                             <template v-if="hasSwUrlExt">
                                 <sw-url-ext-field :label="$t('tinect-redirects.detail.targetUrlLabel')"
-                                                  v-model="redirect.target"
+                                                  v-model:value="redirect.target"
                                                   validation="required">
                                 </sw-url-ext-field>
                             </template>
                             <template v-else>
                                 <sw-dynamic-url-field
-                                        v-model="redirect.target"
+                                        v-model:value="redirect.target"
                                         validation="required">
                                 </sw-dynamic-url-field>
                             </template>
                         </sw-card>
 
                         <sw-select-number-field :label="$t('tinect-redirects.detail.httpCodeLabel')"
-                                                v-model="redirect.httpCode"
+                                                v-model:value="redirect.httpCode"
                                                 validation="required">
                             <option value=301>{{ $t('tinect-redirects.detail.httpCodeLabelValues.301') }}</option>
                             <option value=302>{{ $t('tinect-redirects.detail.httpCodeLabelValues.302') }}</option>
@@ -77,12 +77,12 @@
                         <sw-container class="no-flex-grow-field">
                             <sw-checkbox-field :helpText="$t('tinect-redirects.detail.hiddenHelpText')"
                                                :label="$t('tinect-redirects.detail.hiddenLabel')"
-                                               v-model="redirect.hidden">
+                                               v-model:value="redirect.hidden">
                             </sw-checkbox-field>
                         </sw-container>
 
                         <sw-text-editor :label="$t('tinect-redirects.detail.commentLabel')"
-                                        v-model="redirect.comment"></sw-text-editor>
+                                        v-model:value="redirect.comment"></sw-text-editor>
                     </sw-card>
 
                     <tinect-similar-redirects :redirect="redirect" v-if="!redirect._isNew" />

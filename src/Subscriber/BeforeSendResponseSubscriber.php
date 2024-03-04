@@ -26,6 +26,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Tinect\Redirects\Content\Redirect\RedirectEntity;
 use Tinect\Redirects\Message\TinectRedirectUpdateMessage;
@@ -39,6 +40,7 @@ class BeforeSendResponseSubscriber implements EventSubscriberInterface
         private readonly AbstractSalesChannelContextFactory $salesChannelContextFactory,
         private readonly SystemConfigService $systemConfigService,
         private readonly MessageBusInterface $messageBus,
+        private readonly RequestTransformer $requestTransformer
     ) {
     }
 
@@ -68,6 +70,7 @@ class BeforeSendResponseSubscriber implements EventSubscriberInterface
 
     private function handleRequest(Request $request): ?Response
     {
+        $request = $this->requestTransformer->transform(clone $request);
         $path = $request->attributes->get(RequestTransformer::SALES_CHANNEL_RESOLVED_URI);
 
         if (!\is_string($path) || empty($path)) {

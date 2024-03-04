@@ -10,7 +10,7 @@
       }
     ],
     "require": {
-        "shopware/core": "~6.5.7"
+        "shopware/core": "~6.6.0"
     },
     "extra": {
         "shopware-plugin-class": "Tinect\\Redirects\\TinectRedirects",
