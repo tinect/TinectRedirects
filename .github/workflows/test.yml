@@ -11,20 +11,35 @@ on:
 
 jobs:
   test:
+    env:
+      PLUGIN_NAME: TinectRedirects
     strategy:
       fail-fast: false
       matrix:
-        version: [ "v6.5.7", "v6.5.8", "6.5.x" ]
-    container: ghcr.io/friendsofshopware/platform-plugin-dev:${{ matrix.version }}
+        version: [ "v6.6.0.0-rc4" ]
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      - name: Setup Shopware
+        uses: shopware/setup-shopware@main
+        with:
+          shopware-version: ${{ matrix.version }}
+          php-version: 8.2
+          php-extensions: pcov
+          install: true
 
-      - name: PHPStan
+      - name: Info
         run: |
+          php bin/console -V
           mysql -V
           php -v
-          cp -r "./" "/plugins/TinectRedirects"
-          cd /plugins/TinectRedirects
-          /opt/shopware/vendor/bin/phpstan analyse -c phpstan.neon
+
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          path: ${{ github.workspace }}/custom/plugins/${{ env.PLUGIN_NAME }}
+
+      - name: PHPStan
+        working-directory: ${{ github.workspace }}
+        run: |
+          composer require tinect/redirects
+          ${{ github.workspace }}/vendor/bin/phpstan analyse -c ${{ github.workspace }}/custom/plugins/${{ env.PLUGIN_NAME }}/phpstan.neon
