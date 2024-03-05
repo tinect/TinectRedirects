@@ -46,9 +46,9 @@
                                                      :helpText="$tc('tinect-redirects.detail.salesChannelDomainHelpText')">
                             </sw-entity-single-select>
 
-                            <sw-field :label="$t('tinect-redirects.detail.sourceUrlLabel')"
+                            <sw-text-field :label="$t('tinect-redirects.detail.sourceUrlLabel')"
                                       v-model:value="redirect.source"
-                                      validation="required"></sw-field>
+                                      validation="required"></sw-text-field>
                         </sw-card>
 
                         <sw-card :title="$t('tinect-redirects.detail.target')"
