@@ -90,14 +90,14 @@
                     <sw-sidebar-item icon="regular-filter" :title="$tc('tinect-redirects.sidebar.filter.title')">
 
                         <sw-select-field :label="$t('tinect-redirects.sidebar.filter.active.label')"
-                                         v-model="filter.active">
+                                         v-model:value="filter.active">
                             <option value="">{{ $t('tinect-redirects.sidebar.filter.active.values.all') }}</option>
                             <option value="1">{{ $t('tinect-redirects.sidebar.filter.active.values.yes') }}</option>
                             <option value="0">{{ $t('tinect-redirects.sidebar.filter.active.values.no') }}</option>
                         </sw-select-field>
 
                         <sw-entity-single-select
-                                v-model="filter.salesChannelDomainId"
+                                v-model:value="filter.salesChannelDomainId"
                                 :label="$t('tinect-redirects.sidebar.filter.domain.label')"
                                 entity="sales_channel_domain"
                                 labelProperty="url"
@@ -105,7 +105,7 @@
                         ></sw-entity-single-select>
 
                         <sw-switch-field :label="$t('tinect-redirects.sidebar.filter.hidden.label')"
-                                         v-model="filter.hidden"/>
+                                         v-model:value="filter.hidden"/>
 
                         <sw-button
                                 variant="ghost"
