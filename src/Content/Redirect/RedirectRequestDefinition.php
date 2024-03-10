@@ -40,6 +40,7 @@ class RedirectRequestDefinition extends EntityDefinition
             new FkField('tinect_redirects_redirect_id', 'redirectId', RedirectDefinition::class),
             new RemoteAddressField('ip_address', 'ipAddress'),
             new StringField('user_agent', 'userAgent'),
+            new StringField('referer', 'referer'),
 
             new ManyToOneAssociationField('redirect', 'tinect_redirects_redirect_id', RedirectDefinition::class, 'id'),
         ]);

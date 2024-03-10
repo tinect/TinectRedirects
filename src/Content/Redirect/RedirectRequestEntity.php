@@ -18,6 +18,7 @@ class RedirectRequestEntity extends Entity
     protected string $ipAddress = '';
 
     protected string $userAgent = '';
+    protected string $referer   = '';
 
     public function getRedirectId(): ?string
     {
@@ -57,5 +58,15 @@ class RedirectRequestEntity extends Entity
     public function setUserAgent(string $userAgent): void
     {
         $this->userAgent = $userAgent;
+    }
+
+    public function getReferer(): string
+    {
+        return $this->referer;
+    }
+
+    public function setReferer(string $referer): void
+    {
+        $this->referer = $referer;
     }
 }

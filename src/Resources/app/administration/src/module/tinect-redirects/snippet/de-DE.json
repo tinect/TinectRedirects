@@ -36,6 +36,7 @@
             },
             "columnIpAddress": "IP-Adresse",
             "columnUserAgent": "User-Agent",
+            "columnReferer": "Referent",
             "columnCreatedAt": "aufgerufen am"
         },
         "similar": {
