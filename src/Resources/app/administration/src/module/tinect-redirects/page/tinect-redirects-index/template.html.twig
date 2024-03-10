@@ -26,6 +26,9 @@
                 <sw-button variant="primary" :routerLink="{name: 'tinect.redirects.create'}">
                     {{ $t('tinect-redirects.list.createButton') }}
                 </sw-button>
+                <sw-button variant="secondary" :routerLink="{ name: 'sw.extension.config', params: { namespace: 'TinectRedirects' } }">
+                    {{ $t('tinect-redirects.list.openPluignConfig') }}
+                </sw-button>
             {% endblock %}
         </template>
 

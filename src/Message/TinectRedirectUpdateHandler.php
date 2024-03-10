@@ -85,8 +85,14 @@ class TinectRedirectUpdateHandler
         $query = new RetryableQuery(
             $this->connection,
             $this->connection->prepare(
-                'INSERT IGNORE INTO `tinect_redirects_redirect_request` (`id`, `tinect_redirects_redirect_id`, `ip_address`, `user_agent`, `created_at`)
-                      VALUES (:id, :redirectId, :ipAddress, :userAgent, :createdAt)'
+                'INSERT IGNORE INTO `tinect_redirects_redirect_request` (
+                       `id`,
+                       `tinect_redirects_redirect_id`,
+                       `ip_address`,
+                       `user_agent`,
+                       `referer`,
+                       `created_at`)
+                      VALUES (:id, :redirectId, :ipAddress, :userAgent, :referer, :createdAt)'
             )
         );
 
@@ -95,6 +101,7 @@ class TinectRedirectUpdateHandler
             'redirectId' => Uuid::fromHexToBytes($redirectId),
             'ipAddress'  => $message->getIpAddress(),
             'userAgent'  => $message->getUserAgent(),
+            'referer'    => $message->getReferer(),
             'createdAt'  => $message->getCreatedAt()->format(Defaults::STORAGE_DATE_TIME_FORMAT),
         ];
 

@@ -41,6 +41,11 @@ export default {
                     allowResize: true,
                     sortable: false,
                 }, {
+                    property: 'referer',
+                    label: 'tinect-redirects.detail.columnReferer',
+                    allowResize: true,
+                    sortable: false,
+                }, {
                     property: 'userAgent',
                     label: 'tinect-redirects.detail.columnUserAgent',
                     allowResize: true,

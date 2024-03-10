@@ -112,6 +112,7 @@ class BeforeSendResponseSubscriber implements EventSubscriberInterface
             userAgent: $request->headers->get('User-Agent') ?? '',
             createRedirect: $this->canCreateRedirect($path, $salesChannelDomainId),
             id: $redirect?->getId(),
+            referer: $request->headers->get('referer'),
         );
 
         $this->messageBus->dispatch($message);

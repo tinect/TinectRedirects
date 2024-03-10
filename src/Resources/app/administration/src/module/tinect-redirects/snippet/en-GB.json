@@ -10,6 +10,7 @@
         },
         "list": {
             "createButton": "Add Redirect",
+            "openPluignConfig": "Open plugin config",
             "countColumn": "Requests",
             "placeholderSearchBar": "Search redirects"
         },
@@ -36,6 +37,7 @@
             },
             "columnIpAddress": "IP-Address",
             "columnUserAgent": "User-Agent",
+            "columnReferer": "Referer",
             "columnCreatedAt": "Requested at"
         },
         "similar": {
