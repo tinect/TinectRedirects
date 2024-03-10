@@ -11,6 +11,7 @@
         "list": {
             "createButton": "Weiterleitung anlegen",
             "countColumn": "Aufrufe",
+            "openPluignConfig": "Plugin-Konfiguration öffnen",
             "placeholderSearchBar": "Weiterleitungen durchsuchen"
         },
         "detail": {
@@ -36,6 +37,7 @@
             },
             "columnIpAddress": "IP-Adresse",
             "columnUserAgent": "User-Agent",
+            "columnReferer": "Referent",
             "columnCreatedAt": "aufgerufen am"
         },
         "similar": {
