@@ -10,6 +10,7 @@
         },
         "list": {
             "createButton": "Add Redirect",
+            "openPluignConfig": "Open plugin config",
             "countColumn": "Requests",
             "placeholderSearchBar": "Search redirects"
         },

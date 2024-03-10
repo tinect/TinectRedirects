@@ -11,6 +11,7 @@
         "list": {
             "createButton": "Weiterleitung anlegen",
             "countColumn": "Aufrufe",
+            "openPluignConfig": "Plugin-Konfiguration öffnen",
             "placeholderSearchBar": "Weiterleitungen durchsuchen"
         },
         "detail": {
