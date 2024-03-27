@@ -43,8 +43,8 @@ class RedirectDefinition extends EntityDefinition
     {
         return new FieldCollection([
             (new IdField('id', 'id'))->addFlags(new PrimaryKey(), new Required()),
-            (new StringField('source', 'source'))->addFlags(new SearchRanking(SearchRanking::HIGH_SEARCH_RANKING, true)),
-            (new StringField('target', 'target'))->addFlags(new SearchRanking(SearchRanking::HIGH_SEARCH_RANKING, true)),
+            (new StringField('source', 'source', 512))->addFlags(new SearchRanking(SearchRanking::HIGH_SEARCH_RANKING, true)),
+            (new StringField('target', 'target', 512))->addFlags(new SearchRanking(SearchRanking::HIGH_SEARCH_RANKING, true)),
             new IntField('http_code', 'httpCode'),
             new BoolField('active', 'active'),
             new BoolField('hidden', 'hidden'),
