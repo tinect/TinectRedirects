@@ -1,7 +1,8 @@
 {
     "global": {
         "entities": {
-            "tinect_redirects": "Redirect | Redirects"
+            "tinect_redirects": "Redirect | Redirects",
+            "tinect_redirects_redirect": "Redirect | Redirects"
         }
     },
     "tinect-redirects": {
