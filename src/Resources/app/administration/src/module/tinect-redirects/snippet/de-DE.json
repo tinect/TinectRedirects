@@ -1,7 +1,8 @@
 {
     "global": {
         "entities": {
-            "tinect_redirects": "Weiterleitung | Weiterleitungen"
+            "tinect_redirects": "Weiterleitung | Weiterleitungen",
+            "tinect_redirects_redirect": "Weiterleitung | Weiterleitungen"
         }
     },
     "tinect-redirects": {
