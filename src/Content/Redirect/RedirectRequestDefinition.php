@@ -16,7 +16,9 @@ use Shopware\Core\Framework\DataAbstractionLayer\FieldCollection;
 
 class RedirectRequestDefinition extends EntityDefinition
 {
-    public const ENTITY_NAME = 'tinect_redirects_redirect_request';
+    public const ENTITY_NAME           = 'tinect_redirects_redirect_request';
+    public const MAX_LENGTH_USER_AGENT = 1024;
+    public const MAX_LENGTH_REFERER    = 1024;
 
     public function getEntityName(): string
     {
@@ -39,8 +41,8 @@ class RedirectRequestDefinition extends EntityDefinition
             (new IdField('id', 'id'))->addFlags(new PrimaryKey(), new Required()),
             new FkField('tinect_redirects_redirect_id', 'redirectId', RedirectDefinition::class),
             new RemoteAddressField('ip_address', 'ipAddress'),
-            new StringField('user_agent', 'userAgent'),
-            new StringField('referer', 'referer'),
+            new StringField('user_agent', 'userAgent', self::MAX_LENGTH_USER_AGENT),
+            new StringField('referer', 'referer', self::MAX_LENGTH_REFERER),
 
             new ManyToOneAssociationField('redirect', 'tinect_redirects_redirect_id', RedirectDefinition::class, 'id'),
         ]);
