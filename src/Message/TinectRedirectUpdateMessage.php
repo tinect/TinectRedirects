@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tinect\Redirects\Message;
 
 use Shopware\Core\Framework\MessageQueue\LowPriorityMessageInterface;
+use Tinect\Redirects\Content\Redirect\RedirectRequestDefinition;
 
 class TinectRedirectUpdateMessage implements LowPriorityMessageInterface
 {
@@ -44,12 +45,16 @@ class TinectRedirectUpdateMessage implements LowPriorityMessageInterface
 
     public function getUserAgent(): string
     {
-        return $this->userAgent;
+        return substr($this->userAgent, 0, RedirectRequestDefinition::MAX_LENGTH_USER_AGENT);
     }
 
     public function getReferer(): ?string
     {
-        return $this->referer;
+        if ($this->referer === null) {
+            return null;
+        }
+
+        return substr($this->referer, 0, RedirectRequestDefinition::MAX_LENGTH_REFERER);
     }
 
     public function isCreateRedirect(): bool

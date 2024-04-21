@@ -70,7 +70,7 @@ class BeforeSendResponseSubscriber implements EventSubscriberInterface
     private function handleRequest(Request $request): ?Response
     {
         $request = $this->requestTransformer->transform(clone $request);
-        $path = $request->attributes->get(RequestTransformer::SALES_CHANNEL_RESOLVED_URI);
+        $path    = $request->attributes->get(RequestTransformer::SALES_CHANNEL_RESOLVED_URI);
 
         if (!\is_string($path) || empty($path)) {
             return null;
