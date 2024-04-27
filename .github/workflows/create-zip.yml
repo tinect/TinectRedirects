@@ -6,7 +6,7 @@ on:
 
 jobs:
   build:
-    uses: FriendsOfShopware/workflows/.github/workflows/github.yml@main
+    uses: FriendsOfShopware/actions/.github/workflows/github.yml@main
     with:
       extensionName: ${{ github.event.repository.name }}
       shopwareVersion: '6.6.0'
