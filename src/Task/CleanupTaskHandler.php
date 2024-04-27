@@ -60,8 +60,8 @@ class CleanupTaskHandler extends ScheduledTaskHandler
             $deleteQuery->executeQuery();
         }
 
-        $this->connection->executeStatement('UPDATE tinect_redirects_redirect SET
-            request_count = (SELECT COUNT(*) FROM tinect_redirects_redirect_request WHERE tinect_redirects_redirect_request.tinect_redirects_redirect_id = tinect_redirects_redirect.id)
+        $this->connection->executeStatement('UPDATE `tinect_redirects_redirect` SET
+            `count` = (SELECT COUNT(*) FROM tinect_redirects_redirect_request WHERE tinect_redirects_redirect_request.tinect_redirects_redirect_id = tinect_redirects_redirect.id)
         ');
     }
 }
