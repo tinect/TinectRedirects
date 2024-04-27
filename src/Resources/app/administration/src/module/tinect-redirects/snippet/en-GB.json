@@ -34,7 +34,8 @@
             "targetUrlHelpText": "The target URL can be an internal URL (e.g. /shopware) or an external URL (e.g. https://shopware.com/example)",
             "httpCodeLabelValues": {
                 "301": "301 (Moved Permanently)",
-                "302": "302 (Found / Moved Temporarily)"
+                "302": "302 (Found / Moved Temporarily)",
+                "410": "410 (Gone)"
             },
             "columnIpAddress": "IP-Address",
             "columnUserAgent": "User-Agent",

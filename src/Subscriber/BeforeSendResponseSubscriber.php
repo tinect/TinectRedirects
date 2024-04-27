@@ -119,6 +119,12 @@ class BeforeSendResponseSubscriber implements EventSubscriberInterface
             return null;
         }
 
+        $httpCode = $redirect->getHttpCode();
+
+        if ($httpCode === Response::HTTP_GONE) {
+            return new Response('', $httpCode);
+        }
+
         $targetURL = $redirect->getTarget();
 
         $host = $request->attributes->get(RequestTransformer::SALES_CHANNEL_ABSOLUTE_BASE_URL)
@@ -132,7 +138,7 @@ class BeforeSendResponseSubscriber implements EventSubscriberInterface
             $targetURL = $host . $targetURL;
         }
 
-        return new RedirectResponse($targetURL, $redirect->getHttpCode());
+        return new RedirectResponse($targetURL, $httpCode);
     }
 
     private function getSalesChannelContext(Request $request): SalesChannelContext
