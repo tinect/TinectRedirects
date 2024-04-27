@@ -29,9 +29,14 @@
                 </template>
                 <template v-else>
                     <sw-card position-identifier="tinect-redirects-details">
-                        <sw-container class="no-flex-grow-field">
+                        <sw-container class="no-flex-grow-field" columns="1fr 1fr">
                             <sw-checkbox-field :label="$t('tinect-redirects.detail.activeLabel')"
                                                v-model:value="redirect.active">
+                            </sw-checkbox-field>
+
+                            <sw-checkbox-field :helpText="$t('tinect-redirects.detail.hiddenHelpText')"
+                                               :label="$t('tinect-redirects.detail.hiddenLabel')"
+                                               v-model:value="redirect.hidden">
                             </sw-checkbox-field>
                         </sw-container>
 
@@ -51,7 +56,15 @@
                                       validation="required"></sw-text-field>
                         </sw-card>
 
-                        <sw-card :title="$t('tinect-redirects.detail.target')"
+                        <sw-select-number-field :label="$t('tinect-redirects.detail.httpCodeLabel')"
+                                                v-model:value="redirect.httpCode"
+                                                validation="required">
+                            <option value=301>{{ $t('tinect-redirects.detail.httpCodeLabelValues.301') }}</option>
+                            <option value=302>{{ $t('tinect-redirects.detail.httpCodeLabelValues.302') }}</option>
+                            <option value=410>{{ $t('tinect-redirects.detail.httpCodeLabelValues.410') }}</option>
+                        </sw-select-number-field>
+
+                        <sw-card v-if="redirect.httpCode !== 410" :title="$t('tinect-redirects.detail.target')"
                                  position-identifier="tinect-redirects-details-target">
                             <template v-if="hasSwUrlExt">
                                 <sw-url-ext-field :label="$t('tinect-redirects.detail.targetUrlLabel')"
@@ -66,20 +79,6 @@
                                 </sw-dynamic-url-field>
                             </template>
                         </sw-card>
-
-                        <sw-select-number-field :label="$t('tinect-redirects.detail.httpCodeLabel')"
-                                                v-model:value="redirect.httpCode"
-                                                validation="required">
-                            <option value=301>{{ $t('tinect-redirects.detail.httpCodeLabelValues.301') }}</option>
-                            <option value=302>{{ $t('tinect-redirects.detail.httpCodeLabelValues.302') }}</option>
-                        </sw-select-number-field>
-
-                        <sw-container class="no-flex-grow-field">
-                            <sw-checkbox-field :helpText="$t('tinect-redirects.detail.hiddenHelpText')"
-                                               :label="$t('tinect-redirects.detail.hiddenLabel')"
-                                               v-model:value="redirect.hidden">
-                            </sw-checkbox-field>
-                        </sw-container>
 
                         <sw-text-editor :label="$t('tinect-redirects.detail.commentLabel')"
                                         v-model:value="redirect.comment"></sw-text-editor>
