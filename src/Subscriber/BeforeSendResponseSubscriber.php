@@ -12,7 +12,6 @@ use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\MultiFilter;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
-use Shopware\Core\Framework\Event\BeforeSendResponseEvent;
 use Shopware\Core\PlatformRequest;
 use Shopware\Core\SalesChannelRequest;
 use Shopware\Core\System\SalesChannel\Context\AbstractSalesChannelContextFactory;
@@ -26,6 +25,9 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Event\ExceptionEvent;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Tinect\Redirects\Content\Redirect\RedirectEntity;
 use Tinect\Redirects\Message\TinectRedirectUpdateMessage;
@@ -45,21 +47,27 @@ class BeforeSendResponseSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            BeforeSendResponseEvent::class => ['onBeforeSendResponse', 1000],
+            KernelEvents::EXCEPTION => 'onKernelException',
         ];
     }
 
-    public function onBeforeSendResponse(BeforeSendResponseEvent $event): void
+    public function onKernelException(ExceptionEvent $event): void
     {
-        if ($event->getRequest()->getMethod() !== Request::METHOD_GET) {
+        $request = $event->getRequest();
+
+        if ($request->getMethod() !== Request::METHOD_GET) {
             return;
         }
 
-        if ($event->getResponse()->getStatusCode() !== Response::HTTP_NOT_FOUND) {
+        $exception = $event->getThrowable();
+
+        $is404StatusCode = $exception instanceof HttpException && $exception->getStatusCode() === Response::HTTP_NOT_FOUND;
+
+        if (!$is404StatusCode) {
             return;
         }
 
-        $response = $this->handleRequest($event->getRequest());
+        $response = $this->handleRequest($request);
 
         if ($response instanceof Response) {
             $event->setResponse($response);
@@ -68,16 +76,15 @@ class BeforeSendResponseSubscriber implements EventSubscriberInterface
 
     private function handleRequest(Request $request): ?Response
     {
-        $path = $request->attributes->get(RequestTransformer::SALES_CHANNEL_RESOLVED_URI);
+        $path = $request->attributes->getString(RequestTransformer::ORIGINAL_REQUEST_URI);
 
-        if (!\is_string($path) || empty($path)) {
+        if ($path === '') {
             return null;
         }
 
-        $salesChannelBaseUrl = $request->attributes->get(RequestTransformer::SALES_CHANNEL_BASE_URL);
+        $salesChannelBaseUrl = $request->attributes->getString(RequestTransformer::SALES_CHANNEL_BASE_URL);
 
-        if (\is_string($salesChannelBaseUrl)
-            && !empty($salesChannelBaseUrl)
+        if ($salesChannelBaseUrl !== ''
             && \str_starts_with($path, $salesChannelBaseUrl . '/')) {
             $path = \substr($path, \strlen($salesChannelBaseUrl));
         }
@@ -127,7 +134,7 @@ class BeforeSendResponseSubscriber implements EventSubscriberInterface
 
         $targetURL = $redirect->getTarget();
 
-        $host = $request->attributes->get(RequestTransformer::SALES_CHANNEL_ABSOLUTE_BASE_URL)
+        $host = $request->attributes->getString(RequestTransformer::SALES_CHANNEL_ABSOLUTE_BASE_URL)
             . $salesChannelBaseUrl;
 
         $salesChannelContext = $this->getSalesChannelContext($request);
@@ -149,9 +156,9 @@ class BeforeSendResponseSubscriber implements EventSubscriberInterface
             return $salesChannelContext;
         }
 
-        $salesChannelId = $request->attributes->get(PlatformRequest::ATTRIBUTE_SALES_CHANNEL_ID);
+        $salesChannelId = $request->attributes->getString(PlatformRequest::ATTRIBUTE_SALES_CHANNEL_ID);
 
-        if (!\is_string($salesChannelId) || empty($salesChannelId)) {
+        if ($salesChannelId === '') {
             throw new \RuntimeException('No sales channel id found in request.');
         }
 
@@ -178,9 +185,9 @@ class BeforeSendResponseSubscriber implements EventSubscriberInterface
 
     private function getIpAddress(Request $request): string
     {
-        $salesChannelId = $request->attributes->get(PlatformRequest::ATTRIBUTE_SALES_CHANNEL_ID);
+        $salesChannelId = $request->attributes->getString(PlatformRequest::ATTRIBUTE_SALES_CHANNEL_ID);
 
-        if (!\is_string($salesChannelId) || empty($salesChannelId)) {
+        if ($salesChannelId === '') {
             $salesChannelId = null;
         }
 
