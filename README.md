@@ -1,12 +1,13 @@
 # Redirects for Shopware 6
 
 Manage 301 and 302 redirects in your Shopware 6 shop.
-The plugin is compatible with PHP version 7.4 and higher.
+The plugin is compatible with PHP version 8.1 and higher.
 The plugin has been forked from [RuneLaenenRedirects](https://github.com/runelaenen/sw6-redirects).
 
 ## ✔️ Features
 - 301 redirects
 - 302 (temporary) redirects
+- 410 (Gone) results
 - Import/Export profile
 - redirect just when there would be a error
 - auto add 404 error in list (configurable)
