@@ -16,7 +16,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: [ "v6.6.0.0-rc4" ]
+        version: [ "v6.6.0.0", "v6.6.1.2", "v6.6.2.0", "v6.6.3.1", "v6.6.4.0", "trunk"  ]
     runs-on: ubuntu-latest
     steps:
       - name: Setup Shopware

@@ -11,10 +11,10 @@ use Shopware\Core\Framework\Uuid\Uuid;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 #[AsMessageHandler]
-class TinectRedirectUpdateHandler
+readonly class TinectRedirectUpdateHandler
 {
     public function __construct(
-        private readonly Connection $connection,
+        private Connection $connection,
     ) {
     }
 

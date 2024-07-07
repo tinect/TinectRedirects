@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Tinect\Redirects\Task;
 
+use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
+use Psr\Log\LoggerInterface;
 use Shopware\Core\Defaults;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\MessageQueue\ScheduledTask\ScheduledTaskHandler;
@@ -17,10 +19,11 @@ class CleanupTaskHandler extends ScheduledTaskHandler
 {
     public function __construct(
         EntityRepository $scheduledTaskRepository,
+        LoggerInterface $logger,
         private readonly SystemConfigService $configService,
-        private readonly Connection $connection
+        private readonly Connection $connection,
     ) {
-        parent::__construct($scheduledTaskRepository);
+        parent::__construct($scheduledTaskRepository, $logger);
     }
 
     public function run(): void
@@ -56,7 +59,7 @@ class CleanupTaskHandler extends ScheduledTaskHandler
         $deleteQuery->where('id IN (:ids)');
 
         foreach (\array_chunk($ids, 1000) as $chunk) {
-            $deleteQuery->setParameter('ids', $chunk, Connection::PARAM_STR_ARRAY);
+            $deleteQuery->setParameter('ids', $chunk, ArrayParameterType::STRING);
             $deleteQuery->executeQuery();
         }
 

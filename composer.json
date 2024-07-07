@@ -37,6 +37,6 @@
         "php-cs-fixer": [
             ".ci/vendor/bin/php-cs-fixer fix --diff --config=.ci/.php-cs-fixer.dist.php"
         ],
-        "phpstan": "docker run --rm -v $(pwd):/app aragon999/phpstan-shopware:v6.5.7 analyse ."
+        "phpstan": "docker run --rm -v $(pwd):/app aragon999/phpstan-shopware:v6.6.0 analyse ."
     }
 }
