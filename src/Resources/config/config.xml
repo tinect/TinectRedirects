@@ -14,6 +14,20 @@
             <defaultValue>30</defaultValue>
         </input-field>
 
+        <input-field type="int">
+            <name>deleteInactiveEntriesAfterDays</name>
+            <label>Delete inactive redirects after x days</label>
+            <label lang="de-DE">Inaktive Weiterleitungen löschen, die älter als X Tage sind</label>
+            <defaultValue>30</defaultValue>
+        </input-field>
+
+        <input-field type="int">
+            <name>deleteInactiveEntriesCount</name>
+            <label>Delete inactive redirects with less than x count</label>
+            <label lang="de-DE">Inaktive Weiterleitungen löschen, die weniger als X Aufrufe haben</label>
+            <defaultValue>2</defaultValue>
+        </input-field>
+
         <input-field type="bool">
             <name>saveIpAddresses</name>
             <label>Save IP addresses</label>
