@@ -32,16 +32,16 @@ use Symfony\Component\Messenger\MessageBusInterface;
 use Tinect\Redirects\Content\Redirect\RedirectEntity;
 use Tinect\Redirects\Message\TinectRedirectUpdateMessage;
 
-class BeforeSendResponseSubscriber implements EventSubscriberInterface
+readonly class BeforeSendResponseSubscriber implements EventSubscriberInterface
 {
     public function __construct(
-        private readonly EntityRepository $tinectRedirectsRedirectRepository,
-        private readonly SeoUrlPlaceholderHandlerInterface $seoUrlPlaceholderHandler,
+        private EntityRepository $tinectRedirectsRedirectRepository,
+        private SeoUrlPlaceholderHandlerInterface $seoUrlPlaceholderHandler,
         #[Autowire(service: SalesChannelContextFactory::class)]
-        private readonly AbstractSalesChannelContextFactory $salesChannelContextFactory,
-        private readonly SystemConfigService $systemConfigService,
-        private readonly MessageBusInterface $messageBus,
-        private readonly RequestTransformer $requestTransformer
+        private AbstractSalesChannelContextFactory $salesChannelContextFactory,
+        private SystemConfigService $systemConfigService,
+        private MessageBusInterface $messageBus,
+        private RequestTransformer $requestTransformer
     ) {
     }
 

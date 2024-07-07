@@ -3,32 +3,6 @@ parameters:
     paths:
         - src
     ignoreErrors:
-        -
-            message: """
-                #^Call to method __construct\\(\\) of deprecated class Shopware\\\\Core\\\\Framework\\\\MessageQueue\\\\ScheduledTask\\\\ScheduledTaskHandler\\:
-                tag\\:v6\\.6\\.0 \\- reason\\:class\\-hierarchy\\-change \\- Won't implement MessageSubscriberInterface anymore, tag all ScheduledTaskHandlers with \\#\\[AsMessageHandler\\] instead$#
-            """
-            count: 1
-            path: src/Task/CleanupTaskHandler.php
-            reportUnmatched: false
-
-        -
-            message: """
-                #^Class Tinect\\\\Redirects\\\\Task\\\\CleanupTaskHandler extends deprecated class Shopware\\\\Core\\\\Framework\\\\MessageQueue\\\\ScheduledTask\\\\ScheduledTaskHandler\\:
-                tag\\:v6\\.6\\.0 \\- reason\\:class\\-hierarchy\\-change \\- Won't implement MessageSubscriberInterface anymore, tag all ScheduledTaskHandlers with \\#\\[AsMessageHandler\\] instead$#
-            """
-            count: 1
-            path: src/Task/CleanupTaskHandler.php
-            reportUnmatched: false
-
-        -
-            message: """
-                #^Fetching deprecated class constant PARAM_STR_ARRAY of class Doctrine\\\\DBAL\\\\Connection\\:
-                Use \\{@see ArrayParameterType\\:\\:STRING\\} instead\\.$#
-            """
-            count: 1
-            path: src/Task/CleanupTaskHandler.php
-            reportUnmatched: false
 
         -
             message: '#.* generic class Shopware\\Core\\Framework\\DataAbstractionLayer\\EntityRepository.*not specify its types: TEntityCollection#'

@@ -7,18 +7,18 @@ namespace Tinect\Redirects\Message;
 use Shopware\Core\Framework\MessageQueue\LowPriorityMessageInterface;
 use Tinect\Redirects\Content\Redirect\RedirectRequestDefinition;
 
-class TinectRedirectUpdateMessage implements LowPriorityMessageInterface
+readonly class TinectRedirectUpdateMessage implements LowPriorityMessageInterface
 {
-    private readonly \DateTimeImmutable $createdAt;
+    private \DateTimeImmutable $createdAt;
 
     public function __construct(
-        private readonly string $source,
-        private readonly ?string $salesChannelDomainId,
-        private readonly string $ipAddress,
-        private readonly string $userAgent,
-        private readonly bool $createRedirect,
-        private readonly ?string $id,
-        private readonly ?string $referer,
+        private string $source,
+        private ?string $salesChannelDomainId,
+        private string $ipAddress,
+        private string $userAgent,
+        private bool $createRedirect,
+        private ?string $id,
+        private ?string $referer,
     ) {
         $this->createdAt = new \DateTimeImmutable();
     }
