@@ -7,3 +7,6 @@ parameters:
         -
             message: '#.* generic class Shopware\\Core\\Framework\\DataAbstractionLayer\\EntityRepository.*not specify its types: TEntityCollection#'
             reportUnmatched: false
+        -
+            message: "#^Out of .* possible param types, only .* %% actually have it\\. Add more param types to get over 99 %%$#"
+            reportUnmatched: false

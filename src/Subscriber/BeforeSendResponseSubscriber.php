@@ -31,6 +31,7 @@ use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Tinect\Redirects\Content\Redirect\RedirectEntity;
 use Tinect\Redirects\Message\TinectRedirectUpdateMessage;
+use Tinect\Redirects\Services\ExcludedService;
 
 readonly class BeforeSendResponseSubscriber implements EventSubscriberInterface
 {
@@ -41,7 +42,8 @@ readonly class BeforeSendResponseSubscriber implements EventSubscriberInterface
         private AbstractSalesChannelContextFactory $salesChannelContextFactory,
         private SystemConfigService $systemConfigService,
         private MessageBusInterface $messageBus,
-        private RequestTransformer $requestTransformer
+        private RequestTransformer $requestTransformer,
+        private ExcludedService $excludedService
     ) {
     }
 
@@ -214,23 +216,6 @@ readonly class BeforeSendResponseSubscriber implements EventSubscriberInterface
             return false;
         }
 
-        return $this->canCreateRedirectByExcludes($path, $salesChannelId);
-    }
-
-    private function canCreateRedirectByExcludes(string $path, ?string $salesChannelId): bool
-    {
-        $excludes = \explode(PHP_EOL, $this->systemConfigService->getString('TinectRedirects.config.excludes', $salesChannelId));
-
-        foreach ($excludes as $exclude) {
-            try {
-                if (\preg_match($exclude, $path)) {
-                    return false;
-                }
-            } catch (\Throwable) {
-                // nth, we don't care whether the regex is valid
-            }
-        }
-
-        return true;
+        return !$this->excludedService->isExcluded($path, $salesChannelId);
     }
 }
