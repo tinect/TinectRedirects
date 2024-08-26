@@ -31,7 +31,7 @@ use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Tinect\Redirects\Content\Redirect\RedirectEntity;
 use Tinect\Redirects\Message\TinectRedirectUpdateMessage;
-use Tinect\Redirects\Services\ExcludedService;
+use Tinect\Redirects\Services\RedirectFinderService;
 
 readonly class BeforeSendResponseSubscriber implements EventSubscriberInterface
 {
@@ -43,7 +43,8 @@ readonly class BeforeSendResponseSubscriber implements EventSubscriberInterface
         private SystemConfigService $systemConfigService,
         private MessageBusInterface $messageBus,
         private RequestTransformer $requestTransformer,
-        private ExcludedService $excludedService
+        private ExcludedService $excludedService,
+        private RedirectFinderService $redirectFinderService
     ) {
     }
 
@@ -102,20 +103,7 @@ readonly class BeforeSendResponseSubscriber implements EventSubscriberInterface
             $salesChannelDomainId = null;
         }
 
-        $context  = new Context(new SystemSource());
-        $criteria = (new Criteria())
-            ->addFilter(new EqualsFilter('source', $path))
-            ->addFilter(
-                new MultiFilter(MultiFilter::CONNECTION_OR, [
-                    new EqualsFilter('salesChannelDomainId', $salesChannelDomainId),
-                    new EqualsFilter('salesChannelDomainId', null),
-                ])
-            )
-            ->addSorting(new FieldSorting('salesChannelDomainId', FieldSorting::DESCENDING))
-            ->setLimit(1);
-
-        /** @var ?RedirectEntity $redirect */
-        $redirect = $this->tinectRedirectsRedirectRepository->search($criteria, $context)->first();
+        $redirect = $this->redirectFinderService->find($path, $salesChannelDomainId);
 
         $message = new TinectRedirectUpdateMessage(
             source: $path,
