@@ -5,13 +5,6 @@ declare(strict_types=1);
 namespace Tinect\Redirects\Subscriber;
 
 use Shopware\Core\Content\Seo\SeoUrlPlaceholderHandlerInterface;
-use Shopware\Core\Framework\Api\Context\SystemSource;
-use Shopware\Core\Framework\Context;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
-use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
-use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\MultiFilter;
-use Shopware\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
 use Shopware\Core\PlatformRequest;
 use Shopware\Core\SalesChannelRequest;
 use Shopware\Core\System\SalesChannel\Context\AbstractSalesChannelContextFactory;
@@ -29,21 +22,18 @@ use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Messenger\MessageBusInterface;
-use Tinect\Redirects\Content\Redirect\RedirectEntity;
 use Tinect\Redirects\Message\TinectRedirectUpdateMessage;
 use Tinect\Redirects\Services\RedirectFinderService;
 
 readonly class BeforeSendResponseSubscriber implements EventSubscriberInterface
 {
     public function __construct(
-        private EntityRepository $tinectRedirectsRedirectRepository,
         private SeoUrlPlaceholderHandlerInterface $seoUrlPlaceholderHandler,
         #[Autowire(service: SalesChannelContextFactory::class)]
         private AbstractSalesChannelContextFactory $salesChannelContextFactory,
         private SystemConfigService $systemConfigService,
         private MessageBusInterface $messageBus,
         private RequestTransformer $requestTransformer,
-        private ExcludedService $excludedService,
         private RedirectFinderService $redirectFinderService
     ) {
     }
@@ -110,7 +100,7 @@ readonly class BeforeSendResponseSubscriber implements EventSubscriberInterface
             salesChannelDomainId: $salesChannelDomainId,
             ipAddress: $this->getIpAddress($request),
             userAgent: $request->headers->get('User-Agent') ?? '',
-            createRedirect: $this->canCreateRedirect($path, $salesChannelDomainId),
+            createRedirect: $this->canCreateRedirect($salesChannelDomainId),
             id: $redirect?->getId(),
             referer: $request->headers->get('referer'),
         );
@@ -198,12 +188,8 @@ readonly class BeforeSendResponseSubscriber implements EventSubscriberInterface
         return $this->systemConfigService->getBool('TinectRedirects.config.saveIpAddresses', $salesChannelId);
     }
 
-    private function canCreateRedirect(string $path, ?string $salesChannelId): bool
+    private function canCreateRedirect(?string $salesChannelId): bool
     {
-        if (!$this->systemConfigService->getBool('TinectRedirects.config.createNewRedirects', $salesChannelId)) {
-            return false;
-        }
-
-        return !$this->excludedService->isExcluded($path, $salesChannelId);
+        return $this->systemConfigService->getBool('TinectRedirects.config.createNewRedirects', $salesChannelId);
     }
 }
