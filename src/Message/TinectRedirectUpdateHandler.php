@@ -9,31 +9,43 @@ use Shopware\Core\Defaults;
 use Shopware\Core\Framework\DataAbstractionLayer\Doctrine\RetryableQuery;
 use Shopware\Core\Framework\Uuid\Uuid;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
+use Tinect\Redirects\Services\ExcludedService;
+use Tinect\Redirects\Services\RedirectFinderService;
 
 #[AsMessageHandler]
 readonly class TinectRedirectUpdateHandler
 {
     public function __construct(
         private Connection $connection,
+        private ExcludedService $excludedService,
+        private RedirectFinderService $redirectFinderService
     ) {
     }
 
     public function __invoke(TinectRedirectUpdateMessage $message): void
     {
-        $redirectId = $message->getId();
-
-        if ($message->isCreateRedirect()) {
-            $redirectId = $this->createOrUpdateRedirect($message);
-        } else {
-            $this->updateRedirectCount($message);
+        if ($this->excludedService->isExcluded($message->getSource(), $message->getSalesChannelDomainId())) {
+            return;
         }
 
-        if (\is_string($redirectId)) {
+        $redirectId = $message->getId();
+
+        if ($redirectId === null) {
+            $redirectId = $this->redirectFinderService->find($message->getSource(), $message->getSalesChannelDomainId())?->getId();
+        }
+
+        if ($message->canCreateRedirect()) {
+            $redirectId = $this->createOrUpdateRedirect($message, $redirectId);
+        } elseif ($redirectId !== null) {
+            $this->updateRedirectCount($redirectId);
+        }
+
+        if ($redirectId !== null) {
             $this->createRedirectRequest($message, $redirectId);
         }
     }
 
-    private function createOrUpdateRedirect(TinectRedirectUpdateMessage $message): string
+    private function createOrUpdateRedirect(TinectRedirectUpdateMessage $message, ?string $redirectId): string
     {
         $query = new RetryableQuery(
             $this->connection,
@@ -44,8 +56,12 @@ readonly class TinectRedirectUpdateHandler
             )
         );
 
+        if (!\is_string($redirectId)) {
+            $redirectId = Uuid::randomHex();
+        }
+
         $params = [
-            'id'                   => \is_string($message->getId()) ? Uuid::fromHexToBytes($message->getId()) : Uuid::randomBytes(),
+            'id'                   => Uuid::fromHexToBytes($redirectId),
             'source'               => $message->getSource(),
             'salesChannelDomainId' => null,
             'createdAt'            => $message->getCreatedAt()->format(Defaults::STORAGE_DATE_TIME_FORMAT),
@@ -60,12 +76,8 @@ readonly class TinectRedirectUpdateHandler
         return Uuid::fromBytesToHex($params['id']);
     }
 
-    private function updateRedirectCount(TinectRedirectUpdateMessage $message): void
+    private function updateRedirectCount(string $redirectId): void
     {
-        if (!\is_string($message->getId())) {
-            return;
-        }
-
         $query = new RetryableQuery(
             $this->connection,
             $this->connection->prepare(
@@ -74,7 +86,7 @@ readonly class TinectRedirectUpdateHandler
         );
 
         $params = [
-            'id' => Uuid::fromHexToBytes($message->getId()),
+            'id' => Uuid::fromHexToBytes($redirectId),
         ];
 
         $query->execute($params);
