@@ -57,7 +57,7 @@ readonly class TinectRedirectUpdateMessage implements LowPriorityMessageInterfac
         return substr($this->referer, 0, RedirectRequestDefinition::MAX_LENGTH_REFERER);
     }
 
-    public function isCreateRedirect(): bool
+    public function canCreateRedirect(): bool
     {
         return $this->createRedirect;
     }
