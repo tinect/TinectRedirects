@@ -23,7 +23,28 @@ readonly class RedirectFinderService
     public function find(string $path, ?string $salesChannelDomainId): ?RedirectEntity
     {
         $context  = new Context(new SystemSource());
-        $criteria = (new Criteria())
+        $criteria = $this->getCriteria($path, $salesChannelDomainId);
+
+        $redirect = $this->tinectRedirectsRedirectRepository->search($criteria, $context)->first();
+
+        if ($redirect instanceof RedirectEntity) {
+            return $redirect;
+        }
+
+        return null;
+    }
+
+    public function findId(string $path, ?string $salesChannelDomainId): ?string
+    {
+        $context  = new Context(new SystemSource());
+        $criteria = $this->getCriteria($path, $salesChannelDomainId);
+
+        return $this->tinectRedirectsRedirectRepository->searchIds($criteria, $context)->firstId();
+    }
+
+    private function getCriteria(string $path, ?string $salesChannelDomainId): Criteria
+    {
+        return (new Criteria())
             ->addFilter(new EqualsFilter('source', $path))
             ->addFilter(
                 new MultiFilter(MultiFilter::CONNECTION_OR, [
@@ -33,13 +54,5 @@ readonly class RedirectFinderService
             )
             ->addSorting(new FieldSorting('salesChannelDomainId', FieldSorting::DESCENDING))
             ->setLimit(1);
-
-        $redirect = $this->tinectRedirectsRedirectRepository->search($criteria, $context)->first();
-
-        if ($redirect instanceof RedirectEntity) {
-            return $redirect;
-        }
-
-        return null;
     }
 }

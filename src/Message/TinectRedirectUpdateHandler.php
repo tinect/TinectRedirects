@@ -31,7 +31,7 @@ readonly class TinectRedirectUpdateHandler
         $redirectId = $message->getId();
 
         if ($redirectId === null) {
-            $redirectId = $this->redirectFinderService->find($message->getSource(), $message->getSalesChannelDomainId())?->getId();
+            $redirectId = $this->redirectFinderService->findId($message->getSource(), $message->getSalesChannelDomainId());
         }
 
         if ($message->canCreateRedirect()) {
