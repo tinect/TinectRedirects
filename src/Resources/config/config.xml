@@ -59,7 +59,6 @@
 #.(gz|zip|rar|py|php|ashx)$#i
 #/wp-includes#i
 #.js.map$#i
-#/wp-config#i
 ]]></defaultValue>
             <helpText>Every line is managed an own regex rule. You can check them e.g. at regex101.com. Whenever you add a new line, you might want to use the command tinect-redirects:excludes-cleanup to clean up existing entries.</helpText>
             <helpText lang="de-DE">Jede Zeile wird mit einer eigenen Regex-Regel verwaltet. Sie können diese z.B. bei regex101.com nachlesen. Wenn Sie eine neue Zeile hinzufügen, möchten Sie möglicherweise den Befehl tinect-redirects:excludes-cleanup verwenden, um vorhandene Einträge zu bereinigen.</helpText>
