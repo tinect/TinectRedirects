@@ -67,10 +67,10 @@
                         <sw-card v-if="redirect.httpCode !== 410" :title="$t('tinect-redirects.detail.target')"
                                  position-identifier="tinect-redirects-details-target">
                             <template v-if="hasSwUrlExt">
-                                <sw-url-ext-field :label="$t('tinect-redirects.detail.targetUrlLabel')"
+                                <sw-dynamic-url-ext-field :label="$t('tinect-redirects.detail.targetUrlLabel')"
                                                   v-model:value="redirect.target"
                                                   validation="required">
-                                </sw-url-ext-field>
+                                </sw-dynamic-url-ext-field>
                             </template>
                             <template v-else>
                                 <sw-dynamic-url-field

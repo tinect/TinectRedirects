@@ -46,7 +46,7 @@ export default {
         },
 
         hasSwUrlExt() {
-            return Component.getComponentRegistry().has('sw-url-ext-field');
+            return Component.getComponentRegistry().has('sw-dynamic-url-ext-field');
         },
 
         tooltipSave() {
