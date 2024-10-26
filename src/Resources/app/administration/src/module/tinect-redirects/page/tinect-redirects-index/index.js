@@ -24,7 +24,7 @@ export default {
             sortDirection: 'DESC',
             filter: {
                 salesChannelDomainId: null,
-                active: null,
+                active: 0,
                 hidden: 0,
             }
         };
@@ -86,15 +86,12 @@ export default {
             const criteria = new Criteria(this.page, this.limit);
 
             criteria.setTerm(this.term);
+            criteria.addFilter(Criteria.equals('active', this.filter.active));
             criteria.addFilter(Criteria.equals('hidden', this.filter.hidden));
             criteria.addSorting(Criteria.sort(this.sortBy, this.sortDirection, this.naturalSorting));
 
             if (this.filter.salesChannelDomainId) {
                 criteria.addFilter(Criteria.equals('salesChannelDomainId', this.filter.salesChannelDomainId));
-            }
-
-            if (this.filter.active) {
-                criteria.addFilter(Criteria.equals('active', this.filter.active));
             }
 
             return criteria;
@@ -125,7 +122,7 @@ export default {
         resetFilter() {
             this.filter = {
                 salesChannelDomainId: null,
-                active: null,
+                active: 0,
                 hidden: 0,
             };
         },
