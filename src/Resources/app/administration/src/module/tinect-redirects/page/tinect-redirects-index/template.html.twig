@@ -99,6 +99,15 @@
                             <option value="0">{{ $t('tinect-redirects.sidebar.filter.active.values.no') }}</option>
                         </sw-select-field>
 
+                        <sw-number-field
+                                v-model:value="filter.minimumRequestCount"
+                                :label="$t('tinect-redirects.sidebar.filter.minimumRequests.label')"
+                                type="number"
+                                numberType="int"
+                                :allowEmpty="true"
+                                :min="0" :step="1"
+                        ></sw-number-field>
+
                         <sw-entity-single-select
                                 v-model:value="filter.salesChannelDomainId"
                                 :label="$t('tinect-redirects.sidebar.filter.domain.label')"

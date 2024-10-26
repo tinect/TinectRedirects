@@ -68,6 +68,9 @@
                 },
                 "domain": {
                     "label": "Sales Channel Domain"
+                },
+                "minimumRequests": {
+                    "label": "Minimum Requests"
                 }
             }
         }

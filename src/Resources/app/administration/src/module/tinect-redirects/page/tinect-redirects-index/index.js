@@ -26,6 +26,7 @@ export default {
                 salesChannelDomainId: null,
                 active: 0,
                 hidden: 0,
+                minimumRequestCount: null,
             }
         };
     },
@@ -94,6 +95,12 @@ export default {
                 criteria.addFilter(Criteria.equals('salesChannelDomainId', this.filter.salesChannelDomainId));
             }
 
+            if (this.filter.minimumRequestCount) {
+                criteria.addFilter(Criteria.range('count', {
+                    gte: this.filter.minimumRequestCount,
+                }));
+            }
+
             return criteria;
         },
     },
@@ -124,6 +131,7 @@ export default {
                 salesChannelDomainId: null,
                 active: 0,
                 hidden: 0,
+                minimumRequestCount: null,
             };
         },
 

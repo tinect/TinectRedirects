@@ -68,6 +68,9 @@
                 },
                 "domain": {
                     "label": "Verkaufskanal-Domain"
+                },
+                "minimumRequests": {
+                    "label": "Mindestanzahl Aufrufen"
                 }
             }
         }
