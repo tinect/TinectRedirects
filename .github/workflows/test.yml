@@ -10,20 +10,41 @@ on:
     - cron: "5 15 * * *"
 
 jobs:
+  get-matrix:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.matrix.outputs.matrix }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Get Shopware Version
+        id: shopware-constraint
+        run: echo "shopware_constraint=$(cat composer.json | jq -r '.require."shopware/core"')" >> $GITHUB_OUTPUT
+
+      - name: Get Shopware Matrix
+        uses: tinect/github-shopware-matrix-generator@main
+        id: matrix
+        with:
+          versionConstraint: ${{ steps.shopware-constraint.outputs.shopware_constraint }}
+          allowEol: false
+          justMinMaxShopware: false
+          allowShopwareNext: true
+          allowShopwareRC: false
   test:
     env:
       PLUGIN_NAME: TinectRedirects
+    needs: get-matrix
     strategy:
       fail-fast: false
-      matrix:
-        version: [ "v6.6.0.0", "v6.6.1.2", "v6.6.2.0", "v6.6.3.1", "v6.6.4.0", "trunk"  ]
+      matrix: ${{ fromJson(needs.get-matrix.outputs.matrix) }}
     runs-on: ubuntu-latest
     steps:
       - name: Setup Shopware
         uses: shopware/setup-shopware@main
         with:
-          shopware-version: ${{ matrix.version }}
-          php-version: 8.2
+          shopware-version: ${{ matrix.shopware }}
+          php-version: ${{ matrix.php }}
           php-extensions: pcov
           install: true
 
@@ -34,7 +55,7 @@ jobs:
           php -v
 
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           path: ${{ github.workspace }}/custom/plugins/${{ env.PLUGIN_NAME }}
 
