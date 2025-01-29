@@ -10,3 +10,6 @@ parameters:
         -
             message: "#^Out of .* possible param types, only .* %% actually have it\\. Add more param types to get over 99 %%$#"
             reportUnmatched: false
+        -
+            message: "#Call to deprecated method execute\(\) of class Shopware\\Core\\Framework\\DataAbstractionLayer\\Doctrine\\RetryableQuery\: tag\:v6.7.0 - reason:return-type-change - return type will be changed to int\|string#"
+            reportUnmatched: false
