@@ -58,6 +58,7 @@ class Migration1615031757ImportExportProfile extends MigrationStep
             [
                 'name'          => 'Default redirect',
                 'source_entity' => RedirectDefinition::ENTITY_NAME,
+                'technical_name' => 'default_' . RedirectDefinition::ENTITY_NAME,
                 'mapping'       => [
                     ['key' => 'id', 'mappedKey' => 'id'],
                     ['key' => 'httpCode', 'mappedKey' => 'http_code'],

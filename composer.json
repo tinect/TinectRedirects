@@ -9,8 +9,9 @@
         "name": "Tinect"
       }
     ],
+    "minimum-stability": "RC",
     "require": {
-        "shopware/core": "~6.6.0"
+        "shopware/core": "~6.6.0||~6.7.0"
     },
     "extra": {
         "shopware-plugin-class": "Tinect\\Redirects\\TinectRedirects",
