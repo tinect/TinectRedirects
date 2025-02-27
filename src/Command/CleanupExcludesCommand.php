@@ -15,15 +15,17 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Tinect\Redirects\Content\Redirect\RedirectEntity;
-use Tinect\Redirects\Services\ExcludedService;
+use Tinect\Redirects\Event\IsExcludedEvent;
+use Tinect\Redirects\Message\TinectRedirectUpdateMessage;
 
 #[AsCommand(name: 'tinect-redirects:excludes-cleanup', description: 'Cleanup existing entries by re-checking them for the exclude patterns.')]
 class CleanupExcludesCommand extends Command
 {
     public function __construct(
         private readonly EntityRepository $tinectRedirectsRedirectRepository,
-        private readonly ExcludedService $excludedService
+        private readonly EventDispatcherInterface $dispatcher
     ) {
         parent::__construct($this->getName());
     }
@@ -59,7 +61,22 @@ class CleanupExcludesCommand extends Command
 
                 $salesChannelId = $redirect->getSalesChannelDomain()?->getSalesChannelId();
 
-                if ($this->excludedService->isExcluded($redirect->getSource(), $salesChannelId)) {
+                //TODO: change this with checking the requests
+                $message = new TinectRedirectUpdateMessage(
+                    source: $redirect->getSource(),
+                    salesChannelDomainId: $redirect->getSalesChannelDomainId(),
+                    ipAddress: '',
+                    userAgent: '',
+                    createRedirect: false,
+                    id: $redirect->getId(),
+                    referer: '',
+                    salesChannelId: $salesChannelId
+                );
+
+                $event = new IsExcludedEvent($message);
+                $this->dispatcher->dispatch($event);
+
+                if ($event->isExcluded()) {
                     $deleteIds[] = $redirect->getId();
                 }
             }

@@ -19,6 +19,7 @@ readonly class TinectRedirectUpdateMessage implements LowPriorityMessageInterfac
         private bool $createRedirect,
         private ?string $id,
         private ?string $referer,
+        private ?string $salesChannelId = null
     ) {
         $this->createdAt = new \DateTimeImmutable();
     }
@@ -65,5 +66,10 @@ readonly class TinectRedirectUpdateMessage implements LowPriorityMessageInterfac
     public function getCreatedAt(): \DateTimeImmutable
     {
         return $this->createdAt;
+    }
+
+    public function getSalesChannelId(): ?string
+    {
+        return $this->salesChannelId;
     }
 }

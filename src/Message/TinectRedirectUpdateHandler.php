@@ -9,7 +9,8 @@ use Shopware\Core\Defaults;
 use Shopware\Core\Framework\DataAbstractionLayer\Doctrine\RetryableQuery;
 use Shopware\Core\Framework\Uuid\Uuid;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
-use Tinect\Redirects\Services\ExcludedService;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use Tinect\Redirects\Event\IsExcludedEvent;
 use Tinect\Redirects\Services\RedirectFinderService;
 
 #[AsMessageHandler]
@@ -17,14 +18,17 @@ readonly class TinectRedirectUpdateHandler
 {
     public function __construct(
         private Connection $connection,
-        private ExcludedService $excludedService,
+        private EventDispatcherInterface $dispatcher,
         private RedirectFinderService $redirectFinderService
     ) {
     }
 
     public function __invoke(TinectRedirectUpdateMessage $message): void
     {
-        if ($this->excludedService->isExcluded($message->getSource(), $message->getSalesChannelDomainId())) {
+        $event = new IsExcludedEvent($message);
+        $this->dispatcher->dispatch($event);
+
+        if ($event->isExcluded()) {
             return;
         }
 
