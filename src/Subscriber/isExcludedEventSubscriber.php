@@ -23,12 +23,49 @@ class isExcludedEventSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            IsExcludedEvent::class => ['isExcluded', -1000],
+            IsExcludedEvent::class => [
+                ['isExcluded', -1000],
+                ['isBadUserAgent', -1002]
+            ],
         ];
+    }
+
+    public function isBadUserAgent(IsExcludedEvent $event): void
+    {
+        if ($event->isExcluded()) {
+            return;
+        }
+
+        $badUserAgentsPath = dirname(__DIR__) . '/Resources/lists/bad-user-agents.txt';
+
+        if (!\is_file($badUserAgentsPath)) {
+            throw new \RuntimeException('Bad user agents file not found at ' . $badUserAgentsPath);
+        }
+
+        $badUserAgents = \file_get_contents($badUserAgentsPath);
+        \assert(\is_string($badUserAgents));
+
+        $badUserAgents = \trim($badUserAgents);
+        $badUserAgents = \preg_quote($badUserAgents, '/');
+        $badUserAgents = \explode(PHP_EOL, $badUserAgents);
+        $badUserAgents = \implode('|', $badUserAgents);
+
+        $message = $event->getUpdateMessage();
+        $userAgent = $message->getUserAgent();
+
+        $badBotsRegex = '/' . $badUserAgents . '/i';
+
+        if (\preg_match($badBotsRegex, $userAgent)) {
+            $event->setIsExcluded(true);
+        }
     }
 
     public function isExcluded(IsExcludedEvent $event): void
     {
+        if ($event->isExcluded()) {
+            return;
+        }
+
         $message = $event->getUpdateMessage();
         $path = $message->getSource();
         $salesChannelId = $message->getSalesChannelId();
