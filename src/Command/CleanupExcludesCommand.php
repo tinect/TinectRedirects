@@ -61,7 +61,6 @@ class CleanupExcludesCommand extends Command
 
                 $salesChannelId = $redirect->getSalesChannelDomain()?->getSalesChannelId();
 
-                //TODO: change this with checking the requests
                 $message = new TinectRedirectUpdateMessage(
                     source: $redirect->getSource(),
                     salesChannelDomainId: $redirect->getSalesChannelDomainId(),
