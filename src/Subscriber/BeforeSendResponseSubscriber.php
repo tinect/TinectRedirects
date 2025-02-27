@@ -87,9 +87,15 @@ readonly class BeforeSendResponseSubscriber implements EventSubscriberInterface
             $path = \substr($path, \strlen($salesChannelBaseUrl));
         }
 
-        $salesChannelDomainId = $request->attributes->get(SalesChannelRequest::ATTRIBUTE_DOMAIN_ID);
+        $salesChannelId = $request->attributes->getString(PlatformRequest::ATTRIBUTE_SALES_CHANNEL_ID);
 
-        if (!\is_string($salesChannelDomainId) || empty($salesChannelDomainId)) {
+        if ($salesChannelId === '') {
+            $salesChannelId = null;
+        }
+
+        $salesChannelDomainId = $request->attributes->getString(SalesChannelRequest::ATTRIBUTE_DOMAIN_ID);
+
+        if ($salesChannelDomainId === '') {
             $salesChannelDomainId = null;
         }
 
@@ -98,11 +104,12 @@ readonly class BeforeSendResponseSubscriber implements EventSubscriberInterface
         $message = new TinectRedirectUpdateMessage(
             source: $path,
             salesChannelDomainId: $salesChannelDomainId,
-            ipAddress: $this->getIpAddress($request),
+            ipAddress: $this->getIpAddress($salesChannelId, $request),
             userAgent: $request->headers->get('User-Agent') ?? '',
-            createRedirect: $this->canCreateRedirect($salesChannelDomainId),
+            createRedirect: $this->canCreateRedirect($salesChannelId),
             id: $redirect?->getId(),
             referer: $request->headers->get('referer'),
+            salesChannelId: $salesChannelId
         );
 
         $this->messageBus->dispatch($message);
@@ -168,14 +175,8 @@ readonly class BeforeSendResponseSubscriber implements EventSubscriberInterface
         );
     }
 
-    private function getIpAddress(Request $request): string
+    private function getIpAddress(?string $salesChannelId, Request $request): string
     {
-        $salesChannelId = $request->attributes->getString(PlatformRequest::ATTRIBUTE_SALES_CHANNEL_ID);
-
-        if ($salesChannelId === '') {
-            $salesChannelId = null;
-        }
-
         if (!$this->canSaveIpAddress($salesChannelId)) {
             return '';
         }

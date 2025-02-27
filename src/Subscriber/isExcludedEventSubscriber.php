@@ -1,12 +1,12 @@
 <?php
 
-declare(strict_types=1);
-
-namespace Tinect\Redirects\Services;
+namespace Tinect\Redirects\Subscriber;
 
 use Shopware\Core\System\SystemConfig\SystemConfigService;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Tinect\Redirects\Event\IsExcludedEvent;
 
-class ExcludedService
+class isExcludedEventSubscriber implements EventSubscriberInterface
 {
     /**
      * Key is sales channel id, value is an array of exclude patterns.
@@ -16,12 +16,23 @@ class ExcludedService
     private array $excludes = [];
 
     public function __construct(
-        private readonly SystemConfigService $systemConfigService,
+        private readonly SystemConfigService $systemConfigService
     ) {
     }
 
-    public function isExcluded(string $path, ?string $salesChannelId): bool
+    public static function getSubscribedEvents(): array
     {
+        return [
+            IsExcludedEvent::class => ['isExcluded', -1000],
+        ];
+    }
+
+    public function isExcluded(IsExcludedEvent $event): void
+    {
+        $message = $event->getUpdateMessage();
+        $path = $message->getSource();
+        $salesChannelId = $message->getSalesChannelId();
+
         if (!isset($this->excludes[$salesChannelId])) {
             $excludes                        = \array_filter(\explode(PHP_EOL, $this->systemConfigService->getString('TinectRedirects.config.excludes', $salesChannelId)));
             $this->excludes[$salesChannelId] = $excludes;
@@ -32,13 +43,13 @@ class ExcludedService
         foreach ($excludes as $exclude) {
             try {
                 if (\preg_match($exclude, $path)) {
-                    return true;
+                    $event->setIsExcluded(true);
+
+                    return;
                 }
             } catch (\Throwable) {
                 // nth, we don't care whether the regex is valid
             }
         }
-
-        return false;
     }
 }
