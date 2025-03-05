@@ -1,0 +1,11 @@
+{
+  "main.js": {
+    "file": "js/tinect-redirects.js",
+    "name": "tinect-redirects",
+    "src": "main.js",
+    "isEntry": true,
+    "css": [
+      "css/tinect-redirects.css"
+    ]
+  }
+}
