@@ -30,4 +30,9 @@ class SalesChannelDomainExtension extends EntityExtension
     {
         return SalesChannelDomainDefinition::class;
     }
+
+    public function getEntityName(): string
+    {
+        return 'sales_channel_domain';
+    }
 }
