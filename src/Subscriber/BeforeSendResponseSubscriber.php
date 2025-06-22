@@ -133,7 +133,7 @@ readonly class BeforeSendResponseSubscriber implements EventSubscriberInterface
 
         $targetURL = $this->seoUrlPlaceholderHandler->replace($targetURL, $host, $salesChannelContext);
 
-        if (!parse_url($targetURL, PHP_URL_SCHEME)) {
+        if (\in_array(\parse_url($targetURL, PHP_URL_SCHEME), [false, null], true)) {
             $targetURL = $host . $targetURL;
         }
 
@@ -156,7 +156,7 @@ readonly class BeforeSendResponseSubscriber implements EventSubscriberInterface
 
         $languageId = $request->headers->get(PlatformRequest::HEADER_LANGUAGE_ID);
 
-        if (empty($languageId)) {
+        if ($languageId === null) {
             throw new \RuntimeException('No language id found in request.');
         }
 

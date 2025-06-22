@@ -55,7 +55,7 @@ class isExcludedEventSubscriber implements EventSubscriberInterface
 
         $badBotsRegex = '/' . $badUserAgents . '/i';
 
-        if (\preg_match($badBotsRegex, $userAgent)) {
+        if (\preg_match($badBotsRegex, $userAgent) !== false) {
             $event->setIsExcluded(true);
         }
     }
@@ -71,7 +71,9 @@ class isExcludedEventSubscriber implements EventSubscriberInterface
         $salesChannelId = $message->getSalesChannelId();
 
         if (!isset($this->excludes[$salesChannelId])) {
-            $excludes                        = \array_filter(\explode(PHP_EOL, $this->systemConfigService->getString('TinectRedirects.config.excludes', $salesChannelId)));
+            $excludes                        = \array_filter(
+                \explode(PHP_EOL, $this->systemConfigService->getString('TinectRedirects.config.excludes', $salesChannelId)),
+                static fn ($exclude) => $exclude !== '');
             $this->excludes[$salesChannelId] = $excludes;
         }
 
@@ -79,7 +81,7 @@ class isExcludedEventSubscriber implements EventSubscriberInterface
 
         foreach ($excludes as $exclude) {
             try {
-                if (\preg_match($exclude, $path)) {
+                if (\preg_match($exclude, $path) !== false) {
                     $event->setIsExcluded(true);
 
                     return;

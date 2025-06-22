@@ -30,7 +30,7 @@ jobs:
           allowEol: false
           justMinMaxShopware: true
           allowShopwareNext: true
-          allowShopwareRC: false
+          allowShopwareRC: true
   test:
     env:
       PLUGIN_NAME: TinectRedirects

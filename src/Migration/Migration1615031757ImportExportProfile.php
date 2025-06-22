@@ -28,12 +28,15 @@ class Migration1615031757ImportExportProfile extends MigrationStep
             $profile['mapping']        = json_encode($profile['mapping'], \JSON_THROW_ON_ERROR);
             $profile['created_at']     = (new \DateTime())->format(Defaults::STORAGE_DATE_TIME_FORMAT);
 
+            $name = $profile['name'];
+            unset($profile['name']);
+
             $connection->insert('import_export_profile', $profile);
 
             $translation = [
                 'import_export_profile_id' => $profile['id'],
                 'language_id'              => Uuid::fromHexToBytes(Defaults::LANGUAGE_SYSTEM),
-                'label'                    => $profile['name'],
+                'label'                    => $name,
                 'created_at'               => (new \DateTime())->format(Defaults::STORAGE_DATE_TIME_FORMAT),
             ];
             $connection->insert('import_export_profile_translation', $translation);
@@ -58,6 +61,7 @@ class Migration1615031757ImportExportProfile extends MigrationStep
             [
                 'name'          => 'Default redirect',
                 'source_entity' => RedirectDefinition::ENTITY_NAME,
+                'technical_name' => 'default_' . RedirectDefinition::ENTITY_NAME,
                 'mapping'       => [
                     ['key' => 'id', 'mappedKey' => 'id'],
                     ['key' => 'httpCode', 'mappedKey' => 'http_code'],
