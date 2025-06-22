@@ -92,7 +92,7 @@ class CleanupExcludesCommand extends Command
             return Command::SUCCESS;
         }
 
-        if ($input->getOption('dry-run')) {
+        if ($input->getOption('dry-run') === true) {
             $output->writeln('Would delete ' . $countDeletes . ' entries');
         } else {
             $output->writeln('Deleting ' . $countDeletes . ' entries:');

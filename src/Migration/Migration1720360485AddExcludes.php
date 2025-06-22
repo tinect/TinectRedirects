@@ -22,7 +22,7 @@ class Migration1720360485AddExcludes extends MigrationStep
             ['configurationKey' => 'TinectRedirects.config.excludes']
         )->fetchAllAssociative();
 
-        if (empty($existingExcludes)) {
+        if ($existingExcludes === []) {
             return;
         }
 
@@ -33,7 +33,7 @@ class Migration1720360485AddExcludes extends MigrationStep
 
             $configurationValue = json_decode($existingExclude['configuration_value'], true, 512, JSON_THROW_ON_ERROR);
 
-            if (!\is_array($configurationValue) || !isset($configurationValue['_value'])) {
+            if (!\is_array($configurationValue) || !isset($configurationValue['_value']) || !\is_string($configurationValue['_value'])) {
                 continue;
             }
 
