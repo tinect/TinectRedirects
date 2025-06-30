@@ -17,6 +17,23 @@ class Migration1738788990ImportExportTechnicalName extends MigrationStep
 
     public function update(Connection $connection): void
     {
+        $count = (int)$connection->executeQuery(
+            'SELECT COUNT(*) as count FROM import_export_profile WHERE source_entity = :sourceEntity AND system_default = 1',
+            ['sourceEntity' => RedirectDefinition::ENTITY_NAME]
+        )->fetchOne();
+
+        if ($count > 1) {
+            $connection->executeStatement(
+                'DELETE FROM import_export_profile WHERE source_entity = :sourceEntity AND system_default = 1',
+                ['sourceEntity' => RedirectDefinition::ENTITY_NAME]
+            );
+
+            $migration = new Migration1615031757ImportExportProfile();
+            $migration->update($connection);
+
+            return;
+        }
+
         $connection->executeStatement(
             'UPDATE import_export_profile SET technical_name = :technicalName WHERE source_entity = :sourceEntity AND system_default = 1',
             [
