@@ -55,7 +55,7 @@ class isExcludedEventSubscriber implements EventSubscriberInterface
 
         $badBotsRegex = '/' . $badUserAgents . '/i';
 
-        if (\preg_match($badBotsRegex, $userAgent) !== false) {
+        if (\preg_match($badBotsRegex, $userAgent) === 1) {
             $event->setIsExcluded(true);
         }
     }
