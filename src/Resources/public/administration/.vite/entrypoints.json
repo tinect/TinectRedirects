@@ -1,0 +1,25 @@
+{
+  "base": "/bundles/tinectredirects/administration/",
+  "entryPoints": {
+    "tinect-redirects": {
+      "css": [
+        "/bundles/tinectredirects/administration/css/tinect-redirects.css"
+      ],
+      "dynamic": [],
+      "js": [
+        "/bundles/tinectredirects/administration/js/tinect-redirects.js"
+      ],
+      "legacy": false,
+      "preload": []
+    }
+  },
+  "legacy": false,
+  "metadatas": {},
+  "version": [
+    "7.0.4",
+    7,
+    0,
+    4
+  ],
+  "viteServer": null
+}
