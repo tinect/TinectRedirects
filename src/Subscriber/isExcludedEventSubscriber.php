@@ -81,7 +81,7 @@ class isExcludedEventSubscriber implements EventSubscriberInterface
 
         foreach ($excludes as $exclude) {
             try {
-                if (\preg_match($exclude, $path) !== false) {
+                if (\preg_match($exclude, $path) === 1) {
                     $event->setIsExcluded(true);
 
                     return;
