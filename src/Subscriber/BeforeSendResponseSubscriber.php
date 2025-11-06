@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tinect\Redirects\Subscriber;
 
 use Shopware\Core\Content\Seo\SeoUrlPlaceholderHandlerInterface;
+use Shopware\Core\Framework\Routing\RequestTransformerInterface;
 use Shopware\Core\PlatformRequest;
 use Shopware\Core\SalesChannelRequest;
 use Shopware\Core\System\SalesChannel\Context\AbstractSalesChannelContextFactory;
@@ -33,7 +34,7 @@ readonly class BeforeSendResponseSubscriber implements EventSubscriberInterface
         private AbstractSalesChannelContextFactory $salesChannelContextFactory,
         private SystemConfigService $systemConfigService,
         private MessageBusInterface $messageBus,
-        private RequestTransformer $requestTransformer,
+        private RequestTransformerInterface $requestTransformer,
         private RedirectFinderService $redirectFinderService
     ) {
     }
