@@ -47,6 +47,7 @@ jobs:
           php-version: ${{ matrix.php }}
           php-extensions: pcov
           install: true
+          allow-insecure-versions: true
 
       - name: Info
         run: |
