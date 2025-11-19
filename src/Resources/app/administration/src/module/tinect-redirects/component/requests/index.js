@@ -90,5 +90,10 @@ export default {
         updateTotal({ total }) {
             this.total = total;
         },
+
+        openAbuseIPDB(ipAddress) {
+            const url = `https://www.abuseipdb.com/check/${ipAddress}`;
+            window.open(url, '_blank');
+        }
     }
 }

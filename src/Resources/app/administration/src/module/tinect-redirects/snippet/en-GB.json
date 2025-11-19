@@ -48,7 +48,8 @@
         },
         "requests": {
             "title": "Requests | 1 request | {count} requests",
-            "empty": "No requests found"
+            "empty": "No requests found",
+            "openAbuseIPDB": "Check on AbuseIPDB"
         },
         "sidebar": {
             "refresh": "Refresh",

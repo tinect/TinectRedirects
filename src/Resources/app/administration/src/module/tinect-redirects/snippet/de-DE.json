@@ -48,7 +48,8 @@
         },
         "requests": {
             "title": "Aufrufe | 1 Aufruf | {count} Aufrufe",
-            "empty": "Keine Aufrufe gefunden"
+            "empty": "Keine Aufrufe gefunden",
+            "openAbuseIPDB": "Bei AbuseIPDB prüfen"
         },
         "sidebar": {
             "refresh": "Neuladen",

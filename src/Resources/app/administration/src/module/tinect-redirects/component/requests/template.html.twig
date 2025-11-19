@@ -21,6 +21,14 @@
             <template #column-createdAt="{ item }">
                 {{ date(item.createdAt) }}
             </template>
+
+            <template #more-actions="{ item }">
+                <sw-context-menu-item
+                    @click="openAbuseIPDB(item.ipAddress)"
+                >
+                    {{ $tc('tinect-redirects.requests.openAbuseIPDB') }}
+                </sw-context-menu-item>
+            </template>
         </sw-entity-listing>
         <sw-empty-state
                 v-else
