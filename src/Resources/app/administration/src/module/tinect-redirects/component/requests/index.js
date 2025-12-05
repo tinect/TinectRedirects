@@ -99,7 +99,7 @@ export default {
                 },
                 pulsedrive: {
                     label: this.$tc('tinect-redirects.requests.ipCheckers.pulsedrive'),
-                    url(ipAddress) { return 'https://pulsedive.com/indicator/?ioc=' + window.btob(ipAddress); },
+                    url(ipAddress) { return 'https://pulsedive.com/indicator/?ioc=' + window.btoa(ipAddress); },
                 },
                 whois: {
                     label: this.$tc('tinect-redirects.requests.ipCheckers.whois'),
