@@ -56,13 +56,11 @@
                                       validation="required"></sw-text-field>
                         </sw-card>
 
-                        <sw-select-number-field :label="$t('tinect-redirects.detail.httpCodeLabel')"
-                                                v-model:value="redirect.httpCode"
-                                                validation="required">
-                            <option value=301>{{ $t('tinect-redirects.detail.httpCodeLabelValues.301') }}</option>
-                            <option value=302>{{ $t('tinect-redirects.detail.httpCodeLabelValues.302') }}</option>
-                            <option value=410>{{ $t('tinect-redirects.detail.httpCodeLabelValues.410') }}</option>
-                        </sw-select-number-field>
+                        <mt-select
+                            :label="$t('tinect-redirects.detail.httpCodeLabel')"
+                            v-model="redirect.httpCode"
+                            :options="httpCodeOptions"
+                        />
 
                         <sw-card v-if="redirect.httpCode !== 410" :title="$t('tinect-redirects.detail.target')"
                                  position-identifier="tinect-redirects-details-target">

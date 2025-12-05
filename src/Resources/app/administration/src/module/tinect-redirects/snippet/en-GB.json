@@ -59,7 +59,6 @@
                 "active": {
                     "label": "Active",
                     "values": {
-                        "all": "All",
                         "yes": "Yes",
                         "no": "No"
                     }

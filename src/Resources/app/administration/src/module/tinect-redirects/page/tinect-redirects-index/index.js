@@ -87,7 +87,11 @@ export default {
             const criteria = new Criteria(this.page, this.limit);
 
             criteria.setTerm(this.term);
-            criteria.addFilter(Criteria.equals('active', this.filter.active));
+
+            if (this.filter.active === 0 || this.filter.active === 1) {
+                criteria.addFilter(Criteria.equals('active', this.filter.active));
+            }
+
             criteria.addFilter(Criteria.equals('hidden', this.filter.hidden));
             criteria.addSorting(Criteria.sort(this.sortBy, this.sortDirection, this.naturalSorting));
 
@@ -102,6 +106,13 @@ export default {
             }
 
             return criteria;
+        },
+
+        filterActiveOptions() {
+            return [
+                { value: 1, label: this.$tc('tinect-redirects.sidebar.filter.active.values.yes') },
+                { value: 0, label: this.$tc('tinect-redirects.sidebar.filter.active.values.no') },
+            ];
         },
     },
 

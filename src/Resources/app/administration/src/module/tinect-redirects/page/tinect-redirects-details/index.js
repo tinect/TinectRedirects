@@ -64,6 +64,14 @@ export default {
                 appearance: 'light',
             };
         },
+
+        httpCodeOptions() {
+            return [
+                { value: 301, label: this.$tc('tinect-redirects.detail.httpCodeLabelValues.301') },
+                { value: 302, label: this.$tc('tinect-redirects.detail.httpCodeLabelValues.302') },
+                { value: 410, label: this.$tc('tinect-redirects.detail.httpCodeLabelValues.410') },
+            ];
+        },
     },
 
     watch: {
@@ -134,6 +142,6 @@ export default {
 
         onCancel() {
             this.$router.push({ name: 'tinect.redirects.index' });
-        }
+        },
     }
 };
