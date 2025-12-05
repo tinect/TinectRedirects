@@ -23,13 +23,16 @@
             </template>
 
             <template #more-actions="{ item }">
-                <sw-context-menu-item
-                    @click="openAbuseIPDB(item.ipAddress)"
-                >
-                    {{ $tc('tinect-redirects.requests.openAbuseIPDB') }}
-                </sw-context-menu-item>
+                <template v-for="(checker, key) in getIPCheckers()">
+                    <sw-context-menu-item
+                        @click="openCheckIP(item.ipAddress, key)"
+                    >
+                        {{ $tc('tinect-redirects.requests.openCheckIP.' + key) }}
+                    </sw-context-menu-item>
+                </template>
             </template>
         </sw-entity-listing>
+
         <sw-empty-state
                 v-else
                 :absolute="false"

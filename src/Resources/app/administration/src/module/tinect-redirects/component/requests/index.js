@@ -91,9 +91,35 @@ export default {
             this.total = total;
         },
 
-        openAbuseIPDB(ipAddress) {
-            const url = `https://www.abuseipdb.com/check/${ipAddress}`;
-            window.open(url, '_blank');
-        }
+        getIPCheckers() {
+            return {
+                abuseipdb: {
+                    label: this.$tc('tinect-redirects.requests.ipCheckers.abuseipdb'),
+                    url(ipAddress) { return 'https://www.abuseipdb.com/check/' + ipAddress; },
+                },
+                pulsedrive: {
+                    label: this.$tc('tinect-redirects.requests.ipCheckers.pulsedrive'),
+                    url(ipAddress) { return 'https://pulsedive.com/indicator/?ioc=' + window.btob(ipAddress); },
+                },
+                whois: {
+                    label: this.$tc('tinect-redirects.requests.ipCheckers.whois'),
+                    url(ipAddress) { return 'https://www.whois.com/whois/' + ipAddress; },
+                },
+                shodan: {
+                    label: this.$tc('tinect-redirects.requests.ipCheckers.shodan'),
+                    url(ipAddress) { return 'https://www.shodan.io/host/' + ipAddress; },
+                },
+            };
+        },
+
+        openCheckIP(ipAddress, type) {
+            let detail = this.getIPCheckers()[type];
+
+            if (!detail) {
+                console.error(`Unknown type: ${type}`);
+            }
+
+            window.open(detail.url(ipAddress), '_blank');
+        },
     }
 }

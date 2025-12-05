@@ -49,7 +49,12 @@
         "requests": {
             "title": "Requests | 1 request | {count} requests",
             "empty": "No requests found",
-            "openAbuseIPDB": "Check on AbuseIPDB"
+            "openCheckIP": {
+                "abuseipdb": "Check on AbuseIPDB",
+                "pulsedrive": "Check on Pulsedrive",
+                "whois": "Whois lookup",
+                "shodan": "Check on Shodan"
+            }
         },
         "sidebar": {
             "refresh": "Refresh",

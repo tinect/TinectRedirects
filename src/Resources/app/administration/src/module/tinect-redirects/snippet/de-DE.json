@@ -49,7 +49,12 @@
         "requests": {
             "title": "Aufrufe | 1 Aufruf | {count} Aufrufe",
             "empty": "Keine Aufrufe gefunden",
-            "openAbuseIPDB": "Bei AbuseIPDB prüfen"
+            "openCheckIP": {
+                "abuseipdb": "Bei AbuseIPDB prüfen",
+                "pulsedrive": "Bei Pulsedrive prüfen",
+                "whois": "Whois-Abfrage",
+                "shodan": "Bei Shodan prüfen"
+            }
         },
         "sidebar": {
             "refresh": "Neuladen",
