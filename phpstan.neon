@@ -5,12 +5,10 @@ parameters:
     ignoreErrors:
 
         -
-            message: '''
-                #^Call to deprecated method columnExists\(\) of class Shopware\\Core\\Framework\\Migration\\MigrationStep\:
-                tag\:v6\.8\.0 \- reason\:exception\-change \- Will throw \{@see \\Shopware\\Core\\Framework\\Util\\UtilException\} instead of \{@see \\Doctrine\\DBAL\\Exception\\TableNotFoundException\}$#
-            '''
-            identifier: method.deprecated
-            count: 1
+            message: """
+                #^Call to deprecated method columnExists\\(\\) of class Shopware\\\\Core\\\\Framework\\\\Migration\\\\MigrationStep\\:
+                tag\\:v6\\.8\\.0 \\- reason\\:exception\\-change \\- Will throw \\{@see \\\\Shopware\\\\Core\\\\Framework\\\\Util\\\\UtilException\\} instead of \\{@see \\\\Doctrine\\\\DBAL\\\\Exception\\\\TableNotFoundException\\}$#
+            """
             path: src/Migration/Migration1710072639AddReferer.php
             reportUnmatched: false
 
