@@ -16,11 +16,12 @@ class Migration1693066141addCountColumn extends MigrationStep
 
     public function update(Connection $connection): void
     {
+        if ($this->columnExists($connection, 'tinect_redirects_redirect', 'count')) {
+            return;
+        }
+
         $connection->executeStatement(
-            <<<SQL
-                    ALTER TABLE `tinect_redirects_redirect`
-                        ADD COLUMN `count` bigint(20) NOT NULL DEFAULT 0;
-                SQL
+            'ALTER TABLE `tinect_redirects_redirect` ADD COLUMN `count` bigint(20) NOT NULL DEFAULT 0'
         );
     }
 

@@ -9,9 +9,8 @@ parameters:
                 #^Call to deprecated method columnExists\\(\\) of class Shopware\\\\Core\\\\Framework\\\\Migration\\\\MigrationStep\\:
                 tag\\:v6\\.8\\.0 \\- reason\\:exception\\-change \\- Will throw \\{@see \\\\Shopware\\\\Core\\\\Framework\\\\Util\\\\UtilException\\} instead of \\{@see \\\\Doctrine\\\\DBAL\\\\Exception\\\\TableNotFoundException\\}$#
             """
-            path: src/Migration/Migration1710072639AddReferer.php
+            path: src/Migration/
             reportUnmatched: false
-
         -
             message: '#.* generic class Shopware\\Core\\Framework\\DataAbstractionLayer\\EntityRepository.*not specify its types: TEntityCollection#'
             reportUnmatched: false
@@ -24,3 +23,4 @@ parameters:
             				tag\\:v6\\.7\\.0 \\- reason\\:return\\-type\\-change \\- return type will be changed to int\\|string$#
             			"""
             reportUnmatched: false
+
