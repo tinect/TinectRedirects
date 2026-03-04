@@ -1,4 +1,4 @@
-const { Component, Module } = Shopware;
+const { Component } = Shopware;
 
 Component.register(
     'tinect-redirects-index',
