@@ -101,6 +101,7 @@ class CleanupExcludesCommand extends Command
             $progressBar->start();
 
             $deleteIds = \array_chunk($deleteIds, 1000);
+            /** @phpstan-ignore shopware.noEntityRepositoryInLoop */
             foreach ($deleteIds as $ids) {
                 $this->tinectRedirectsRedirectRepository->delete(\array_map(static fn ($id) => ['id' => $id], $ids), $context);
                 $progressBar->advance(\count($ids));
