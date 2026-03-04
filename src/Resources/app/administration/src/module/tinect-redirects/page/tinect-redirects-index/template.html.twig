@@ -1,131 +1,145 @@
 {% block tinect_redirects_list %}
-    <sw-page class="tinect-redirects-list">
+<sw-page class="tinect-redirects-list">
+    <template #smart-bar-header>
+        {% block tinect_redirects_list_header %}
+        <h2>
+            {{ $tc('tinect-redirects.general.title') }}
+            <span
+                v-if="!isLoading"
+                class="sw-page__smart-bar-amount"
+            >({{ total }})</span>
+        </h2>
+        {% endblock %}
+    </template>
 
-        <template #smart-bar-header>
-            {% block tinect_redirects_list_header %}
-                <h2>
-                    {{ $tc('tinect-redirects.general.title') }}
-                    <span v-if="!isLoading" class="sw-page__smart-bar-amount">({{ total }})</span>
-                </h2>
-            {% endblock %}
-        </template>
+    <template #search-bar>
+        {% block tinect_redirects_list_search %}
+        <sw-search-bar
+            initial-search-type="tinect_redirects"
+            :initial-search="term"
+            :placeholder="$tc('tinect-redirects.list.placeholderSearchBar')"
+            @search="onSearch"
+        />
+        {% endblock %}
+    </template>
 
-        <template #search-bar>
-            {% block tinect_redirects_list_search %}
-                <sw-search-bar
-                        initial-search-type="tinect_redirects"
-                        :initial-search="term"
-                        :placeholder="$tc('tinect-redirects.list.placeholderSearchBar')"
-                        @search="onSearch"
+    <template #smart-bar-actions>
+        {% block tinect_redirects_list_smarbar %}
+        <sw-button
+            variant="primary"
+            :routerLink="{name: 'tinect.redirects.create'}"
+        >
+            {{ $t('tinect-redirects.list.createButton') }}
+        </sw-button>
+
+        <sw-button
+            variant="secondary"
+            :routerLink="{ name: 'sw.extension.config', params: { namespace: 'TinectRedirects' } }"
+        >
+            {{ $t('tinect-redirects.list.openPluignConfig') }}
+        </sw-button>
+        {% endblock %}
+    </template>
+
+    <template #content>
+        {% block tinect_redirects_list_content %}
+        <sw-entity-listing
+            v-if="isLoading || items"
+            :items="items"
+            :repository="redirectRepository"
+            :columns="columns"
+            :sort-by="sortBy"
+            :sort-direction="sortDirection"
+            :isLoading="isLoading"
+            :disable-data-fetching="true"
+            :allow-edit="acl.can('tinect_redirects_redirect.editor')"
+            :allow-delete="acl.can('tinect_redirects_redirect.deleter')"
+            identifier="tinect-redirect-list"
+            detail-route="tinect.redirects.details"
+            @update-records="updateTotal"
+            @page-change="onPageChange"
+            @column-sort="onSortColumn"
+        >
+            <template #column-active="{ item }">
+                <sw-icon
+                    v-if="item.active"
+                    name="regular-checkmark-xs"
+                    small
+                    class="sw-icon--product-status is--active"
                 />
-            {% endblock %}
-        </template>
+                <sw-icon
+                    v-else
+                    name="regular-times-s"
+                    small
+                    class="sw-icon--product-status is--inactive"
+                />
+            </template>
 
-        <template #smart-bar-actions>
-            {% block tinect_redirects_list_smarbar %}
-                <sw-button variant="primary" :routerLink="{name: 'tinect.redirects.create'}">
-                    {{ $t('tinect-redirects.list.createButton') }}
-                </sw-button>
-                <sw-button variant="secondary" :routerLink="{ name: 'sw.extension.config', params: { namespace: 'TinectRedirects' } }">
-                    {{ $t('tinect-redirects.list.openPluignConfig') }}
-                </sw-button>
-            {% endblock %}
-        </template>
-
-        <template #content>
-            {% block tinect_redirects_list_content %}
-                <sw-entity-listing
-                        v-if="isLoading || items"
-                        :items="items"
-                        :repository="redirectRepository"
-                        :columns="columns"
-                        :sort-by="sortBy"
-                        :sort-direction="sortDirection"
-                        :isLoading="isLoading"
-                        :disable-data-fetching="true"
-                        :allow-edit="acl.can('tinect_redirects_redirect.editor')"
-                        :allow-delete="acl.can('tinect_redirects_redirect.deleter')"
-                        identifier="tinect-redirect-list"
-                        detail-route="tinect.redirects.details"
-                        @update-records="updateTotal"
-                        @page-change="onPageChange"
-                        @column-sort="onSortColumn"
+            <template #column-source="{ item }">
+                <router-link
+                    :to="{ name: 'tinect.redirects.details', params: { id: item.id } }"
                 >
-                    <template #column-active="{ item }">
-                        <sw-icon
-                                v-if="item.active"
-                                name="regular-checkmark-xs"
-                                small
-                                class="sw-icon--product-status is--active"
-                        />
-                        <sw-icon
-                                v-else
-                                name="regular-times-s"
-                                small
-                                class="sw-icon--product-status is--inactive"
-                        />
+                    <template v-if="item.salesChannelDomain">
+                        {{ item.salesChannelDomain.url }}
+                        {{ item.source }}
                     </template>
 
-                    <template #column-source="{ item }">
-                        <router-link :to="{ name: 'tinect.redirects.details', params: { id: item.id } }">
-                            <template v-if="item.salesChannelDomain">
-                                {{ item.salesChannelDomain.url }}{{ item.source }}
-                            </template>
-                            <template v-else>
+                    <template v-else>
                                 {{ item.source }}
                             </template>
-                        </router-link>
-                    </template>
+                </router-link>
+            </template>
+        </sw-entity-listing>
+        {% endblock %}
+    </template>
 
-                </sw-entity-listing>
-            {% endblock %}
-        </template>
-
-        <template #sidebar>
-            {% block tinect_redirects_list_sidebar %}
-                <sw-sidebar>
-                    <sw-sidebar-item
-                            icon="regular-undo"
-                            :title="$tc('tinect-redirects.sidebar.refresh')"
-                            @click="onRefresh">
+    <template #sidebar>
+        {% block tinect_redirects_list_sidebar %}
+        <sw-sidebar>
+            <sw-sidebar-item
+                icon="regular-undo"
+                :title="$tc('tinect-redirects.sidebar.refresh')"
+                @click="onRefresh"
+            >
                     </sw-sidebar-item>
-
-                    <sw-sidebar-item icon="regular-filter" :title="$tc('tinect-redirects.sidebar.filter.title')">
-
-                        <mt-select
-                            :label="$t('tinect-redirects.sidebar.filter.active.label')"
-                            v-model="filter.active"
-                            :options="filterActiveOptions"
-                        />
-
-                        <sw-number-field
-                                v-model:value="filter.minimumRequestCount"
-                                :label="$t('tinect-redirects.sidebar.filter.minimumRequests.label')"
-                                type="number"
-                                numberType="int"
-                                :allowEmpty="true"
-                                :min="0" :step="1"
-                        ></sw-number-field>
-
-                        <sw-entity-single-select
-                                v-model:value="filter.salesChannelDomainId"
-                                :label="$t('tinect-redirects.sidebar.filter.domain.label')"
-                                entity="sales_channel_domain"
-                                labelProperty="url"
-                                show-clearable-button
-                        ></sw-entity-single-select>
-
-                        <sw-switch-field :label="$t('tinect-redirects.sidebar.filter.hidden.label')"
-                                         v-model:value="filter.hidden"/>
-
-                        <sw-button
-                                variant="ghost"
-                                @click="resetFilter">
-                            {{ $tc('tinect-redirects.sidebar.filter.resetFilter') }}
-                        </sw-button>
-                    </sw-sidebar-item>
-                </sw-sidebar>
-            {% endblock %}
-        </template>
-    </sw-page>
+            <sw-sidebar-item
+                icon="regular-filter"
+                :title="$tc('tinect-redirects.sidebar.filter.title')"
+            >
+                <mt-select
+                    :label="$t('tinect-redirects.sidebar.filter.active.label')"
+                    v-model="filter.active"
+                    :options="filterActiveOptions"
+                />
+                <sw-number-field
+                    v-model:value="filter.minimumRequestCount"
+                    :label="$t('tinect-redirects.sidebar.filter.minimumRequests.label')"
+                    type="number"
+                    numberType="int"
+                    :allowEmpty="true"
+                    :min="0"
+                    :step="1"
+                ></sw-number-field>
+                <sw-entity-single-select
+                    v-model:value="filter.salesChannelDomainId"
+                    :label="$t('tinect-redirects.sidebar.filter.domain.label')"
+                    entity="sales_channel_domain"
+                    labelProperty="url"
+                    show-clearable-button
+                ></sw-entity-single-select>
+                <sw-switch-field
+                    :label="$t('tinect-redirects.sidebar.filter.hidden.label')"
+                    v-model:value="filter.hidden"
+                />
+                <sw-button
+                    variant="ghost"
+                    @click="resetFilter"
+                >
+                    {{ $tc('tinect-redirects.sidebar.filter.resetFilter') }}
+                </sw-button>
+            </sw-sidebar-item>
+        </sw-sidebar>
+        {% endblock %}
+    </template>
+</sw-page>
 {% endblock %}

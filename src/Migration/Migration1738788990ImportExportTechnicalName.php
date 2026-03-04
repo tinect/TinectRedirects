@@ -22,7 +22,7 @@ class Migration1738788990ImportExportTechnicalName extends MigrationStep
             ['sourceEntity' => RedirectDefinition::ENTITY_NAME]
         )->fetchOne();
 
-        if (\is_scalar($count) && (int)$count > 1) {
+        if (\is_scalar($count) && (int) $count > 1) {
             $connection->executeStatement(
                 'DELETE FROM import_export_profile WHERE source_entity = :sourceEntity AND system_default = 1',
                 ['sourceEntity' => RedirectDefinition::ENTITY_NAME]

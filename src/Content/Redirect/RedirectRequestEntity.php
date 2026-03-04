@@ -18,7 +18,8 @@ class RedirectRequestEntity extends Entity
     protected string $ipAddress = '';
 
     protected string $userAgent = '';
-    protected string $referer   = '';
+
+    protected string $referer = '';
 
     public function getRedirectId(): ?string
     {

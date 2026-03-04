@@ -42,7 +42,7 @@ class CleanupTaskHandler extends ScheduledTaskHandler
         }
 
         $time = new \DateTime();
-        $time->modify(sprintf('-%s days', $days));
+        $time->modify(\sprintf('-%s days', $days));
 
         $query = $this->connection->createQueryBuilder();
 
@@ -90,7 +90,7 @@ class CleanupTaskHandler extends ScheduledTaskHandler
         }
 
         $time = new \DateTime();
-        $time->modify(sprintf('-%s days', $days));
+        $time->modify(\sprintf('-%s days', $days));
 
         $query = $this->connection->createQueryBuilder();
 

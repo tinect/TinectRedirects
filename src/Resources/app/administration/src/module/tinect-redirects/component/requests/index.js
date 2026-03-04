@@ -1,19 +1,14 @@
 import template from './template.html.twig';
 
-const {Mixin} = Shopware;
-const {Criteria} = Shopware.Data;
+const { Mixin } = Shopware;
+const { Criteria } = Shopware.Data;
 
 export default {
     template,
 
-    inject: [
-        'repositoryFactory',
-        'acl',
-    ],
+    inject: ['repositoryFactory', 'acl'],
 
-    mixins: [
-        Mixin.getByName('listing'),
-    ],
+    mixins: [Mixin.getByName('listing')],
 
     props: {
         redirect: {
@@ -41,27 +36,32 @@ export default {
                     label: 'tinect-redirects.detail.columnIpAddress',
                     allowResize: true,
                     sortable: false,
-                }, {
+                },
+                {
                     property: 'referer',
                     label: 'tinect-redirects.detail.columnReferer',
                     allowResize: true,
                     sortable: false,
-                }, {
+                },
+                {
                     property: 'userAgent',
                     label: 'tinect-redirects.detail.columnUserAgent',
                     allowResize: true,
                     sortable: false,
-                }, {
+                },
+                {
                     property: 'createdAt',
                     label: 'tinect-redirects.detail.columnCreatedAt',
                     allowResize: true,
                     sortable: false,
-                }
+                },
             ];
         },
 
         repository() {
-            return this.repositoryFactory.create('tinect_redirects_redirect_request');
+            return this.repositoryFactory.create(
+                'tinect_redirects_redirect_request'
+            );
         },
 
         criteria() {
@@ -80,11 +80,13 @@ export default {
     methods: {
         getList() {
             this.isLoading = true;
-            return this.repository.search(this.criteria, Shopware.Context.api).then((result) => {
-                this.total = result.total;
-                this.items = result;
-                this.isLoading = false;
-            });
+            return this.repository
+                .search(this.criteria, Shopware.Context.api)
+                .then((result) => {
+                    this.total = result.total;
+                    this.items = result;
+                    this.isLoading = false;
+                });
         },
 
         updateTotal({ total }) {
@@ -94,20 +96,39 @@ export default {
         getIPCheckers() {
             return {
                 abuseipdb: {
-                    label: this.$tc('tinect-redirects.requests.ipCheckers.abuseipdb'),
-                    url(ipAddress) { return 'https://www.abuseipdb.com/check/' + ipAddress; },
+                    label: this.$tc(
+                        'tinect-redirects.requests.ipCheckers.abuseipdb'
+                    ),
+                    url(ipAddress) {
+                        return 'https://www.abuseipdb.com/check/' + ipAddress;
+                    },
                 },
                 pulsedrive: {
-                    label: this.$tc('tinect-redirects.requests.ipCheckers.pulsedrive'),
-                    url(ipAddress) { return 'https://pulsedive.com/indicator/?ioc=' + window.btoa(ipAddress); },
+                    label: this.$tc(
+                        'tinect-redirects.requests.ipCheckers.pulsedrive'
+                    ),
+                    url(ipAddress) {
+                        return (
+                            'https://pulsedive.com/indicator/?ioc=' +
+                            window.btoa(ipAddress)
+                        );
+                    },
                 },
                 whois: {
-                    label: this.$tc('tinect-redirects.requests.ipCheckers.whois'),
-                    url(ipAddress) { return 'https://www.whois.com/whois/' + ipAddress; },
+                    label: this.$tc(
+                        'tinect-redirects.requests.ipCheckers.whois'
+                    ),
+                    url(ipAddress) {
+                        return 'https://www.whois.com/whois/' + ipAddress;
+                    },
                 },
                 shodan: {
-                    label: this.$tc('tinect-redirects.requests.ipCheckers.shodan'),
-                    url(ipAddress) { return 'https://www.shodan.io/host/' + ipAddress; },
+                    label: this.$tc(
+                        'tinect-redirects.requests.ipCheckers.shodan'
+                    ),
+                    url(ipAddress) {
+                        return 'https://www.shodan.io/host/' + ipAddress;
+                    },
                 },
             };
         },
@@ -121,5 +142,5 @@ export default {
 
             window.open(detail.url(ipAddress), '_blank');
         },
-    }
-}
+    },
+};

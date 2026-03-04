@@ -26,18 +26,10 @@
         }
     },
     "scripts": {
-        "init-ci": "composer install --working-dir=.ci",
-        "phpcs-check": [
-            "@init-ci",
-            "@php-cs-fixer --dry-run"
+        "check": [
+            "docker run --rm -v $(pwd):/ext shopware/shopware-cli:latest extension validate --check-against lowest --full /ext",
+            "docker run --rm -v $(pwd):/ext shopware/shopware-cli:latest extension validate --check-against highest --full /ext"
         ],
-        "phpcs": [
-            "@init-ci",
-            "@php-cs-fixer"
-        ],
-        "php-cs-fixer": [
-            ".ci/vendor/bin/php-cs-fixer fix --diff --config=.ci/.php-cs-fixer.dist.php"
-        ],
-        "phpstan": "docker run --rm -v $(pwd):/app aragon999/phpstan-shopware:v6.6.0 analyse ."
+        "format": "docker run --rm -v $(pwd):/ext shopware/shopware-cli:latest extension format /ext"
     }
 }

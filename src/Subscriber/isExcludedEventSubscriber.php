@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Tinect\Redirects\Subscriber;
 
@@ -25,7 +25,7 @@ class isExcludedEventSubscriber implements EventSubscriberInterface
         return [
             IsExcludedEvent::class => [
                 ['isExcluded', -1000],
-                ['isBadUserAgent', -1002]
+                ['isBadUserAgent', -1002],
             ],
         ];
     }
@@ -36,7 +36,7 @@ class isExcludedEventSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $badUserAgentsPath = dirname(__DIR__) . '/Resources/lists/bad-user-agents.txt';
+        $badUserAgentsPath = \dirname(__DIR__) . '/Resources/lists/bad-user-agents.txt';
 
         if (!\is_file($badUserAgentsPath)) {
             throw new \RuntimeException('Bad user agents file not found at ' . $badUserAgentsPath);
@@ -47,7 +47,7 @@ class isExcludedEventSubscriber implements EventSubscriberInterface
 
         $badUserAgents = \trim($badUserAgents);
         $badUserAgents = \preg_quote($badUserAgents, '/');
-        $badUserAgents = \explode(PHP_EOL, $badUserAgents);
+        $badUserAgents = \explode(\PHP_EOL, $badUserAgents);
         $badUserAgents = \implode('|', $badUserAgents);
 
         $message = $event->getUpdateMessage();
@@ -71,9 +71,10 @@ class isExcludedEventSubscriber implements EventSubscriberInterface
         $salesChannelId = $message->getSalesChannelId();
 
         if (!isset($this->excludes[$salesChannelId])) {
-            $excludes                        = \array_filter(
-                \explode(PHP_EOL, $this->systemConfigService->getString('TinectRedirects.config.excludes', $salesChannelId)),
-                static fn ($exclude) => $exclude !== '');
+            $excludes = \array_filter(
+                \explode(\PHP_EOL, $this->systemConfigService->getString('TinectRedirects.config.excludes', $salesChannelId)),
+                static fn ($exclude) => $exclude !== ''
+            );
             $this->excludes[$salesChannelId] = $excludes;
         }
 

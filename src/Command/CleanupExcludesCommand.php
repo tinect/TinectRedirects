@@ -39,7 +39,7 @@ class CleanupExcludesCommand extends Command
     {
         $output->writeln('Collecting entries:');
 
-        $context  = new Context(new SystemSource());
+        $context = new Context(new SystemSource());
         $criteria = (new Criteria())
             ->setLimit(500)
             ->addFilter(new EqualsFilter('active', false))

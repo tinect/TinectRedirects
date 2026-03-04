@@ -16,9 +16,9 @@ use Shopware\Core\Framework\DataAbstractionLayer\FieldCollection;
 
 class RedirectRequestDefinition extends EntityDefinition
 {
-    public const ENTITY_NAME           = 'tinect_redirects_redirect_request';
+    public const ENTITY_NAME = 'tinect_redirects_redirect_request';
     public const MAX_LENGTH_USER_AGENT = 1024;
-    public const MAX_LENGTH_REFERER    = 1024;
+    public const MAX_LENGTH_REFERER = 1024;
 
     public function getEntityName(): string
     {

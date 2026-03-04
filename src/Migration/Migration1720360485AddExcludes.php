@@ -31,7 +31,7 @@ class Migration1720360485AddExcludes extends MigrationStep
                 continue;
             }
 
-            $configurationValue = json_decode($existingExclude['configuration_value'], true, 512, JSON_THROW_ON_ERROR);
+            $configurationValue = json_decode($existingExclude['configuration_value'], true, 512, \JSON_THROW_ON_ERROR);
 
             if (!\is_array($configurationValue) || !isset($configurationValue['_value']) || !\is_string($configurationValue['_value'])) {
                 continue;
@@ -57,8 +57,8 @@ class Migration1720360485AddExcludes extends MigrationStep
             );
 
             $params = [
-                'id'                 => $existingExclude['id'],
-                'configurationValue' => json_encode(['_value' => $excludes], JSON_THROW_ON_ERROR),
+                'id' => $existingExclude['id'],
+                'configurationValue' => json_encode(['_value' => $excludes], \JSON_THROW_ON_ERROR),
             ];
 
             $query->execute($params);

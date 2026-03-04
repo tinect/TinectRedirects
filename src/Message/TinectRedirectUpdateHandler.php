@@ -65,10 +65,10 @@ readonly class TinectRedirectUpdateHandler
         }
 
         $params = [
-            'id'                   => Uuid::fromHexToBytes($redirectId),
-            'source'               => $message->getSource(),
+            'id' => Uuid::fromHexToBytes($redirectId),
+            'source' => $message->getSource(),
             'salesChannelDomainId' => null,
-            'createdAt'            => $message->getCreatedAt()->format(Defaults::STORAGE_DATE_TIME_FORMAT),
+            'createdAt' => $message->getCreatedAt()->format(Defaults::STORAGE_DATE_TIME_FORMAT),
         ];
 
         if (\is_string($message->getSalesChannelDomainId())) {
@@ -113,12 +113,12 @@ readonly class TinectRedirectUpdateHandler
         );
 
         $params = [
-            'id'         => Uuid::randomBytes(),
+            'id' => Uuid::randomBytes(),
             'redirectId' => Uuid::fromHexToBytes($redirectId),
-            'ipAddress'  => $message->getIpAddress(),
-            'userAgent'  => $message->getUserAgent(),
-            'referer'    => $message->getReferer(),
-            'createdAt'  => $message->getCreatedAt()->format(Defaults::STORAGE_DATE_TIME_FORMAT),
+            'ipAddress' => $message->getIpAddress(),
+            'userAgent' => $message->getUserAgent(),
+            'referer' => $message->getReferer(),
+            'createdAt' => $message->getCreatedAt()->format(Defaults::STORAGE_DATE_TIME_FORMAT),
         ];
 
         $query->execute($params);

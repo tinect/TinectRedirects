@@ -1,4 +1,3 @@
-
 Shopware.Component.override('sw-import-export-edit-profile-modal', {
     created() {
         this.supportedEntities.push({

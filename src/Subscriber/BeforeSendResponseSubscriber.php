@@ -134,7 +134,7 @@ readonly class BeforeSendResponseSubscriber implements EventSubscriberInterface
 
         $targetURL = $this->seoUrlPlaceholderHandler->replace($targetURL, $host, $salesChannelContext);
 
-        if (\in_array(\parse_url($targetURL, PHP_URL_SCHEME), [false, null], true)) {
+        if (\in_array(\parse_url($targetURL, \PHP_URL_SCHEME), [false, null], true)) {
             $targetURL = $host . $targetURL;
         }
 

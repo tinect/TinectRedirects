@@ -6,13 +6,9 @@ const { Component, Mixin } = Shopware;
 export default {
     template,
 
-    inject: [
-        'repositoryFactory',
-    ],
+    inject: ['repositoryFactory'],
 
-    mixins: [
-        Mixin.getByName('notification'),
-    ],
+    mixins: [Mixin.getByName('notification')],
 
     shortcuts: {
         'SYSTEMKEY+S': 'onSave',
@@ -30,7 +26,7 @@ export default {
         return {
             redirect: null,
             isLoading: false,
-            isSaveSuccessful: false
+            isSaveSuccessful: false,
         };
     },
 
@@ -46,7 +42,9 @@ export default {
         },
 
         hasSwUrlExt() {
-            return Component.getComponentRegistry().has('sw-dynamic-url-ext-field');
+            return Component.getComponentRegistry().has(
+                'sw-dynamic-url-ext-field'
+            );
         },
 
         tooltipSave() {
@@ -67,9 +65,24 @@ export default {
 
         httpCodeOptions() {
             return [
-                { value: 301, label: this.$tc('tinect-redirects.detail.httpCodeLabelValues.301') },
-                { value: 302, label: this.$tc('tinect-redirects.detail.httpCodeLabelValues.302') },
-                { value: 410, label: this.$tc('tinect-redirects.detail.httpCodeLabelValues.410') },
+                {
+                    value: 301,
+                    label: this.$tc(
+                        'tinect-redirects.detail.httpCodeLabelValues.301'
+                    ),
+                },
+                {
+                    value: 302,
+                    label: this.$tc(
+                        'tinect-redirects.detail.httpCodeLabelValues.302'
+                    ),
+                },
+                {
+                    value: 410,
+                    label: this.$tc(
+                        'tinect-redirects.detail.httpCodeLabelValues.410'
+                    ),
+                },
             ];
         },
     },
@@ -77,7 +90,7 @@ export default {
     watch: {
         redirectId() {
             this.getRedirect();
-        }
+        },
     },
 
     created() {
@@ -102,7 +115,8 @@ export default {
         getRedirect() {
             this.isLoading = true;
 
-            this.repository.get(this.redirectId, Shopware.Context.api)
+            this.repository
+                .get(this.redirectId, Shopware.Context.api)
                 .then((entity) => {
                     this.redirect = entity;
                     this.isLoading = false;
@@ -110,7 +124,7 @@ export default {
                 .catch(() => {
                     this.createNotificationError({
                         message: this.$tc(
-                            'global.notification.notificationLoadingDataErrorMessage',
+                            'global.notification.notificationLoadingDataErrorMessage'
                         ),
                     });
                     this.isLoading = false;
@@ -120,28 +134,38 @@ export default {
         onSave() {
             this.isLoading = true;
 
-            this.repository.save(this.redirect).then(() => {
-                this.isLoading = false;
-                this.isSaveSuccessful = true;
-                if (this.redirectId === null) {
-                    this.$router.push({ name: 'tinect.redirects.details', params: { id: this.redirect.id } });
-                    return;
-                }
+            this.repository
+                .save(this.redirect)
+                .then(() => {
+                    this.isLoading = false;
+                    this.isSaveSuccessful = true;
+                    if (this.redirectId === null) {
+                        this.$router.push({
+                            name: 'tinect.redirects.details',
+                            params: { id: this.redirect.id },
+                        });
+                        return;
+                    }
 
-                this.getRedirect();
-            }).catch((exception) => {
-                this.isLoading = false;
-                this.createNotificationError({
-                    message: this.$tc('global.notification.notificationSaveErrorMessage', 0, {
-                        entityName: this.download.id,
-                    }),
+                    this.getRedirect();
+                })
+                .catch((exception) => {
+                    this.isLoading = false;
+                    this.createNotificationError({
+                        message: this.$tc(
+                            'global.notification.notificationSaveErrorMessage',
+                            0,
+                            {
+                                entityName: this.download.id,
+                            }
+                        ),
+                    });
+                    throw exception;
                 });
-                throw exception;
-            });
         },
 
         onCancel() {
             this.$router.push({ name: 'tinect.redirects.index' });
         },
-    }
+    },
 };

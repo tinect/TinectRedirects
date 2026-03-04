@@ -1,91 +1,112 @@
 {% block tinect_redirects_details %}
-    <sw-page class="tinect-redirects-details">
-        <template #smart-bar-actions>
-            <sw-button
-                    v-tooltip.bottom="tooltipCancel"
-                    :disabled="redirect !== null && isLoading"
-                    @click="onCancel"
-            >
-                {{ $tc('global.default.cancel') }}
-            </sw-button>
+<sw-page class="tinect-redirects-details">
+    <template #smart-bar-actions>
+        <sw-button
+            v-tooltip.bottom="tooltipCancel"
+            :disabled="redirect !== null && isLoading"
+            @click="onCancel"
+        >
+            {{ $tc('global.default.cancel') }}
+        </sw-button>
+        <sw-button-process
+            v-model:processSuccess="isSaveSuccessful"
+            v-tooltip.bottom="tooltipSave"
+            :is-loading="isLoading"
+            :disabled="isLoading"
+            variant="primary"
+            @click.prevent="onSave"
+        >
+            {{ $tc('global.default.save') }}
+        </sw-button-process>
+    </template>
 
-            <sw-button-process
-                    v-model:processSuccess="isSaveSuccessful"
-                    v-tooltip.bottom="tooltipSave"
-                    :is-loading="isLoading"
-                    :disabled="isLoading"
-                    variant="primary"
-                    @click.prevent="onSave"
-            >
-                {{ $tc('global.default.save') }}
-            </sw-button-process>
-        </template>
+    <template #content>
+        <sw-card-view>
+            <template v-if="isLoading">
+                <sw-skeleton variant="detail-bold"/>
+                <sw-skeleton/>
+            </template>
 
-        <template #content>
-            <sw-card-view>
-                <template v-if="isLoading">
-                    <sw-skeleton variant="detail-bold"/>
-                    <sw-skeleton/>
-                </template>
-                <template v-else>
-                    <sw-card position-identifier="tinect-redirects-details">
-                        <sw-container class="no-flex-grow-field" columns="1fr 1fr">
-                            <sw-checkbox-field :label="$t('tinect-redirects.detail.activeLabel')"
-                                               v-model:value="redirect.active">
+            <template v-else>
+                <sw-card position-identifier="tinect-redirects-details">
+                    <sw-container
+                        class="no-flex-grow-field"
+                        columns="1fr 1fr"
+                    >
+                        <sw-checkbox-field
+                            :label="$t('tinect-redirects.detail.activeLabel')"
+                            v-model:value="redirect.active"
+                        >
                             </sw-checkbox-field>
-
-                            <sw-checkbox-field :helpText="$t('tinect-redirects.detail.hiddenHelpText')"
-                                               :label="$t('tinect-redirects.detail.hiddenLabel')"
-                                               v-model:value="redirect.hidden">
+                        <sw-checkbox-field
+                            :helpText="$t('tinect-redirects.detail.hiddenHelpText')"
+                            :label="$t('tinect-redirects.detail.hiddenLabel')"
+                            v-model:value="redirect.hidden"
+                        >
                             </sw-checkbox-field>
-                        </sw-container>
-
-                        <sw-card :title="$t('tinect-redirects.detail.source')"
-                                 position-identifier="tinect-redirects-details-source">
-                            <sw-entity-single-select :label="$tc('tinect-redirects.detail.salesChannelDomain')"
-                                                     :value="redirect.salesChannelDomainId"
-                                                     v-model:value="redirect.salesChannelDomainId"
-                                                     entity="sales_channel_domain"
-                                                     show-clearable-button
-                                                     labelProperty="url"
-                                                     :helpText="$tc('tinect-redirects.detail.salesChannelDomainHelpText')">
+                    </sw-container>
+                    <sw-card
+                        :title="$t('tinect-redirects.detail.source')"
+                        position-identifier="tinect-redirects-details-source"
+                    >
+                        <sw-entity-single-select
+                            :label="$tc('tinect-redirects.detail.salesChannelDomain')"
+                            :value="redirect.salesChannelDomainId"
+                            v-model:value="redirect.salesChannelDomainId"
+                            entity="sales_channel_domain"
+                            show-clearable-button
+                            labelProperty="url"
+                            :helpText="$tc('tinect-redirects.detail.salesChannelDomainHelpText')"
+                        >
                             </sw-entity-single-select>
-
-                            <sw-text-field :label="$t('tinect-redirects.detail.sourceUrlLabel')"
-                                      v-model:value="redirect.source"
-                                      validation="required"></sw-text-field>
-                        </sw-card>
-
-                        <mt-select
-                            :label="$t('tinect-redirects.detail.httpCodeLabel')"
-                            v-model="redirect.httpCode"
-                            :options="httpCodeOptions"
-                        />
-
-                        <sw-card v-if="redirect.httpCode !== 410" :title="$t('tinect-redirects.detail.target')"
-                                 position-identifier="tinect-redirects-details-target">
-                            <template v-if="hasSwUrlExt">
-                                <sw-dynamic-url-ext-field :label="$t('tinect-redirects.detail.targetUrlLabel')"
-                                                  v-model:value="redirect.target"
-                                                  validation="required">
-                                </sw-dynamic-url-ext-field>
-                            </template>
-                            <template v-else>
-                                <sw-dynamic-url-field
-                                        v-model:value="redirect.target"
-                                        validation="required">
-                                </sw-dynamic-url-field>
-                            </template>
-                        </sw-card>
-
-                        <sw-text-editor :label="$t('tinect-redirects.detail.commentLabel')"
-                                        v-model:value="redirect.comment"></sw-text-editor>
+                        <sw-text-field
+                            :label="$t('tinect-redirects.detail.sourceUrlLabel')"
+                            v-model:value="redirect.source"
+                            validation="required"
+                        ></sw-text-field>
                     </sw-card>
+                    <mt-select
+                        :label="$t('tinect-redirects.detail.httpCodeLabel')"
+                        v-model="redirect.httpCode"
+                        :options="httpCodeOptions"
+                    />
+                    <sw-card
+                        v-if="redirect.httpCode !== 410"
+                        :title="$t('tinect-redirects.detail.target')"
+                        position-identifier="tinect-redirects-details-target"
+                    >
+                        <template v-if="hasSwUrlExt">
+                            <sw-dynamic-url-ext-field
+                                :label="$t('tinect-redirects.detail.targetUrlLabel')"
+                                v-model:value="redirect.target"
+                                validation="required"
+                            >
+                                </sw-dynamic-url-ext-field>
+                        </template>
 
-                    <tinect-similar-redirects :redirect="redirect" v-if="!redirect._isNew" />
-                    <tinect-similar-requests :redirect="redirect"  v-if="!redirect._isNew" />
-                </template>
-            </sw-card-view>
-        </template>
-    </sw-page>
+                        <template v-else>
+                            <sw-dynamic-url-field
+                                v-model:value="redirect.target"
+                                validation="required"
+                            >
+                                </sw-dynamic-url-field>
+                        </template>
+                    </sw-card>
+                    <sw-text-editor
+                        :label="$t('tinect-redirects.detail.commentLabel')"
+                        v-model:value="redirect.comment"
+                    ></sw-text-editor>
+                </sw-card>
+                <tinect-similar-redirects
+                    :redirect="redirect"
+                    v-if="!redirect._isNew"
+                />
+                <tinect-similar-requests
+                    :redirect="redirect"
+                    v-if="!redirect._isNew"
+                />
+            </template>
+        </sw-card-view>
+    </template>
+</sw-page>
 {% endblock %}

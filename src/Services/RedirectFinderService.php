@@ -22,7 +22,7 @@ readonly class RedirectFinderService
 
     public function find(string $path, ?string $salesChannelDomainId): ?RedirectEntity
     {
-        $context  = new Context(new SystemSource());
+        $context = new Context(new SystemSource());
         $criteria = $this->getCriteria($path, $salesChannelDomainId);
 
         $redirect = $this->tinectRedirectsRedirectRepository->search($criteria, $context)->first();
@@ -36,7 +36,7 @@ readonly class RedirectFinderService
 
     public function findId(string $path, ?string $salesChannelDomainId): ?string
     {
-        $context  = new Context(new SystemSource());
+        $context = new Context(new SystemSource());
         $criteria = $this->getCriteria($path, $salesChannelDomainId);
 
         return $this->tinectRedirectsRedirectRepository->searchIds($criteria, $context)->firstId();

@@ -6,14 +6,9 @@ const Criteria = Shopware.Data.Criteria;
 export default {
     template,
 
-    inject: [
-        'repositoryFactory',
-        'acl',
-    ],
+    inject: ['repositoryFactory', 'acl'],
 
-    mixins: [
-        Mixin.getByName('listing'),
-    ],
+    mixins: [Mixin.getByName('listing')],
 
     data() {
         return {
@@ -27,7 +22,7 @@ export default {
                 active: 0,
                 hidden: 0,
                 minimumRequestCount: null,
-            }
+            },
         };
     },
 
@@ -89,20 +84,35 @@ export default {
             criteria.setTerm(this.term);
 
             if (this.filter.active === 0 || this.filter.active === 1) {
-                criteria.addFilter(Criteria.equals('active', this.filter.active));
+                criteria.addFilter(
+                    Criteria.equals('active', this.filter.active)
+                );
             }
 
             criteria.addFilter(Criteria.equals('hidden', this.filter.hidden));
-            criteria.addSorting(Criteria.sort(this.sortBy, this.sortDirection, this.naturalSorting));
+            criteria.addSorting(
+                Criteria.sort(
+                    this.sortBy,
+                    this.sortDirection,
+                    this.naturalSorting
+                )
+            );
 
             if (this.filter.salesChannelDomainId) {
-                criteria.addFilter(Criteria.equals('salesChannelDomainId', this.filter.salesChannelDomainId));
+                criteria.addFilter(
+                    Criteria.equals(
+                        'salesChannelDomainId',
+                        this.filter.salesChannelDomainId
+                    )
+                );
             }
 
             if (this.filter.minimumRequestCount) {
-                criteria.addFilter(Criteria.range('count', {
-                    gte: this.filter.minimumRequestCount,
-                }));
+                criteria.addFilter(
+                    Criteria.range('count', {
+                        gte: this.filter.minimumRequestCount,
+                    })
+                );
             }
 
             return criteria;
@@ -110,8 +120,18 @@ export default {
 
         filterActiveOptions() {
             return [
-                { value: 1, label: this.$tc('tinect-redirects.sidebar.filter.active.values.yes') },
-                { value: 0, label: this.$tc('tinect-redirects.sidebar.filter.active.values.no') },
+                {
+                    value: 1,
+                    label: this.$tc(
+                        'tinect-redirects.sidebar.filter.active.values.yes'
+                    ),
+                },
+                {
+                    value: 0,
+                    label: this.$tc(
+                        'tinect-redirects.sidebar.filter.active.values.no'
+                    ),
+                },
             ];
         },
     },
@@ -129,7 +149,8 @@ export default {
         getList() {
             this.isLoading = true;
 
-            return this.redirectRepository.search(this.criteria, Shopware.Context.api)
+            return this.redirectRepository
+                .search(this.criteria, Shopware.Context.api)
                 .then((searchResult) => {
                     this.items = searchResult;
                     this.total = searchResult.total;

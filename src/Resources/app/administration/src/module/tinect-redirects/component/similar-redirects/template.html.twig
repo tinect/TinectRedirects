@@ -1,29 +1,34 @@
-<sw-card :isLoading="isLoading" v-if="redirect" position-identifier="tinect-redirects-similar">
+<sw-card
+    :isLoading="isLoading"
+    v-if="redirect"
+    position-identifier="tinect-redirects-similar"
+>
     <template #title>
         {{ $tc('tinect-redirects.similar.title', total) }}
     </template>
+
     <template #grid>
         <sw-entity-listing
-                v-if="total > 0"
-                :fullPage="false"
-                :repository="repository"
-                :columns="columns"
-                :items="items"
-                :sort-by="sortBy"
-                :sort-direction="sortDirection"
-                :allow-edit="acl.can('tinect_redirects_redirect.editor')"
-                :allow-delete="acl.can('tinect_redirects_redirect.deleter')"
-                identifier="tinect-redirects-similar-list"
-                :is-loading="isLoading"
-                @page-change="onPageChange"
-                @update-records="updateTotal"
+            v-if="total > 0"
+            :fullPage="false"
+            :repository="repository"
+            :columns="columns"
+            :items="items"
+            :sort-by="sortBy"
+            :sort-direction="sortDirection"
+            :allow-edit="acl.can('tinect_redirects_redirect.editor')"
+            :allow-delete="acl.can('tinect_redirects_redirect.deleter')"
+            identifier="tinect-redirects-similar-list"
+            :is-loading="isLoading"
+            @page-change="onPageChange"
+            @update-records="updateTotal"
         />
         <sw-empty-state
-                v-else
-                :absolute="false"
-                icon="regular-rocket"
-                :title="$tc('tinect-redirects.similar.empty')"
-                subline=""
+            v-else
+            :absolute="false"
+            icon="regular-rocket"
+            :title="$tc('tinect-redirects.similar.empty')"
+            subline
         />
     </template>
 </sw-card>

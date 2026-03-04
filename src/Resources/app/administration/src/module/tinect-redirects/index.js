@@ -1,9 +1,21 @@
 const { Component, Module } = Shopware;
 
-Component.register('tinect-redirects-index', () => import('./page/tinect-redirects-index'));
-Component.register('tinect-redirects-details', () => import('./page/tinect-redirects-details'));
-Component.register('tinect-similar-requests', () => import('./component/requests'));
-Component.register('tinect-similar-redirects', () => import('./component/similar-redirects'));
+Component.register(
+    'tinect-redirects-index',
+    () => import('./page/tinect-redirects-index')
+);
+Component.register(
+    'tinect-redirects-details',
+    () => import('./page/tinect-redirects-details')
+);
+Component.register(
+    'tinect-similar-requests',
+    () => import('./component/requests')
+);
+Component.register(
+    'tinect-similar-redirects',
+    () => import('./component/similar-redirects')
+);
 
 Shopware.Module.register('tinect-redirects', {
     type: 'plugin',
@@ -39,19 +51,21 @@ Shopware.Module.register('tinect-redirects', {
             meta: {
                 parentPath: 'tinect.redirects.index',
             },
-        }
+        },
     },
 
-    settingsItem: [{
-        id: 'tinect-redirects',
-        path: 'tinect.redirects.index',
-        parent: 'sw-settings',
-        color: '#189eff',
-        group: 'plugins',
-        to: 'tinect.redirects.index',
-        icon: 'regular-double-chevron-right-s',
-        label: 'tinect-redirects.general.title',
-    }],
+    settingsItem: [
+        {
+            id: 'tinect-redirects',
+            path: 'tinect.redirects.index',
+            parent: 'sw-settings',
+            color: '#189eff',
+            group: 'plugins',
+            to: 'tinect.redirects.index',
+            icon: 'regular-double-chevron-right-s',
+            label: 'tinect-redirects.general.title',
+        },
+    ],
 
     defaultSearchConfiguration: {
         _searchable: true,

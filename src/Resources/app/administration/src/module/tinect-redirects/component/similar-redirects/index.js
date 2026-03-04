@@ -6,14 +6,9 @@ const { Criteria } = Shopware.Data;
 export default {
     template,
 
-    inject: [
-        'repositoryFactory',
-        'acl',
-    ],
+    inject: ['repositoryFactory', 'acl'],
 
-    mixins: [
-        Mixin.getByName('listing'),
-    ],
+    mixins: [Mixin.getByName('listing')],
 
     props: {
         redirect: {
@@ -84,9 +79,9 @@ export default {
         criteria() {
             const criteria = new Criteria(this.page, this.limit);
             criteria.addFilter(Criteria.equals('source', this.redirect.source));
-            criteria.addFilter(Criteria.not('and', [
-                Criteria.equals('id', this.redirect.id),
-            ]));
+            criteria.addFilter(
+                Criteria.not('and', [Criteria.equals('id', this.redirect.id)])
+            );
             criteria.addSorting(Criteria.sort(this.sortBy, this.sortDirection));
 
             return criteria;
@@ -96,15 +91,17 @@ export default {
     methods: {
         getList() {
             this.isLoading = true;
-            return this.repository.search(this.criteria, Shopware.Context.api).then((result) => {
-                this.total = result.total;
-                this.items = result;
-                this.isLoading = false;
-            });
+            return this.repository
+                .search(this.criteria, Shopware.Context.api)
+                .then((result) => {
+                    this.total = result.total;
+                    this.items = result;
+                    this.isLoading = false;
+                });
         },
 
         updateTotal({ total }) {
             this.total = total;
         },
-    }
-}
+    },
+};

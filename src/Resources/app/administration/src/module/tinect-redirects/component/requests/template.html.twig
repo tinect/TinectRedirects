@@ -1,22 +1,27 @@
-<sw-card :isLoading="isLoading" v-if="redirect" position-identifier="tinect-redirects-requests">
+<sw-card
+    :isLoading="isLoading"
+    v-if="redirect"
+    position-identifier="tinect-redirects-requests"
+>
     <template #title>
         {{ $tc('tinect-redirects.requests.title', total) }}
     </template>
+
     <template #grid>
         <sw-entity-listing
-                v-if="total > 0"
-                :fullPage="false"
-                :repository="repository"
-                :columns="columns"
-                :items="items"
-                :sort-by="sortBy"
-                :sort-direction="sortDirection"
-                :allow-edit="acl.can('tinect_redirects_redirect_request.editor')"
-                :allow-delete="acl.can('tinect_redirects_redirect_request.deleter')"
-                identifier="tinect-redirects-requests-list"
-                :is-loading="isLoading"
-                @page-change="onPageChange"
-                @update-records="updateTotal"
+            v-if="total > 0"
+            :fullPage="false"
+            :repository="repository"
+            :columns="columns"
+            :items="items"
+            :sort-by="sortBy"
+            :sort-direction="sortDirection"
+            :allow-edit="acl.can('tinect_redirects_redirect_request.editor')"
+            :allow-delete="acl.can('tinect_redirects_redirect_request.deleter')"
+            identifier="tinect-redirects-requests-list"
+            :is-loading="isLoading"
+            @page-change="onPageChange"
+            @update-records="updateTotal"
         >
             <template #column-createdAt="{ item }">
                 {{ date(item.createdAt) }}
@@ -24,21 +29,18 @@
 
             <template #more-actions="{ item }">
                 <template v-for="(checker, key) in getIPCheckers()">
-                    <sw-context-menu-item
-                        @click="openCheckIP(item.ipAddress, key)"
-                    >
+                    <sw-context-menu-item @click="openCheckIP(item.ipAddress, key)">
                         {{ $tc('tinect-redirects.requests.openCheckIP.' + key) }}
                     </sw-context-menu-item>
                 </template>
             </template>
         </sw-entity-listing>
-
         <sw-empty-state
-                v-else
-                :absolute="false"
-                icon="regular-rocket"
-                :title="$tc('tinect-redirects.requests.empty')"
-                subline=""
+            v-else
+            :absolute="false"
+            icon="regular-rocket"
+            :title="$tc('tinect-redirects.requests.empty')"
+            subline
         />
     </template>
 </sw-card>
