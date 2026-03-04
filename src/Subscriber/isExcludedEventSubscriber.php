@@ -85,6 +85,9 @@ class isExcludedEventSubscriber implements EventSubscriberInterface
         }
     }
 
+    /**
+     * @return string[]
+     */
     private function getExcludes(?string $salesChannelId): array
     {
         $salesChannelIdKey = $salesChannelId ?? 'none';
