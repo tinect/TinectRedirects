@@ -70,15 +70,7 @@ class isExcludedEventSubscriber implements EventSubscriberInterface
         $path = $message->getSource();
         $salesChannelId = $message->getSalesChannelId();
 
-        if (!isset($this->excludes[$salesChannelId])) {
-            $excludes = \array_filter(
-                \explode(\PHP_EOL, $this->systemConfigService->getString('TinectRedirects.config.excludes', $salesChannelId)),
-                static fn ($exclude) => $exclude !== ''
-            );
-            $this->excludes[$salesChannelId] = $excludes;
-        }
-
-        $excludes = $this->excludes[$salesChannelId];
+        $excludes = $this->getExcludes($salesChannelId);
 
         foreach ($excludes as $exclude) {
             try {
@@ -91,5 +83,20 @@ class isExcludedEventSubscriber implements EventSubscriberInterface
                 // nth, we don't care whether the regex is valid
             }
         }
+    }
+
+    private function getExcludes(?string $salesChannelId): array
+    {
+        $salesChannelIdKey = $salesChannelId ?? 'none';
+
+        if (!isset($this->excludes[$salesChannelIdKey])) {
+            $excludes = \array_filter(
+                \explode(\PHP_EOL, $this->systemConfigService->getString('TinectRedirects.config.excludes', $salesChannelId)),
+                static fn ($exclude) => $exclude !== ''
+            );
+            $this->excludes[$salesChannelIdKey] = $excludes;
+        }
+
+        return $this->excludes[$salesChannelIdKey];
     }
 }
