@@ -23,4 +23,13 @@ parameters:
             				tag\\:v6\\.7\\.0 \\- reason\\:return\\-type\\-change \\- return type will be changed to int\\|string$#
             			"""
             reportUnmatched: false
+        -
+            message: """
+            				#tag\\:v6\\.8\\.0 \\- reason\\:return\\-type\\-change \\- Will return static natively$#
+            			"""
+            reportUnmatched: false
+        -
+            identifier: shopware.noEntityRepositoryInLoop
+            path: src/Command/CleanupExcludesCommand.php
+            reportUnmatched: false
 
