@@ -1,10 +1,13 @@
-01h4x.com
+libredtail-http
+opendirme-credhunt
+1h4x.com
 360Spider
 404checker
 404enemy
 80legs
 ADmantX
 AIBOT
+AIWebIndex
 ALittle Client
 ASPSeek
 Abonti
@@ -336,6 +339,7 @@ Nmap
 Nuclei
 Nutch
 Octopus
+Odin
 Offline Explorer
 Offline Navigator
 OnCrawl
@@ -402,6 +406,7 @@ Ripper
 RocketCrawler
 Rogerbot
 SBIder
+SEBot-WA
 SEOkicks
 SEOkicks-Robot
 SEOlyt
@@ -485,6 +490,8 @@ Swiftbot
 Szukacz
 T0PHackTeam
 T8Abot
+TLM-Audit-Scanner
+TMP
 Teleport
 TeleportPro
 Telesoft
@@ -599,6 +606,7 @@ adscanner
 allenai.org
 anthropic-ai
 archive.org_bot
+aria2
 arquivo-web-crawler
 arquivo.pt
 autoemailspider
@@ -623,6 +631,8 @@ eCatch
 evc-batch
 everyfeed-spider
 facebookscraper
+fasthttp
+git
 gopher
 heritrix
 imagesift.com
@@ -671,6 +681,7 @@ spyfu
 sysscan
 tAkeOut
 terrabot-owned-you
+trafilatura
 trendiction.com
 trendiction.de
 ubermetrics-technologies.com
