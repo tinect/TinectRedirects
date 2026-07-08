@@ -19,6 +19,18 @@
         "label": {
             "de-DE": "Redirect Plugin",
             "en-GB": "Redirect plugin"
+        },
+        "description": {
+            "de-DE": "SEO-Weiterleitungen in Shopware 6 verwalten: 404-Fehler automatisch protokollieren, 301-, 302- und 410-Weiterleitungen anlegen, per Import pflegen und verwalten.",
+            "en-GB": "Manage SEO redirects in Shopware 6: automatically log 404 errors, create 301, 302 and 410 redirects, import and organize them in bulk of your online shop."
+        },
+        "manufacturerLink": {
+            "de-DE": "https://github.com/tinect",
+            "en-GB": "https://github.com/tinect"
+        },
+        "supportLink": {
+            "de-DE": "https://github.com/tinect/TinectRedirects/issues",
+            "en-GB": "https://github.com/tinect/TinectRedirects/issues"
         }
     },
     "autoload": {
