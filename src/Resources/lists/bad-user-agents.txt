@@ -1,6 +1,4 @@
-libredtail-http
-opendirme-credhunt
-1h4x.com
+1h4x\.com
 360Spider
 404checker
 404enemy
@@ -77,6 +75,7 @@ BuzzSumo
 Bytespider
 CATExplorador
 CCBot
+CMS-Security-Auditor
 CODE87
 CSHttp
 Calculon
@@ -138,7 +137,7 @@ Dotbot
 Download Wonder
 Dragonfly
 Drip
-ECCP/1.0
+ECCP
 EMail Siphon
 EMail Wolf
 EasyDL
@@ -160,7 +159,7 @@ FHscan
 FacebookBot
 FemtosearchBot
 Fimap
-Firefox/7.0
+Firefox/7\.0
 FlashGet
 Flunky
 Foobot
@@ -175,6 +174,7 @@ GT::WWW
 GalaxyBot
 GeedoProductSearch
 Genieo
+GenomeCrawlerd
 GermCrawler
 GetRight
 GetWeb
@@ -470,7 +470,6 @@ SpankBot
 Spanner
 Spbot
 Spider_Bot
-Spider_Bot/3.0
 Spinn3r
 SplitSignalBot
 SputnikBot
@@ -501,6 +500,7 @@ TheNomad
 The Intraformant
 Thumbor
 TightTwatBot
+Timpibot
 TinyTestBot
 Titan
 Toata
@@ -541,7 +541,6 @@ WWW-Mechanize
 WWW::Mechanize
 WWWOFFLE
 Wallpapers
-Wallpapers/3.0
 WallpapersHD
 WeSEE
 WebAuto
@@ -579,7 +578,7 @@ Webster
 Whack
 Whacker
 Whatweb
-Who.is Bot
+Who\.is Bot
 Widow
 WinHTTrack
 WiseGuys Robot
@@ -603,48 +602,49 @@ ZoominfoBot
 ZumBot
 ZyBorg
 adscanner
-allenai.org
+allenai\.org
 anthropic-ai
 archive.org_bot
 aria2
 arquivo-web-crawler
-arquivo.pt
+arquivo\.pt
 autoemailspider
-awario.com
+awario\.com
 backlink-check
-cah.io.community
-check1.exe
+cah\.io\.community
+check1\.exe
 clark-crawler
 coccocbot
 cognitiveseo
 cohere-ai
 com.plumanalytics
-crawl.sogou.com
-crawler.feedback
+crawl\.sogou.com
 crawler4j
-dataforseo.com
+crawler\.feedback
+dataforseo\.com
 dataforseobot
 dataprovider
 demandbase-bot
-domainsproject.org
+domainsproject\.org
 eCatch
 evc-batch
 everyfeed-spider
 facebookscraper
 fasthttp
-git
 gopher
 heritrix
-imagesift.com
+imagesift\.com
 instabid
 internetVista monitor
 ips-agent
-isitwp.com
+isitwp\.com
 iubenda-radar
 l9scan
 leakix
+libredtail-http
 linkdexbot
 linkfluence
+litellm-recon
 lwp-request
 lwp-trivial
 magpie-crawler
@@ -655,43 +655,46 @@ netEstate NE Crawler
 oBot
 omgili
 openai
-openai.com
+openai\.com
+opendirme-credhunt
 page scorer
 pcBrowser
 plumanalytics
 polaris version
 probe-image-size
 ripz
-s1z.ru
-satoristudio.net
+s1z\.ru
+satoristudio\.net
 scalaj-http
-scan.lol
+scan\.lol
 seobility
 seocompany.store
 seoscanners
 seostar
 serpstatbot
 sexsearcher
-sitechecker.pro
+sitechecker\.pro
 siteripz
-smart-seo-tools.sbs
+smart-seo-tools\.sbs
 sogouspider
 sp_auditbot
+spy4x-domain-scanner
 spyfu
 sysscan
 tAkeOut
 terrabot-owned-you
 trafilatura
-trendiction.com
-trendiction.de
-ubermetrics-technologies.com
-voyagerx.com
+trendiction\.com
+trendiction\.de
+ubermetrics-technologies\.com
+voyagerx\.com
 webgains-bot
 webmeup-crawler
-webpros.com
+webpros\.com
 webprosbot
+wp2shell
 x09Mozilla
 x22Mozilla
-xpymep1.exe
-zauba.io
+xpymep1\.exe
+zauba\.io
 zgrab
