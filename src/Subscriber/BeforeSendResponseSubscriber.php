@@ -101,6 +101,19 @@ readonly class BeforeSendResponseSubscriber implements EventSubscriberInterface
         }
 
         $redirect = $this->redirectFinderService->find($path, $salesChannelDomainId);
+        $queryString = null;
+
+        // Fall back to the path without query string, e.g. for tracking parameters like gclid
+        if ($redirect === null && \str_contains($path, '?')) {
+            [$pathWithoutQuery, $originalQueryString] = \explode('?', $path, 2);
+
+            $redirect = $this->redirectFinderService->find($pathWithoutQuery, $salesChannelDomainId);
+
+            if ($redirect !== null) {
+                $path = $pathWithoutQuery;
+                $queryString = $originalQueryString;
+            }
+        }
 
         $message = new TinectRedirectUpdateMessage(
             source: $path,
@@ -140,7 +153,30 @@ readonly class BeforeSendResponseSubscriber implements EventSubscriberInterface
             $targetURL = $host . $targetURL;
         }
 
+        if ($queryString !== null && $queryString !== '') {
+            $targetURL = $this->appendQueryString($targetURL, $queryString);
+        }
+
         return new RedirectResponse($targetURL, $httpCode);
+    }
+
+    private function appendQueryString(string $url, string $queryString): string
+    {
+        $fragment = '';
+        $fragmentPosition = \strpos($url, '#');
+
+        if ($fragmentPosition !== false) {
+            $fragment = \substr($url, $fragmentPosition);
+            $url = \substr($url, 0, $fragmentPosition);
+        }
+
+        $separator = match (true) {
+            \str_ends_with($url, '?'), \str_ends_with($url, '&') => '',
+            \str_contains($url, '?') => '&',
+            default => '?',
+        };
+
+        return $url . $separator . $queryString . $fragment;
     }
 
     private function getSalesChannelContext(Request $request): SalesChannelContext
