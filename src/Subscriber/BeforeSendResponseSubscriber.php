@@ -103,13 +103,15 @@ readonly class BeforeSendResponseSubscriber implements EventSubscriberInterface
         $redirect = $this->redirectFinderService->find($path, $salesChannelDomainId);
         $queryString = null;
 
-        // Fall back to the path without query string, e.g. for tracking parameters like gclid
-        if ($redirect === null && \str_contains($path, '?')) {
+        // Fall back to the path without query string, e.g. for tracking parameters like gclid.
+        // An inactive exact match (e.g. a logged 404 entry) must not hide an active redirect for the path.
+        if (($redirect === null || !$redirect->isActive()) && \str_contains($path, '?')) {
             [$pathWithoutQuery, $originalQueryString] = \explode('?', $path, 2);
 
-            $redirect = $this->redirectFinderService->find($pathWithoutQuery, $salesChannelDomainId);
+            $fallbackRedirect = $this->redirectFinderService->find($pathWithoutQuery, $salesChannelDomainId);
 
-            if ($redirect !== null) {
+            if ($fallbackRedirect !== null && ($redirect === null || $fallbackRedirect->isActive())) {
+                $redirect = $fallbackRedirect;
                 $path = $pathWithoutQuery;
                 $queryString = $originalQueryString;
             }
