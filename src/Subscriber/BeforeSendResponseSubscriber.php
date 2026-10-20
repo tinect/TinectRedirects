@@ -24,6 +24,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Tinect\Redirects\Message\TinectRedirectUpdateMessage;
+use Tinect\Redirects\Services\QueryString;
 use Tinect\Redirects\Services\RedirectFinderService;
 
 readonly class BeforeSendResponseSubscriber implements EventSubscriberInterface
@@ -103,17 +104,20 @@ readonly class BeforeSendResponseSubscriber implements EventSubscriberInterface
         $redirect = $this->redirectFinderService->find($path, $salesChannelDomainId);
         $queryString = null;
 
-        // Fall back to the path without query string, e.g. for tracking parameters like gclid.
-        // An inactive exact match (e.g. a logged 404 entry) must not hide an active redirect for the path.
-        if (($redirect === null || !$redirect->isActive()) && \str_contains($path, '?')) {
-            [$pathWithoutQuery, $originalQueryString] = \explode('?', $path, 2);
+        // Fall back to an active redirect for the path without query string, e.g. for tracking parameters like gclid.
+        // The request is then logged on the redirect handling it, as it is no unresolved 404 anymore.
+        if (($redirect === null || !$redirect->isActive())
+            && $this->canRedirectWithoutQueryString($salesChannelId)) {
+            [$pathWithoutQueryString, $fallbackQueryString] = QueryString::split($path);
 
-            $fallbackRedirect = $this->redirectFinderService->find($pathWithoutQuery, $salesChannelDomainId);
+            $fallbackRedirect = $fallbackQueryString === null
+                ? null
+                : $this->redirectFinderService->find($pathWithoutQueryString, $salesChannelDomainId);
 
-            if ($fallbackRedirect !== null && ($redirect === null || $fallbackRedirect->isActive())) {
+            if ($fallbackRedirect?->isActive()) {
                 $redirect = $fallbackRedirect;
-                $path = $pathWithoutQuery;
-                $queryString = $originalQueryString;
+                $path = $pathWithoutQueryString;
+                $queryString = $fallbackQueryString;
             }
         }
 
@@ -155,30 +159,11 @@ readonly class BeforeSendResponseSubscriber implements EventSubscriberInterface
             $targetURL = $host . $targetURL;
         }
 
-        if ($queryString !== null && $queryString !== '') {
-            $targetURL = $this->appendQueryString($targetURL, $queryString);
+        if ($queryString !== null) {
+            $targetURL = QueryString::append($targetURL, $queryString);
         }
 
         return new RedirectResponse($targetURL, $httpCode);
-    }
-
-    private function appendQueryString(string $url, string $queryString): string
-    {
-        $fragment = '';
-        $fragmentPosition = \strpos($url, '#');
-
-        if ($fragmentPosition !== false) {
-            $fragment = \substr($url, $fragmentPosition);
-            $url = \substr($url, 0, $fragmentPosition);
-        }
-
-        $separator = match (true) {
-            \str_ends_with($url, '?'), \str_ends_with($url, '&') => '',
-            \str_contains($url, '?') => '&',
-            default => '?',
-        };
-
-        return $url . $separator . $queryString . $fragment;
     }
 
     private function getSalesChannelContext(Request $request): SalesChannelContext
@@ -233,5 +218,10 @@ readonly class BeforeSendResponseSubscriber implements EventSubscriberInterface
     private function canCreateRedirect(?string $salesChannelId): bool
     {
         return $this->systemConfigService->getBool('TinectRedirects.config.createNewRedirects', $salesChannelId);
+    }
+
+    private function canRedirectWithoutQueryString(?string $salesChannelId): bool
+    {
+        return $this->systemConfigService->getBool('TinectRedirects.config.redirectWithoutQueryString', $salesChannelId);
     }
 }

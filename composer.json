@@ -12,7 +12,8 @@
     "minimum-stability": "RC",
     "require": {
         "shopware/core": "~6.6.10||~6.7.0",
-        "shopware/storefront": "*"
+        "shopware/storefront": "*",
+        "guzzlehttp/psr7": "^2.4"
     },
     "extra": {
         "shopware-plugin-class": "Tinect\\Redirects\\TinectRedirects",
@@ -36,6 +37,11 @@
     "autoload": {
         "psr-4": {
             "Tinect\\Redirects\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tinect\\Redirects\\Tests\\": "tests/"
         }
     },
     "scripts": {

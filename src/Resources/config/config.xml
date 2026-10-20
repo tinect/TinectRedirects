@@ -39,6 +39,20 @@
     </card>
 
     <card>
+        <title>Redirects</title>
+        <title lang="de-DE">Weiterleitungen</title>
+
+        <input-field type="bool">
+            <name>redirectWithoutQueryString</name>
+            <label>Fall back to redirect without query string</label>
+            <label lang="de-DE">Weiterleitung ohne Query-String als Fallback verwenden</label>
+            <defaultValue>false</defaultValue>
+            <helpText>If no active redirect exists for the requested URI including its query string (e.g. /foo?gclid=123), an active redirect for the path without query string (/foo) is used. The query string is appended to the target. The request is then counted on the used redirect.</helpText>
+            <helpText lang="de-DE">Existiert keine aktive Weiterleitung für die aufgerufene URI inklusive Query-String (z.B. /foo?gclid=123), wird eine aktive Weiterleitung für den Pfad ohne Query-String (/foo) verwendet. Der Query-String wird an das Ziel angehängt. Der Aufruf wird dann bei der verwendeten Weiterleitung gezählt.</helpText>
+        </input-field>
+    </card>
+
+    <card>
         <title>New entries</title>
         <title lang="de-DE">Neue Einträge</title>
         <input-field type="bool">
