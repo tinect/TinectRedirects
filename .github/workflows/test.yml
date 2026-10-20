@@ -65,3 +65,7 @@ jobs:
         run: |
           composer require tinect/redirects
           ${{ github.workspace }}/vendor/bin/phpstan analyse -c ${{ github.workspace }}/custom/plugins/${{ env.PLUGIN_NAME }}/phpstan.neon
+
+      - name: PHPUnit
+        working-directory: ${{ github.workspace }}/custom/plugins/${{ env.PLUGIN_NAME }}
+        run: ${{ github.workspace }}/vendor/bin/phpunit

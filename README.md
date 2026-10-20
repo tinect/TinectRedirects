@@ -11,6 +11,8 @@ The plugin has been forked from [RuneLaenenRedirects](https://github.com/runelae
 - Import/Export profile
 - redirect just when there would be a error
 - auto add 404 error in list (configurable)
+- fall back to redirect without query string and keep the parameters, e.g. for `gclid` (configurable, counted on the used redirect)
+- ignore tracking parameters like `gclid` or `utm_source` from `shopware.http_cache.ignored_url_parameters` for matching and logging (configurable)
 
 ## 🚀 How to install
 ### Composer install (recommended)

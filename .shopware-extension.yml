@@ -11,3 +11,5 @@ build:
         paths:
           - var
           - .gitignore
+          - tests
+          - phpunit.xml.dist
