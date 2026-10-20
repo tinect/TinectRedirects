@@ -46,7 +46,7 @@ readonly class TinectRedirectUpdateMessage implements LowPriorityMessageInterfac
 
     public function getUserAgent(): string
     {
-        return substr($this->userAgent, 0, RedirectRequestDefinition::MAX_LENGTH_USER_AGENT);
+        return \mb_substr($this->userAgent, 0, RedirectRequestDefinition::MAX_LENGTH_USER_AGENT);
     }
 
     public function getReferer(): ?string
@@ -55,7 +55,7 @@ readonly class TinectRedirectUpdateMessage implements LowPriorityMessageInterfac
             return null;
         }
 
-        return substr($this->referer, 0, RedirectRequestDefinition::MAX_LENGTH_REFERER);
+        return \mb_substr($this->referer, 0, RedirectRequestDefinition::MAX_LENGTH_REFERER);
     }
 
     public function canCreateRedirect(): bool

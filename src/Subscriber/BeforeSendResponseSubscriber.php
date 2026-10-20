@@ -148,14 +148,17 @@ readonly class BeforeSendResponseSubscriber implements EventSubscriberInterface
             }
         }
 
+        $referer = $request->headers->get('referer');
+
+        // Bots send invalid UTF-8 in the path or headers, which cannot be serialized for async transports
         $message = new TinectRedirectUpdateMessage(
-            source: $path,
+            source: \mb_scrub($path, 'UTF-8'),
             salesChannelDomainId: $salesChannelDomainId,
             ipAddress: $this->getIpAddress($salesChannelId, $request),
-            userAgent: $request->headers->get('User-Agent') ?? '',
+            userAgent: \mb_scrub($request->headers->get('User-Agent') ?? '', 'UTF-8'),
             createRedirect: $this->canCreateRedirect($salesChannelId),
             id: $redirect?->getId(),
-            referer: $request->headers->get('referer'),
+            referer: $referer === null ? null : \mb_scrub($referer, 'UTF-8'),
             salesChannelId: $salesChannelId
         );
 
