@@ -137,7 +137,7 @@ readonly class BeforeSendResponseSubscriber implements EventSubscriberInterface
             && $this->canRedirectWithoutQueryString($salesChannelId)) {
             $fallbackRedirect = $this->redirectFinderService->find($pathWithoutQueryString, $salesChannelDomainId);
 
-            if ($fallbackRedirect?->isActive()) {
+            if ($fallbackRedirect?->isActive() === true) {
                 $redirect = $fallbackRedirect;
                 $path = $pathWithoutQueryString;
                 $queryString = $requestQueryString;
