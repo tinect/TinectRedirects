@@ -169,7 +169,6 @@ readonly class BeforeSendResponseSubscriber implements EventSubscriberInterface
 
         if ($httpCode === Response::HTTP_GONE) {
             // 410 Gone intentionally has an empty body
-            /** @phpstan-ignore-next-line shopware.noEmptyResponse */
             return new Response('', $httpCode);
         }
 

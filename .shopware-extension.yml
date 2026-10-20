@@ -13,3 +13,8 @@ build:
           - .gitignore
           - tests
           - phpunit.xml.dist
+validation:
+  ignore:
+    # 410 Gone intentionally has an empty body
+    - identifier: phpstan/shopware.noEmptyResponse
+      path: src/Subscriber/BeforeSendResponseSubscriber.php
