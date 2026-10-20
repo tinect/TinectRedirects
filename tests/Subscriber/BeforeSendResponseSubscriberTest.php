@@ -241,14 +241,39 @@ class BeforeSendResponseSubscriberTest extends TestCase
         $this->assertLoggedRequest('/foo', $redirect->getId());
     }
 
+    public function testInvalidUtf8IsScrubbedFromLoggedRequest(): void
+    {
+        $event = $this->dispatch(
+            "/foo\xc3\x28",
+            [],
+            headers: [
+                'User-Agent' => "Mozilla/5.0 \xff\xfe",
+                'Referer' => "https://shop.example/\xc3\x28",
+            ]
+        );
+
+        static::assertNull($event->getResponse());
+
+        $messages = $this->messageBus->getMessages();
+        static::assertCount(1, $messages);
+
+        $message = $messages[0]->getMessage();
+        static::assertInstanceOf(TinectRedirectUpdateMessage::class, $message);
+        static::assertTrue(\mb_check_encoding($message->getSource(), 'UTF-8'));
+        static::assertTrue(\mb_check_encoding($message->getUserAgent(), 'UTF-8'));
+        static::assertTrue(\mb_check_encoding((string) $message->getReferer(), 'UTF-8'));
+    }
+
     /**
      * @param array<string, RedirectEntity> $redirects
+     * @param array<string, string> $headers
      */
     private function dispatch(
         string $path,
         array $redirects,
         bool $redirectWithoutQueryString = false,
-        bool $ignoreTrackingParameters = false
+        bool $ignoreTrackingParameters = false,
+        array $headers = []
     ): ExceptionEvent
     {
         // RedirectFinderService is readonly and cannot be doubled with PHPUnit 10, so its repository is stubbed instead
@@ -290,6 +315,7 @@ class BeforeSendResponseSubscriberTest extends TestCase
         );
 
         $request = Request::create(self::HOST . $path);
+        $request->headers->add($headers);
         $request->attributes->set(RequestTransformer::ORIGINAL_REQUEST_URI, $path);
         $request->attributes->set(RequestTransformer::SALES_CHANNEL_ABSOLUTE_BASE_URL, self::HOST);
         $request->attributes->set(PlatformRequest::ATTRIBUTE_SALES_CHANNEL_CONTEXT_OBJECT, $this->createStub(SalesChannelContext::class));
