@@ -7,6 +7,11 @@ namespace Tinect\Redirects\Tests\Subscriber;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Shopware\Core\Content\Seo\SeoUrlPlaceholderHandlerInterface;
+use Shopware\Core\Framework\Context;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
+use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
+use Shopware\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
+use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Shopware\Core\Framework\Routing\RequestTransformerInterface;
 use Shopware\Core\Framework\Uuid\Uuid;
 use Shopware\Core\PlatformRequest;
@@ -21,6 +26,8 @@ use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
+use Tinect\Redirects\Content\Redirect\RedirectCollection;
+use Tinect\Redirects\Content\Redirect\RedirectDefinition;
 use Tinect\Redirects\Content\Redirect\RedirectEntity;
 use Tinect\Redirects\Message\TinectRedirectUpdateMessage;
 use Tinect\Redirects\Services\RedirectFinderService;
@@ -244,9 +251,26 @@ class BeforeSendResponseSubscriberTest extends TestCase
         bool $ignoreTrackingParameters = false
     ): ExceptionEvent
     {
-        $finder = $this->createStub(RedirectFinderService::class);
-        $finder->method('find')->willReturnCallback(
-            static fn (string $source): ?RedirectEntity => $redirects[$source] ?? null
+        // RedirectFinderService is readonly and cannot be doubled with PHPUnit 10, so its repository is stubbed instead
+        $repository = $this->createStub(EntityRepository::class);
+        $repository->method('search')->willReturnCallback(
+            static function (Criteria $criteria, Context $context) use ($redirects): EntitySearchResult {
+                $sourceFilter = $criteria->getFilters()[0];
+                static::assertInstanceOf(EqualsFilter::class, $sourceFilter);
+
+                $redirect = $redirects[$sourceFilter->getValue()] ?? null;
+                $collection = new RedirectCollection($redirect === null ? [] : [$redirect]);
+
+                // Shopware 6.7 asserts that the entity name matches the API alias of the entities
+                return new EntitySearchResult(
+                    $redirect?->getApiAlias() ?? RedirectDefinition::ENTITY_NAME,
+                    $collection->count(),
+                    $collection,
+                    null,
+                    $criteria,
+                    $context
+                );
+            }
         );
 
         $seoUrlPlaceholderHandler = $this->createStub(SeoUrlPlaceholderHandlerInterface::class);
@@ -261,7 +285,7 @@ class BeforeSendResponseSubscriberTest extends TestCase
             ]),
             $this->messageBus,
             $this->createStub(RequestTransformerInterface::class),
-            $finder,
+            new RedirectFinderService($repository),
             ['gclid', 'utm_source']
         );
 
