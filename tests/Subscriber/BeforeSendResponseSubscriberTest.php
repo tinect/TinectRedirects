@@ -144,10 +144,95 @@ class BeforeSendResponseSubscriberTest extends TestCase
         static::assertNull($event->getResponse());
     }
 
+    public function testTrackingParametersAreNotIgnoredByDefault(): void
+    {
+        $event = $this->dispatch('/foo?gclid=123', ['/foo' => $this->createRedirect('/bar')]);
+
+        static::assertNull($event->getResponse());
+        $this->assertLoggedRequest('/foo?gclid=123', null);
+    }
+
+    public function testIgnoreTrackingParameters(): void
+    {
+        $redirect = $this->createRedirect('/bar');
+
+        $event = $this->dispatch(
+            '/foo?gclid=123&utm_source=news',
+            ['/foo' => $redirect],
+            ignoreTrackingParameters: true
+        );
+
+        $this->assertRedirect($event, self::HOST . '/bar?gclid=123&utm_source=news');
+        $this->assertLoggedRequest('/foo', $redirect->getId());
+    }
+
+    public function testIgnoreTrackingParametersKeepsOtherParameters(): void
+    {
+        $redirect = $this->createRedirect('/bar');
+
+        $event = $this->dispatch(
+            '/foo?page=2&gclid=123',
+            ['/foo?page=2' => $redirect],
+            ignoreTrackingParameters: true
+        );
+
+        $this->assertRedirect($event, self::HOST . '/bar?gclid=123');
+        $this->assertLoggedRequest('/foo?page=2', $redirect->getId());
+    }
+
+    public function testIgnoreTrackingParametersLogsUnknownRequestWithoutThem(): void
+    {
+        $event = $this->dispatch(
+            '/foo?page=2&gclid=123',
+            ['/foo?page=2&gclid=123' => $this->createRedirect('', active: false)],
+            ignoreTrackingParameters: true
+        );
+
+        static::assertNull($event->getResponse());
+        $this->assertLoggedRequest('/foo?page=2', null);
+    }
+
+    public function testExactMatchWinsOverIgnoredTrackingParameters(): void
+    {
+        $redirect = $this->createRedirect('/exact');
+
+        $event = $this->dispatch(
+            '/foo?gclid=123',
+            [
+                '/foo?gclid=123' => $redirect,
+                '/foo' => $this->createRedirect('/bar'),
+            ],
+            ignoreTrackingParameters: true
+        );
+
+        $this->assertRedirect($event, self::HOST . '/exact');
+        $this->assertLoggedRequest('/foo?gclid=123', $redirect->getId());
+    }
+
+    public function testIgnoreTrackingParametersWithFallbackKeepsFullQueryString(): void
+    {
+        $redirect = $this->createRedirect('/bar');
+
+        $event = $this->dispatch(
+            '/foo?page=2&gclid=123',
+            ['/foo' => $redirect],
+            redirectWithoutQueryString: true,
+            ignoreTrackingParameters: true
+        );
+
+        $this->assertRedirect($event, self::HOST . '/bar?page=2&gclid=123');
+        $this->assertLoggedRequest('/foo', $redirect->getId());
+    }
+
     /**
      * @param array<string, RedirectEntity> $redirects
      */
-    private function dispatch(string $path, array $redirects, bool $redirectWithoutQueryString = false): ExceptionEvent
+    private function dispatch(
+        string $path,
+        array $redirects,
+        bool $redirectWithoutQueryString = false,
+        bool $ignoreTrackingParameters = false
+    ): ExceptionEvent
     {
         $finder = $this->createStub(RedirectFinderService::class);
         $finder->method('find')->willReturnCallback(
@@ -162,10 +247,12 @@ class BeforeSendResponseSubscriberTest extends TestCase
             $this->createStub(AbstractSalesChannelContextFactory::class),
             new StaticSystemConfigService([
                 'TinectRedirects.config.redirectWithoutQueryString' => $redirectWithoutQueryString,
+                'TinectRedirects.config.ignoreTrackingParameters' => $ignoreTrackingParameters,
             ]),
             $this->messageBus,
             $this->createStub(RequestTransformerInterface::class),
-            $finder
+            $finder,
+            ['gclid', 'utm_source']
         );
 
         $request = Request::create(self::HOST . $path);

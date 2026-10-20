@@ -32,6 +32,32 @@ class QueryStringTest extends TestCase
         yield 'with question mark in query string' => ['/foo?a=1?b=2', ['/foo', 'a=1?b=2']];
     }
 
+    /**
+     * @param array{string, string} $expected
+     */
+    #[DataProvider('removeParametersProvider')]
+    public function testRemoveParameters(string $queryString, array $expected): void
+    {
+        static::assertSame($expected, QueryString::removeParameters($queryString, ['gclid', 'utm_source']));
+    }
+
+    /**
+     * @return iterable<string, array{string, array{string, string}}>
+     */
+    public static function removeParametersProvider(): iterable
+    {
+        yield 'empty query string' => ['', ['', '']];
+        yield 'no ignored parameters' => ['a=1&b=2', ['a=1&b=2', '']];
+        yield 'only ignored parameters' => ['gclid=123&utm_source=news', ['', 'gclid=123&utm_source=news']];
+        yield 'keeps order of mixed parameters' => ['b=2&gclid=123&a=1', ['b=2&a=1', 'gclid=123']];
+        yield 'keeps encoding' => ['q=a%20b&gclid=1%2B2', ['q=a%20b', 'gclid=1%2B2']];
+        yield 'encoded key' => ['utm%5Fsource=news&a=1', ['a=1', 'utm%5Fsource=news']];
+        yield 'array parameter' => ['utm_source[]=news&a[]=1', ['a[]=1', 'utm_source[]=news']];
+        yield 'parameter without value' => ['gclid&a', ['a', 'gclid']];
+        yield 'empty pairs are dropped' => ['&a=1&&gclid=123&', ['a=1', 'gclid=123']];
+        yield 'similar names are kept' => ['gclid_x=1&xgclid=2', ['gclid_x=1&xgclid=2', '']];
+    }
+
     #[DataProvider('appendProvider')]
     public function testAppend(string $url, string $queryString, string $expected): void
     {

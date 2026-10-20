@@ -29,6 +29,9 @@ use Tinect\Redirects\Services\RedirectFinderService;
 
 readonly class BeforeSendResponseSubscriber implements EventSubscriberInterface
 {
+    /**
+     * @param array<string> $ignoredUrlParameters
+     */
     public function __construct(
         private SeoUrlPlaceholderHandlerInterface $seoUrlPlaceholderHandler,
         #[Autowire(service: SalesChannelContextFactory::class)]
@@ -36,7 +39,9 @@ readonly class BeforeSendResponseSubscriber implements EventSubscriberInterface
         private SystemConfigService $systemConfigService,
         private MessageBusInterface $messageBus,
         private RequestTransformerInterface $requestTransformer,
-        private RedirectFinderService $redirectFinderService
+        private RedirectFinderService $redirectFinderService,
+        #[Autowire(param: 'shopware.http_cache.ignored_url_parameters')]
+        private array $ignoredUrlParameters
     ) {
     }
 
@@ -102,22 +107,40 @@ readonly class BeforeSendResponseSubscriber implements EventSubscriberInterface
         }
 
         $redirect = $this->redirectFinderService->find($path, $salesChannelDomainId);
+        [$pathWithoutQueryString, $requestQueryString] = QueryString::split($path);
         $queryString = null;
 
-        // Fall back to an active redirect for the path without query string, e.g. for tracking parameters like gclid.
+        // Ignore tracking parameters like utm_source for matching and logging, as they do not change the requested content.
+        // They are appended to the target to keep the tracking working.
+        if (($redirect === null || !$redirect->isActive())
+            && $requestQueryString !== null
+            && $this->canIgnoreTrackingParameters($salesChannelId)) {
+            [$queryStringWithoutTracking, $trackingQueryString] = QueryString::removeParameters(
+                $requestQueryString,
+                $this->ignoredUrlParameters
+            );
+
+            if ($trackingQueryString !== '') {
+                $path = $queryStringWithoutTracking === ''
+                    ? $pathWithoutQueryString
+                    : $pathWithoutQueryString . '?' . $queryStringWithoutTracking;
+                $redirect = $this->redirectFinderService->find($path, $salesChannelDomainId);
+                $queryString = $trackingQueryString;
+            }
+        }
+
+        // Fall back to an active redirect for the path without query string.
         // The request is then logged on the redirect handling it, as it is no unresolved 404 anymore.
         if (($redirect === null || !$redirect->isActive())
+            && $requestQueryString !== null
+            && $path !== $pathWithoutQueryString
             && $this->canRedirectWithoutQueryString($salesChannelId)) {
-            [$pathWithoutQueryString, $fallbackQueryString] = QueryString::split($path);
-
-            $fallbackRedirect = $fallbackQueryString === null
-                ? null
-                : $this->redirectFinderService->find($pathWithoutQueryString, $salesChannelDomainId);
+            $fallbackRedirect = $this->redirectFinderService->find($pathWithoutQueryString, $salesChannelDomainId);
 
             if ($fallbackRedirect?->isActive()) {
                 $redirect = $fallbackRedirect;
                 $path = $pathWithoutQueryString;
-                $queryString = $fallbackQueryString;
+                $queryString = $requestQueryString;
             }
         }
 
@@ -218,6 +241,11 @@ readonly class BeforeSendResponseSubscriber implements EventSubscriberInterface
     private function canCreateRedirect(?string $salesChannelId): bool
     {
         return $this->systemConfigService->getBool('TinectRedirects.config.createNewRedirects', $salesChannelId);
+    }
+
+    private function canIgnoreTrackingParameters(?string $salesChannelId): bool
+    {
+        return $this->systemConfigService->getBool('TinectRedirects.config.ignoreTrackingParameters', $salesChannelId);
     }
 
     private function canRedirectWithoutQueryString(?string $salesChannelId): bool

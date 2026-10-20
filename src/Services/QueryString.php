@@ -23,6 +23,42 @@ final class QueryString
     }
 
     /**
+     * Removes the given parameters from a raw query string, keeping order and encoding of all other parameters.
+     * Returns the remaining and the removed query string.
+     *
+     * @param array<string> $parameters
+     *
+     * @return array{string, string}
+     */
+    public static function removeParameters(string $queryString, array $parameters): array
+    {
+        $kept = [];
+        $removed = [];
+
+        foreach (\explode('&', $queryString) as $pair) {
+            if ($pair === '') {
+                continue;
+            }
+
+            $key = \urldecode(\explode('=', $pair, 2)[0]);
+
+            // Array parameters like "utm_source[]=foo" are matched by their name
+            $bracketPosition = \strpos($key, '[');
+            if ($bracketPosition !== false) {
+                $key = \substr($key, 0, $bracketPosition);
+            }
+
+            if (\in_array($key, $parameters, true)) {
+                $removed[] = $pair;
+            } else {
+                $kept[] = $pair;
+            }
+        }
+
+        return [\implode('&', $kept), \implode('&', $removed)];
+    }
+
+    /**
      * Appends a raw query string to an URL, keeping its existing query and fragment.
      */
     public static function append(string $url, string $queryString): string
