@@ -25,7 +25,7 @@ readonly class RedirectFinderService
         $context = new Context(new SystemSource());
         $criteria = $this->getCriteria($path, $salesChannelDomainId);
 
-        $redirect = $this->tinectRedirectsRedirectRepository->search($criteria, $context)->first();
+        $redirect = $this->tinectRedirectsRedirectRepository->search($criteria, $context)->getEntities()->first();
 
         if ($redirect instanceof RedirectEntity) {
             return $redirect;
