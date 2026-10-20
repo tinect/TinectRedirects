@@ -29,6 +29,8 @@ use Tinect\Redirects\Services\RedirectFinderService;
 
 readonly class BeforeSendResponseSubscriber implements EventSubscriberInterface
 {
+    public const PRIORITY = -95;
+
     /**
      * @param array<string> $ignoredUrlParameters
      */
@@ -48,7 +50,9 @@ readonly class BeforeSendResponseSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            KernelEvents::EXCEPTION => 'onKernelException',
+            // Run after Shopware's sales channel files (llms.txt, agents.md, ...) at -90 have been served,
+            // but before the storefront renders the 404 page at -100
+            KernelEvents::EXCEPTION => ['onKernelException', self::PRIORITY],
         ];
     }
 

@@ -20,6 +20,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\HttpKernel\KernelEvents;
 use Tinect\Redirects\Content\Redirect\RedirectEntity;
 use Tinect\Redirects\Message\TinectRedirectUpdateMessage;
 use Tinect\Redirects\Services\RedirectFinderService;
@@ -35,6 +36,15 @@ class BeforeSendResponseSubscriberTest extends TestCase
     protected function setUp(): void
     {
         $this->messageBus = new CollectingMessageBus();
+    }
+
+    public function testRunsBetweenSalesChannelFilesAndStorefrontNotFoundPage(): void
+    {
+        $listener = BeforeSendResponseSubscriber::getSubscribedEvents()[KernelEvents::EXCEPTION];
+
+        static::assertSame(['onKernelException', BeforeSendResponseSubscriber::PRIORITY], $listener);
+        static::assertLessThan(-90, BeforeSendResponseSubscriber::PRIORITY);
+        static::assertGreaterThan(-100, BeforeSendResponseSubscriber::PRIORITY);
     }
 
     public function testActiveRedirectWithoutQueryString(): void
